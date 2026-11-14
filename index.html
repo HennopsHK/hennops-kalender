@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="af">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Huis Hennops — Kalender</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23CBC3BA'/%3E%3Cpath d='M30 45c0-12 10-22 22-22 10 0 18 6 21 15 5 1 9 5 9 11 0 6-5 11-11 11h-2v12c0 4-3 7-7 7h-9c-2 0-4-1-5-2' stroke='%23A86E53' stroke-width='4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M30 45c-6 0-11 4-11 10s5 11 11 11c2 0 4-1 5-2' stroke='%23A86E53' stroke-width='4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='62' cy='40' r='3' fill='%23A86E53'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23CBC3BA'/%3E%3Cpath d='M30 45c0-12 10-22 22-22 10 0 18 6 21 15 5 1 9 5 9 11 0 6-5 11-11 11h-2v12c0 4-3 7-7 7h-9c-2 0-4-1-5-2' stroke='%23A86E53' stroke-width='4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M30 45c-6 0-11 4-11 10s5 11 11 11c2 0 4-1 5-2' stroke='%23A86E53' stroke-width='4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='62' cy='40' r='3' fill='%23A86E53'/%3E%3C/svg%3E">
+<link rel="manifest" href='data:application/manifest+json,{"name":"Huis Hennops Kalender","short_name":"Hennops","start_url":".","display":"standalone","background_color":"%23CBC3BA","theme_color":"%23CBC3BA"}'>
+<meta name="theme-color" content="#CBC3BA">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Hennops">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#CBC3BA;
+  --surface:#FBF9F6;
+  --ink:#33291F;
+  --ink-soft:#6E6459;
+  --line:#B7ACA0;
+  --accent:#A86E53;
+  --accent-dark:#8A5640;
+  --sage:#758378;
+  --danger:#B84A3E;
+  --radius:14px;
+  --radius-sm:10px;
+}
+
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html{-webkit-text-size-adjust:100%; text-size-adjust:100%;}
+html,body{margin:0; padding:0;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Work Sans', system-ui, -apple-system, sans-serif;
+  font-size:15px;
+  line-height:1.45;
+  -webkit-font-smoothing:antialiased;
+}
+button{font-family:inherit; touch-action:manipulation;}
+h1,h2,h3{font-family:'Fraunces', Georgia, serif; margin:0; font-weight:600;}
+
+.app{max-width:560px; margin:0 auto; min-height:100vh; min-height:100dvh;}
+
+/* ---------- KOP ---------- */
+.topbar{
+  position:sticky; top:0; z-index:10;
+  background:var(--bg);
+  border-bottom:1px solid var(--line);
+  padding:calc(10px + env(safe-area-inset-top)) 14px 10px;
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+}
+.brand{display:flex; align-items:center; gap:10px; min-width:0;}
+.brand svg{flex-shrink:0;}
+.brand h1{font-size:19px; letter-spacing:-0.01em; line-height:1.1;}
+.live-badge{display:flex; align-items:center; gap:5px; font-size:11px; color:var(--ink-soft); margin-top:2px;}
+.live-badge .dot{width:6px; height:6px; border-radius:50%; background:#5C9E7A; flex-shrink:0;}
+.hk-btn{
+  flex-shrink:0; min-height:40px; padding:0 16px; border-radius:999px;
+  border:1.5px solid var(--accent); background:var(--surface); color:var(--accent-dark);
+  font-weight:700; font-size:13.5px; cursor:pointer;
+}
+.hk-btn.on{background:var(--accent); color:#fff;}
+
+main{padding:14px 14px calc(96px + env(safe-area-inset-bottom));}
+
+/* ---------- BANIER ---------- */
+.countdown-banner{
+  background:linear-gradient(135deg, var(--accent), var(--accent-dark)); color:#fff;
+  border-radius:var(--radius); padding:12px 14px; margin-bottom:12px;
+  font-size:14px; font-weight:600;
+}
+.countdown-banner .sub{font-weight:400; opacity:0.88; font-size:12.5px; display:block; margin-top:2px;}
+
+/* ---------- SOEK + FILTERS ---------- */
+.search{position:relative; margin-bottom:10px;}
+.search span{position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:15px; pointer-events:none;}
+.search input{
+  width:100%; height:44px; padding:0 14px 0 40px; border:1px solid var(--line);
+  border-radius:var(--radius-sm); background:var(--surface); color:var(--ink);
+  font-family:inherit; font-size:16px;
+}
+.search input:focus{outline:2px solid var(--accent); outline-offset:1px;}
+
+.chips{
+  display:flex; gap:8px; overflow-x:auto; padding:2px 14px 12px; margin:0 -14px;
+  scrollbar-width:none; -webkit-overflow-scrolling:touch;
+}
+.chips::-webkit-scrollbar{display:none;}
+.chip{
+  flex-shrink:0; height:38px; padding:0 15px; border-radius:999px; border:1px solid var(--line);
+  background:var(--surface); font-size:13.5px; font-weight:500; color:var(--ink-soft);
+  cursor:pointer; white-space:nowrap; display:inline-flex; align-items:center;
+}
+.chip.active{background:var(--ink); color:#fff; border-color:var(--ink);}
+.chip .dot{width:8px; height:8px; border-radius:50%; margin-right:7px;}
+
+/* ---------- LYS ---------- */
+.month-label{
+  font-family:'Fraunces', Georgia, serif; font-size:16px; font-weight:700; color:var(--ink);
+  margin:22px 2px 10px; display:flex; align-items:center; gap:10px;
+}
+.month-label::after{content:''; flex:1; height:1px; background:var(--line);}
+#listArea > .month-label:first-child{margin-top:6px;}
+
+.section-label{
+  font-size:11.5px; font-weight:700; letter-spacing:.07em; text-transform:uppercase;
+  color:var(--accent-dark); margin:6px 2px 8px;
+}
+
+.day-row{display:flex; gap:10px; margin-bottom:6px;}
+.day-col{width:44px; flex-shrink:0; text-align:center; padding-top:6px;}
+.day-num{
+  font-family:'Fraunces', Georgia, serif; font-size:21px; font-weight:700; line-height:1;
+  width:38px; height:38px; margin:0 auto; display:flex; align-items:center; justify-content:center;
+  border-radius:50%;
+}
+.day-wd{font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.03em; color:var(--ink-soft); margin-top:3px;}
+.day-row.today .day-num{background:var(--accent); color:#fff;}
+.day-row.today .day-wd{color:var(--accent-dark);}
+.day-row.pastday .day-col{opacity:.55;}
+.day-cards{flex:1; min-width:0;}
+
+.event-card{
+  background:var(--surface); border-radius:var(--radius); padding:12px 12px 6px 13px;
+  margin-bottom:8px; border-left:4px solid var(--accent);
+  display:flex; justify-content:space-between; gap:8px; align-items:flex-start;
+}
+.event-card.past{opacity:0.55;}
+.event-main{flex:1; min-width:0;}
+.event-title{font-weight:600; font-size:15.5px; line-height:1.3; margin-bottom:5px; overflow-wrap:anywhere;}
+.event-meta{display:flex; flex-wrap:wrap; gap:6px;}
+.meta-pill{
+  display:inline-flex; align-items:center; gap:4px; padding:4px 10px 4px 8px;
+  border-radius:999px; background:var(--bg); color:var(--ink-soft);
+  font-size:12px; font-weight:500; max-width:100%;
+}
+.event-notes{font-size:13.5px; color:var(--ink-soft); margin-top:7px; overflow-wrap:anywhere;}
+.event-side{display:flex; flex-direction:column; align-items:flex-end; gap:5px; flex-shrink:0; max-width:104px;}
+.cat-tag{
+  font-size:10.5px; font-weight:700; padding:3px 9px; border-radius:999px; color:#fff;
+  white-space:nowrap;
+}
+.card-actions{display:flex; gap:4px; align-items:center; flex-wrap:wrap; margin-top:2px;}
+.link-btn{
+  background:none; border:none; color:var(--ink-soft); font-size:12.5px; cursor:pointer;
+  min-height:38px; padding:0 10px 0 0;
+}
+.menu-btn{
+  width:38px; height:38px; border-radius:50%; border:none; background:var(--bg); color:var(--ink);
+  font-size:18px; line-height:1; cursor:pointer;
+}
+.manage{display:flex; gap:6px; flex-wrap:wrap; margin:4px 0 8px;}
+.mini-btn{
+  min-height:38px; padding:0 13px; border-radius:var(--radius-sm); border:1px solid var(--line);
+  background:transparent; color:var(--ink-soft); font-size:13px; font-weight:600; cursor:pointer;
+}
+.mini-btn.danger{color:var(--danger); border-color:var(--danger);}
+
+.empty-state{text-align:center; padding:44px 20px; color:var(--ink-soft);}
+.empty-state .big{font-size:34px; margin-bottom:6px;}
+.empty-state p{margin:4px 0 0; font-size:14px;}
+
+.foot{margin-top:18px; display:flex; flex-direction:column; gap:10px; align-items:stretch;}
+.ics-btn{
+  min-height:50px; border-radius:var(--radius); border:1.5px solid var(--sage); background:transparent;
+  color:var(--sage); font-weight:700; font-size:14.5px; cursor:pointer;
+}
+.toggle-past{
+  background:none; border:none; color:var(--ink-soft); font-size:13px; min-height:40px; cursor:pointer;
+  text-decoration:underline;
+}
+
+/* ---------- MODAL ---------- */
+.modal-overlay{
+  display:none; position:fixed; inset:0; background:rgba(51,41,31,0.5);
+  align-items:flex-end; justify-content:center; z-index:100;
+}
+.modal-overlay.open{display:flex;}
+.modal{
+  background:var(--surface); width:100%; max-width:560px; border-radius:20px 20px 0 0;
+  padding:14px 18px calc(24px + env(safe-area-inset-bottom));
+  max-height:92vh; max-height:92dvh; overflow-y:auto; -webkit-overflow-scrolling:touch;
+  animation:slideUp .22s ease-out;
+}
+.modal::before{content:''; display:block; width:40px; height:4px; border-radius:2px; background:var(--line); margin:0 auto 14px;}
+@keyframes slideUp{from{transform:translateY(24px); opacity:0;} to{transform:translateY(0); opacity:1;}}
+.modal h3{font-size:19px; margin-bottom:14px;}
+.field{margin-bottom:14px;}
+.field label{display:block; font-size:12.5px; font-weight:600; color:var(--ink-soft); margin-bottom:5px;}
+.field input, .field select, .field textarea{
+  width:100%; min-height:46px; padding:10px 12px; border:1px solid var(--line); border-radius:var(--radius-sm);
+  font-family:inherit; font-size:16px; color:var(--ink); background:#fff;
+}
+.field textarea{resize:vertical; min-height:80px;}
+.field input[type=checkbox]{width:22px; height:22px; min-height:0; padding:0; flex-shrink:0;}
+.field input:focus, .field select:focus, .field textarea:focus{outline:2px solid var(--accent); outline-offset:1px;}
+.check-row{display:flex; align-items:center; gap:10px;}
+.check-row label{margin:0; font-size:14px; color:var(--ink); font-weight:500;}
+.modal-actions{display:flex; gap:10px; margin-top:18px;}
+.btn{
+  flex:1; min-height:50px; padding:0 14px; border-radius:var(--radius-sm); border:none; font-weight:600;
+  font-size:15px; cursor:pointer;
+}
+.btn-primary{background:var(--accent); color:#fff;}
+.btn-secondary{background:transparent; color:var(--ink-soft); border:1px solid var(--line);}
+.error-msg{color:var(--danger); font-size:13px; margin-top:6px;}
+.hint{font-size:12.5px; color:var(--ink-soft); margin-top:5px;}
+.menu-list{display:flex; flex-direction:column; gap:10px;}
+
+.notice{
+  background:var(--surface); border-radius:var(--radius); padding:24px 20px; margin-top:10px;
+}
+.notice h3{font-size:17px; margin-bottom:8px;}
+.notice p{font-size:14px; color:var(--ink-soft); margin:0 0 12px;}
+.notice.bad{border:1.5px solid var(--danger);}
+.notice pre{
+  background:#fff; border:1px solid var(--line); border-radius:var(--radius-sm); padding:12px;
+  font-size:12.5px; overflow-x:auto; margin:0 0 14px; user-select:all; -webkit-user-select:all;
+}
+.notice ol{padding-left:20px; margin:0 0 14px; font-size:14px; color:var(--ink-soft);}
+.notice li{margin-bottom:4px;}
+
+.toast{
+  position:fixed; bottom:calc(24px + env(safe-area-inset-bottom)); left:50%; transform:translateX(-50%);
+  background:var(--ink); color:#fff; padding:12px 20px; border-radius:999px; max-width:92vw;
+  font-size:14px; font-weight:500; z-index:200; opacity:0; pointer-events:none; transition:opacity .2s;
+  text-align:center;
+}
+.toast.show{opacity:1;}
+
+.back-today-btn{
+  position:fixed; bottom:calc(20px + env(safe-area-inset-bottom)); right:16px; z-index:50;
+  background:var(--ink); color:#fff; border:none; border-radius:999px; min-height:44px;
+  padding:0 18px; font-size:14px; font-weight:600; cursor:pointer;
+  box-shadow:0 4px 14px rgba(0,0,0,0.25); display:none;
+}
+.back-today-btn.show{display:block;}
+
+@media(prefers-reduced-motion: reduce){ .modal{animation:none;} }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <svg width="34" height="34" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+        <path d="M14 22c0-6 5-11 11-11 5 0 9 3 10.5 7.5 2.5.5 4.5 2.5 4.5 5.5 0 3-2.5 5.5-5.5 5.5h-1v6c0 2-1.5 3.5-3.5 3.5H23c-1 0-2-.4-2.7-1.1" stroke="#A86E53" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M14 22c-3 0-5.5 2-5.5 5s2.5 5.5 5.5 5.5c1 0 2-.3 2.7-.8" stroke="#A86E53" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="30" cy="20" r="1.3" fill="#A86E53"/>
+        <path d="M18 32.5v4.5M22 33v4" stroke="#A86E53" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <h1>Huis Hennops</h1>
+        <div class="live-badge" id="liveBadge"><span class="dot"></span>Verbind...</div>
+      </div>
+    </div>
+    <button class="hk-btn" id="hkMenuBtn">HK ⚙</button>
+  </header>
+
+  <main id="content"><div class="empty-state"><p>Laai...</p></div></main>
+</div>
+
+<button class="back-today-btn" id="backTodayBtn">↑ Vandag</button>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modalBody"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Gewone skrip (nie module nie): wys 'n duidelike boodskap as die kalender nie kon begin nie,
+     bv. as die lêer in 'n voorskou-venster oopgemaak is wat kode blokkeer. -->
+<script>
+window.__hennopsBooted = false;
+setTimeout(function(){
+  if(window.__hennopsBooted) return;
+  var el = document.getElementById('content');
+  if(!el) return;
+  el.innerHTML = '<div class="notice bad"><h3>Die kalender kon nie begin nie</h3>' +
+    '<p>Dit gebeur gewoonlik as die lêer in \'n voorskou-venster (bv. WhatsApp, Lêers-app of Claude se voorskou) oopgemaak is. Daardie vensters blokkeer die kode wat nodig is.</p>' +
+    '<p>Maak dit eerder oop as \'n gewone webskakel in <b>Chrome</b> of <b>Safari</b>.</p>' +
+    '<button class="btn btn-primary" onclick="location.reload()" style="width:100%">Probeer weer</button></div>';
+}, 6000);
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, set, update, remove, onValue, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+window.__hennopsBooted = true;
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAnD6HlukBh10Vghx4Mr60u4XsIvEJD_SI",
+  authDomain: "huis-hennops.firebaseapp.com",
+  databaseURL: "https://huis-hennops-default-rtdb.firebaseio.com",
+  projectId: "huis-hennops",
+  storageBucket: "huis-hennops.firebasestorage.app",
+  messagingSenderId: "1025223700383",
+  appId: "1:1025223700383:web:1d87ba93e2555d5b6517aa"
+};
+
+let db = null;
+let firebaseError = null;
+try{
+  const firebaseApp = initializeApp(firebaseConfig);
+  db = getDatabase(firebaseApp);
+}catch(e){
+  firebaseError = e.message;
+}
+
+// ---------- STATE ----------
+let events = [];
+let hkPin = null;
+let pinLoaded = false;
+let unlocked = false;
+let activeFilter = 'alle';
+let loading = true;
+let connected = false;
+let slowConnection = false;
+let confirmingId = null;
+let searchQuery = '';
+let showPast = false;
+
+const CATEGORIES = {
+  akademies: { label:'Akademies', hex:'#33291F' },
+  hennops:   { label:'Huis Hennops', hex:'#A86E53' },
+  ander:     { label:'Mede Koshuise', hex:'#758378' },
+  kampus:    { label:'Akademia', hex:'#8C8073' }
+};
+
+const AF_MAANDE = ['Januarie','Februarie','Maart','April','Mei','Junie','Julie','Augustus','September','Oktober','November','Desember'];
+const AF_MAANDE_KORT = ['Jan','Feb','Mrt','Apr','Mei','Jun','Jul','Aug','Sep','Okt','Nov','Des'];
+const AF_DAE = ['Sondag','Maandag','Dinsdag','Woensdag','Donderdag','Vrydag','Saterdag'];
+const AF_DAE_KORT = ['So','Ma','Di','Wo','Do','Vr','Sa'];
+
+const content = document.getElementById('content');
+const modalOverlay = document.getElementById('modalOverlay');
+const modalBody = document.getElementById('modalBody');
+const toastEl = document.getElementById('toast');
+const liveBadge = document.getElementById('liveBadge');
+const hkBtn = document.getElementById('hkMenuBtn');
+
+// ---------- HELPERS ----------
+// localStorage kan in sommige foon-blaaiers/voorskou-vensters 'n fout gooi — daarom altyd in try/catch.
+function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+function lsDel(k){ try{ localStorage.removeItem(k); }catch(e){} }
+
+function showToast(msg){
+  toastEl.textContent = msg;
+  toastEl.classList.add('show');
+  setTimeout(()=>toastEl.classList.remove('show'), 2600);
+}
+
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str || '';
+  return div.innerHTML;
+}
+
+function pad2(n){ return String(n).padStart(2,'0'); }
+
+function todayStr(){
+  const d = new Date();
+  return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate());
+}
+
+function parseDate(dateStr){
+  const [y,m,d] = dateStr.split('-').map(Number);
+  return { y, m, d, wd: new Date(y, m-1, d).getDay() };
+}
+
+function formatDateLabel(dateStr){
+  const p = parseDate(dateStr);
+  return `${AF_DAE[p.wd]} ${p.d} ${AF_MAANDE[p.m-1]}`;
+}
+
+function formatShortDate(dateStr){
+  const p = parseDate(dateStr);
+  return `${p.d} ${AF_MAANDE_KORT[p.m-1]}`;
+}
+
+function daysBetween(dateStr1, dateStr2){
+  const a = parseDate(dateStr1), b = parseDate(dateStr2);
+  return Math.round((Date.UTC(b.y,b.m-1,b.d) - Date.UTC(a.y,a.m-1,a.d)) / 86400000);
+}
+
+function addDaysToDateStr(dateStr, days){
+  const p = parseDate(dateStr);
+  const dt = new Date(p.y, p.m-1, p.d);
+  dt.setDate(dt.getDate()+days);
+  return dt.getFullYear()+'-'+pad2(dt.getMonth()+1)+'-'+pad2(dt.getDate());
+}
+
+function sortKey(e){ return e.date + ((e.time) || '00:00'); }
+
+function getNextEvent(){
+  const today = todayStr();
+  const active = events.filter(e=>!e.isCancelled);
+  const ongoing = active.find(e=> e.isPeriod && e.endDate && e.date <= today && today <= e.endDate);
+  if(ongoing) return { event: ongoing, ongoing: true };
+  const upcoming = active.filter(e => e.date >= today).sort((a,b)=> sortKey(a).localeCompare(sortKey(b)));
+  if(upcoming.length === 0) return null;
+  return { event: upcoming[0], ongoing: false, days: daysBetween(today, upcoming[0].date) };
+}
+
+// ---------- ICS EXPORT (Outlook / Apple / Google kalender) ----------
+function toICSDateOnly(dateStr){ return dateStr.split('-').join(''); }
+
+function toICSDateTime(dateStr, timeStr){
+  const t = timeStr ? timeStr.replace(':','') + '00' : '090000';
+  return dateStr.split('-').join('') + 'T' + t;
+}
+
+function computeEndDateTime(dateStr, timeStr, endTimeStr){
+  if(endTimeStr){
+    if(endTimeStr < timeStr) return { date: addDaysToDateStr(dateStr,1), time: endTimeStr };
+    return { date: dateStr, time: endTimeStr };
+  }
+  const p = parseDate(dateStr);
+  const [h,mi] = timeStr.split(':').map(Number);
+  const dt = new Date(p.y, p.m-1, p.d, h, mi);
+  dt.setHours(dt.getHours()+1);
+  return {
+    date: dt.getFullYear()+'-'+pad2(dt.getMonth()+1)+'-'+pad2(dt.getDate()),
+    time: pad2(dt.getHours())+':'+pad2(dt.getMinutes())
+  };
+}
+
+function escapeICS(str){
+  return (str||'').replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\n/g,'\\n');
+}
+
+function buildICS(){
+  const now = new Date();
+  const stamp = now.getUTCFullYear()+pad2(now.getUTCMonth()+1)+pad2(now.getUTCDate())+'T'+pad2(now.getUTCHours())+pad2(now.getUTCMinutes())+pad2(now.getUTCSeconds())+'Z';
+  const lines = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Huis Hennops//Kalender//AF','CALSCALE:GREGORIAN'];
+  events.filter(e=>!e.isCancelled).forEach(e=>{
+    const cat = CATEGORIES[e.category] || CATEGORIES.hennops;
+    lines.push('BEGIN:VEVENT');
+    lines.push('UID:'+e.id+'@huishennops');
+    lines.push('DTSTAMP:'+stamp);
+    let alarmTrigger;
+    if(e.isPeriod && e.endDate){
+      lines.push('DTSTART;VALUE=DATE:'+toICSDateOnly(e.date));
+      lines.push('DTEND;VALUE=DATE:'+toICSDateOnly(addDaysToDateStr(e.endDate,1)));
+      alarmTrigger = '-P1D';
+    } else if(e.time){
+      lines.push('DTSTART:'+toICSDateTime(e.date, e.time));
+      const endInfo = computeEndDateTime(e.date, e.time, e.endTime);
+      lines.push('DTEND:'+toICSDateTime(endInfo.date, endInfo.time));
+      alarmTrigger = '-PT30M';
+    } else {
+      lines.push('DTSTART;VALUE=DATE:'+toICSDateOnly(e.date));
+      lines.push('DTEND;VALUE=DATE:'+toICSDateOnly(addDaysToDateStr(e.date,1)));
+      alarmTrigger = '-P1D';
+    }
+    lines.push('SUMMARY:'+escapeICS(e.title));
+    if(e.location) lines.push('LOCATION:'+escapeICS(e.location));
+    if(e.notes) lines.push('DESCRIPTION:'+escapeICS(e.notes));
+    lines.push('CATEGORIES:'+escapeICS(cat.label));
+    lines.push('BEGIN:VALARM');
+    lines.push('ACTION:DISPLAY');
+    lines.push('DESCRIPTION:Herinnering');
+    lines.push('TRIGGER:'+alarmTrigger);
+    lines.push('END:VALARM');
+    lines.push('END:VEVENT');
+  });
+  lines.push('END:VCALENDAR');
+  return lines.join('\r\n');
+}
+
+function triggerDownload(blob, filename){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url), 4000);
+}
+
+function downloadICS(){
+  if(events.filter(e=>!e.isCancelled).length === 0){
+    showToast('Nog geen events om af te laai nie');
+    return;
+  }
+  triggerDownload(new Blob([buildICS()], { type:'text/calendar;charset=utf-8' }), 'huis-hennops-kalender.ics');
+  showToast('Afgelaai — maak die lêer oop om by Outlook te voeg');
+}
+
+async function downloadBackup(){
+  try{
+    const snap = await get(ref(db,'events'));
+    const data = snap.exists() ? snap.val() : {};
+    triggerDownload(new Blob([JSON.stringify(data, null, 2)], { type:'application/json' }), 'hennops-rugsteun-' + todayStr() + '.json');
+    showToast('Rugsteun afgelaai');
+  }catch(e){
+    showToast('Kon nie rugsteun maak nie: ' + e.message);
+  }
+}
+
+function shareOnWhatsApp(e){
+  const cat = CATEGORIES[e.category] || CATEGORIES.hennops;
+  const dateText = e.isPeriod && e.endDate ? `${formatDateLabel(e.date)} tot ${formatDateLabel(e.endDate)}` : formatDateLabel(e.date);
+  let text = `*${e.title}*\n${cat.label}\n📅 ${dateText}`;
+  if(e.time) text += `\n🕐 ${e.time}${e.endTime ? '–'+e.endTime : ''}`;
+  if(e.location) text += `\n📍 ${e.location}`;
+  if(e.notes) text += `\n\n${e.notes}`;
+  window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+}
+
+// ---------- FIREBASE ----------
+function initApp(){
+  if(!db){
+    firebaseError = firebaseError || 'Firebase kon nie begin nie.';
+    loading = false;
+    pinLoaded = true;
+    liveBadge.innerHTML = `⚠️ Nie verbind nie`;
+    render();
+    return;
+  }
+
+  // As niks binne 10 sekondes terugkom nie (swak sein / vliegtuig-modus), wys 'n vriendelike boodskap.
+  setTimeout(()=>{
+    if(!connected && loading){ slowConnection = true; loading = false; liveBadge.innerHTML = `⚠️ Geen verbinding`; render(); }
+  }, 10000);
+
+  onValue(ref(db,'events'), (snapshot)=>{
+    const val = snapshot.val();
+    events = val ? Object.values(val) : [];
+    loading = false;
+    connected = true;
+    slowConnection = false;
+    firebaseError = null;
+    liveBadge.innerHTML = `<span class="dot"></span>Intyds verbind`;
+    render();
+  }, (err)=>{
+    firebaseError = (err && (err.code || err.message)) ? ((err.code ? err.code + ': ' : '') + (err.message || '')) : 'Onbekende fout';
+    loading = false;
+    liveBadge.innerHTML = `⚠️ Verbindingsfout`;
+    render();
+  });
+
+  get(ref(db,'config/pin')).then(snap=>{
+    hkPin = snap.exists() ? snap.val().value : null;
+    pinLoaded = true;
+    if(hkPin && lsGet('hennops-unlocked') === String(hkPin)){ unlocked = true; render(); }
+  }).catch(()=>{ hkPin = null; pinLoaded = false; });
+}
+
+// ---------- RENDER ----------
+function isPermissionError(msg){ return /permission[_ ]denied/i.test(msg || ''); }
+
+function render(){
+  hkBtn.textContent = unlocked ? 'HK ✓' : 'HK ⚙';
+  hkBtn.classList.toggle('on', unlocked);
+
+  if(loading){
+    content.innerHTML = `<div class="empty-state"><p>Laai...</p></div>`;
+    return;
+  }
+  if(firebaseError){
+    if(isPermissionError(firebaseError)){
+      content.innerHTML = `<div class="notice bad">
+        <h3>Die databasis weier toegang</h3>
+        <p>Dit gebeur amper altyd omdat Firebase se "toets-modus" ná 30 dae vanself verval. Dis vinnig reggemaak (net een keer, op 'n rekenaar):</p>
+        <ol>
+          <li>Firebase-konsole → jou projek → <b>Realtime Database</b> → <b>Rules</b></li>
+          <li>Vervang alles met die reëls hieronder</li>
+          <li>Klik <b>Publish</b>, kom terug hier en probeer weer</li>
+        </ol>
+<pre>{
+  "rules": {
+    ".read": true,
+    ".write": true
+  }
+}</pre>
+        <button class="btn btn-primary" id="retryBtn" style="width:100%">Probeer weer</button>
+      </div>`;
+    } else {
+      content.innerHTML = `<div class="notice bad">
+        <h3>Kon nie aan die databasis koppel nie</h3>
+        <p>${escapeHtml(firebaseError)}</p>
+        <button class="btn btn-primary" id="retryBtn" style="width:100%">Probeer weer</button>
+      </div>`;
+    }
+    document.getElementById('retryBtn').addEventListener('click', ()=>location.reload());
+    return;
+  }
+  if(slowConnection && !connected){
+    content.innerHTML = `<div class="notice">
+      <h3>Geen verbinding nie</h3>
+      <p>Die kalender kon nie die databasis bereik nie. Kyk of jy data of Wi-Fi het en probeer weer.</p>
+      <button class="btn btn-primary" id="retryBtn" style="width:100%">Probeer weer</button>
+    </div>`;
+    document.getElementById('retryBtn').addEventListener('click', ()=>location.reload());
+    return;
+  }
+  renderKalender();
+}
+
+function cardHtml(e, today){
+  const THREE_DAYS = 3*24*60*60*1000;
+  const cat = CATEGORIES[e.category] || CATEGORIES.hennops;
+  const isPeriod = !!(e.isPeriod && e.endDate);
+  const endCompare = isPeriod ? e.endDate : e.date;
+  const isPast = endCompare < today;
+  const isOngoing = isPeriod && e.date <= today && today <= e.endDate;
+  const isCancelled = !!e.isCancelled;
+  const isConfirming = confirmingId === e.id;
+  const isNew = e.createdAt && (Date.now() - e.createdAt < THREE_DAYS);
+
+  const whenPill = isPeriod
+    ? `<span class="meta-pill">🗓 ${formatShortDate(e.date)} – ${formatShortDate(e.endDate)}</span>`
+    : (e.time ? `<span class="meta-pill">🕐 ${e.time}${e.endTime ? '–'+e.endTime : ''}</span>` : '');
+
+  return `<div class="event-card ${(isPast||isCancelled)?'past':''}" style="border-left-color:${cat.hex}">
+    <div class="event-main">
+      <div class="event-title" style="${isCancelled?'text-decoration:line-through;':''}">${escapeHtml(e.title)}</div>
+      <div class="event-meta">
+        ${whenPill}
+        ${e.location ? `<span class="meta-pill">📍 ${escapeHtml(e.location)}</span>` : ''}
+        ${e.addedBy ? `<span class="meta-pill">👤 ${escapeHtml(e.addedBy)}</span>` : ''}
+      </div>
+      ${e.notes ? `<div class="event-notes">${escapeHtml(e.notes)}</div>` : ''}
+      <div class="card-actions">
+        <button class="link-btn" data-share-event="${e.id}">↗ Deel op WhatsApp</button>
+      </div>
+      ${unlocked && isConfirming ? `<div class="manage">
+        <button class="mini-btn" data-edit-event="${e.id}">Wysig</button>
+        ${!isCancelled ? `<button class="mini-btn" data-cancel-event="${e.id}">Kanselleer</button>` : `<button class="mini-btn" data-restore-event="${e.id}">Herstel</button>`}
+        <button class="mini-btn danger" data-remove-event="${e.id}">Verwyder heeltemal</button>
+        <button class="mini-btn" data-close-confirm="1">Los dit</button>
+      </div>` : ''}
+    </div>
+    <div class="event-side">
+      ${isCancelled ? `<span class="cat-tag" style="background:#B84A3E">GEKANSELLEER</span>` : `<span class="cat-tag" style="background:${cat.hex}">${cat.label}</span>`}
+      ${isNew && !isCancelled ? `<span class="cat-tag" style="background:var(--accent-dark)">NUUT</span>` : ''}
+      ${isOngoing && !isCancelled ? `<span class="cat-tag" style="background:var(--sage)">Nou aan die gang</span>` : ''}
+      ${unlocked && !isConfirming ? `<button class="menu-btn" data-open-confirm="${e.id}" title="Opsies" aria-label="Opsies">⋯</button>` : ''}
+    </div>
+  </div>`;
+}
+
+function buildListHtml(){
+  const today = todayStr();
+  const tomorrow = addDaysToDateStr(today, 1);
+  const currentYear = parseDate(today).y;
+
+  let filtered = events.filter(e => {
+    if(activeFilter === 'alle') return true;
+    if(activeFilter === 'week'){
+      const endCompare = (e.isPeriod && e.endDate) ? e.endDate : e.date;
+      return endCompare >= today && e.date <= addDaysToDateStr(today, 7);
+    }
+    return e.category === activeFilter;
+  });
+  if(searchQuery.trim()){
+    const q = searchQuery.trim().toLowerCase();
+    filtered = filtered.filter(e => (e.title||'').toLowerCase().includes(q) || (e.location||'').toLowerCase().includes(q) || (e.notes||'').toLowerCase().includes(q));
+  }
+  if(!showPast){
+    filtered = filtered.filter(e => ((e.isPeriod && e.endDate) ? e.endDate : e.date) >= today);
+  }
+  filtered.sort((a,b)=> sortKey(a).localeCompare(sortKey(b)));
+
+  // Tydperke wat reeds begin het (bv. HA-tydperk) kry hul eie "Nou aan die gang"-afdeling bo-aan.
+  const ongoing = [];
+  const groups = {};
+  filtered.forEach(e=>{
+    if(e.isPeriod && e.endDate && e.date < today && e.endDate >= today){ ongoing.push(e); }
+    else { (groups[e.date] = groups[e.date] || []).push(e); }
+  });
+
+  const dateKeys = Object.keys(groups).sort();
+  if(ongoing.length === 0 && dateKeys.length === 0){
+    return `<div class="empty-state"><div class="big">📅</div><p>${searchQuery.trim() ? 'Niks gevind vir jou soektog nie.' : 'Niks op die kalender nie.'}</p>${(!searchQuery.trim() && !showPast) ? '<p>Nuwe events verskyn hier sodra HK dit byvoeg.</p>' : ''}</div>`;
+  }
+
+  let html = '';
+  if(ongoing.length){
+    html += `<div class="section-label">Nou aan die gang</div>`;
+    ongoing.forEach(e=>{ html += cardHtml(e, today); });
+  }
+
+  let lastMonth = '';
+  let anchorSet = false;
+  dateKeys.forEach(dateKey=>{
+    const p = parseDate(dateKey);
+    const monthKey = p.y + '-' + p.m;
+    if(monthKey !== lastMonth){
+      lastMonth = monthKey;
+      html += `<div class="month-label">${AF_MAANDE[p.m-1]}${p.y !== currentYear ? ' ' + p.y : ''}</div>`;
+    }
+    const isToday = dateKey === today;
+    const wdLabel = isToday ? 'Vandag' : (dateKey === tomorrow ? 'Môre' : AF_DAE_KORT[p.wd]);
+    const idAttr = (!anchorSet && dateKey >= today) ? 'id="todayAnchor"' : '';
+    if(idAttr) anchorSet = true;
+    html += `<div class="day-row ${isToday?'today':''} ${dateKey<today?'pastday':''}" ${idAttr}>
+      <div class="day-col"><div class="day-num">${p.d}</div><div class="day-wd">${wdLabel}</div></div>
+      <div class="day-cards">${groups[dateKey].map(e=>cardHtml(e, today)).join('')}</div>
+    </div>`;
+  });
+  return html;
+}
+
+function bindListHandlers(){
+  const root = document.getElementById('listArea');
+  if(!root) return;
+  root.querySelectorAll('[data-share-event]').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      const ev = events.find(e=>e.id === b.dataset.shareEvent);
+      if(ev) shareOnWhatsApp(ev);
+    });
+  });
+  root.querySelectorAll('[data-open-confirm]').forEach(b=>{
+    b.addEventListener('click', ()=>{ confirmingId = b.dataset.openConfirm; render(); });
+  });
+  root.querySelectorAll('[data-close-confirm]').forEach(b=>{
+    b.addEventListener('click', ()=>{ confirmingId = null; render(); });
+  });
+  root.querySelectorAll('[data-edit-event]').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      const ev = events.find(e=>e.id === b.dataset.editEvent);
+      if(ev) openAddEventModal(ev);
+    });
+  });
+  root.querySelectorAll('[data-cancel-event]').forEach(b=>{
+    b.addEventListener('click', ()=> cancelEvent(b.dataset.cancelEvent));
+  });
+  root.querySelectorAll('[data-restore-event]').forEach(b=>{
+    b.addEventListener('click', ()=> restoreEvent(b.dataset.restoreEvent));
+  });
+  root.querySelectorAll('[data-remove-event]').forEach(b=>{
+    b.addEventListener('click', ()=> deleteEvent(b.dataset.removeEvent));
+  });
+}
+
+function renderKalender(){
+  const chipDefs = [['alle','Alle'], ['week','Hierdie week'], ...Object.keys(CATEGORIES).map(k=>[k, CATEGORIES[k].label])];
+  const chipsHtml = chipDefs.map(([key,label])=>{
+    const dot = CATEGORIES[key] ? `<span class="dot" style="background:${CATEGORIES[key].hex}"></span>` : '';
+    return `<button class="chip ${activeFilter===key?'active':''}" data-filter="${key}">${dot}${label}</button>`;
+  }).join('');
+
+  const next = getNextEvent();
+  let bannerHtml = '';
+  if(next){
+    const t = escapeHtml(next.event.title);
+    if(next.ongoing){
+      bannerHtml = `<div class="countdown-banner">🎉 "${t}" is nou aan die gang<span class="sub">tot ${formatShortDate(next.event.endDate)}</span></div>`;
+    } else if(next.days === 0){
+      bannerHtml = `<div class="countdown-banner">📍 "${t}" is vandag${next.event.time ? ' om '+next.event.time : ''}</div>`;
+    } else if(next.days === 1){
+      bannerHtml = `<div class="countdown-banner">⏳ "${t}" is môre${next.event.time ? ' om '+next.event.time : ''}</div>`;
+    } else {
+      bannerHtml = `<div class="countdown-banner">⏳ ${next.days} dae tot "${t}"<span class="sub">${formatDateLabel(next.event.date)}</span></div>`;
+    }
+  }
+
+  content.innerHTML = `
+    ${bannerHtml}
+    <div class="search"><span>🔍</span><input type="search" id="searchInput" placeholder="Soek events..." value="${escapeHtml(searchQuery)}" autocomplete="off"></div>
+    <div class="chips">${chipsHtml}</div>
+    <div id="listArea">${buildListHtml()}</div>
+    <div class="foot">
+      <button class="ics-btn" id="downloadIcsBtn">📥 Voeg by my Outlook / Kalender</button>
+      <button class="toggle-past" id="togglePast">${showPast ? 'Versteek verlede events' : 'Wys verlede events'}</button>
+    </div>
+  `;
+
+  // Soek werk net die lys op, nie die hele bladsy nie — anders maak die sleutelbord op foon aanhoudend toe.
+  const searchInput = document.getElementById('searchInput');
+  searchInput.addEventListener('input', ()=>{
+    searchQuery = searchInput.value;
+    document.getElementById('listArea').innerHTML = buildListHtml();
+    bindListHandlers();
+  });
+  document.getElementById('togglePast').addEventListener('click', ()=>{ showPast = !showPast; render(); });
+  content.querySelectorAll('.chip[data-filter]').forEach(c=>{
+    c.addEventListener('click', ()=>{ activeFilter = c.dataset.filter; render(); });
+  });
+  document.getElementById('downloadIcsBtn').addEventListener('click', downloadICS);
+  bindListHandlers();
+}
+
+// ---------- HK MENU ----------
+function openHKMenu(){
+  modalBody.innerHTML = `
+    <h3>HK-opsies</h3>
+    <p class="hint" style="margin:-8px 0 14px;">${unlocked ? 'Jy is ingeteken as HK.' : 'Hierdie aksies is agter die HK-PIN.'}</p>
+    <div class="menu-list">
+      <button class="btn btn-primary" id="hkAddEvent">+ Voeg event by</button>
+      <button class="btn btn-secondary" id="hkBulkAdd">📋 Voeg lys van datums by</button>
+      <button class="btn btn-secondary" id="hkBackup">💾 Rugsteun (JSON)</button>
+      ${unlocked ? `<button class="btn btn-secondary" id="hkLogout">🔒 Teken uit op hierdie foon</button>` : ''}
+      <button class="btn btn-secondary" id="hkClose">Sluit</button>
+    </div>
+  `;
+  openModal();
+  document.getElementById('hkAddEvent').addEventListener('click', ()=>{ closeModal(); handleAddEventClick(); });
+  document.getElementById('hkBulkAdd').addEventListener('click', ()=>{ closeModal(); handleBulkAddClick(); });
+  document.getElementById('hkBackup').addEventListener('click', ()=>{ closeModal(); handleBackupClick(); });
+  document.getElementById('hkClose').addEventListener('click', closeModal);
+  const lo = document.getElementById('hkLogout');
+  if(lo) lo.addEventListener('click', ()=>{ unlocked = false; confirmingId = null; lsDel('hennops-unlocked'); closeModal(); render(); showToast('Uitgeteken'); });
+}
+
+function handleBackupClick(){
+  if(!unlocked){ openPinModalThen(downloadBackup); return; }
+  downloadBackup();
+}
+
+hkBtn.addEventListener('click', openHKMenu);
+
+const backTodayBtn = document.getElementById('backTodayBtn');
+backTodayBtn.addEventListener('click', ()=>{
+  const anchor = document.getElementById('todayAnchor');
+  if(anchor) anchor.scrollIntoView({ behavior:'smooth', block:'start' });
+  else window.scrollTo({ top:0, behavior:'smooth' });
+});
+window.addEventListener('scroll', ()=>{
+  backTodayBtn.classList.toggle('show', window.scrollY > 400);
+}, { passive:true });
+
+// ---------- PIN ----------
+function openPinModalThen(callback){
+  if(!pinLoaded){
+    showToast('Wag net \'n oomblik, die kalender laai nog...');
+    return;
+  }
+  const needsSetup = !hkPin;
+  modalBody.innerHTML = `
+    <h3>${needsSetup ? 'Stel HK-PIN op' : 'HK-PIN'}</h3>
+    <p class="hint" style="margin:-8px 0 14px; font-size:13.5px;">
+      ${needsSetup ? 'Kies \'n PIN wat almal op HK gebruik. Net HK-lede met hierdie PIN kan events byvoeg of verwyder.' : 'Voer die HK-PIN in om voort te gaan.'}
+    </p>
+    <div class="field">
+      <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" id="modalPinInput" placeholder="••••" autocomplete="off" style="text-align:center; letter-spacing:8px; font-size:22px;">
+    </div>
+    <div class="field check-row">
+      <input type="checkbox" id="rememberMe" checked>
+      <label for="rememberMe">Onthou my op hierdie foon</label>
+    </div>
+    <div id="modalPinError" class="error-msg"></div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" id="pinCancel">Kanselleer</button>
+      <button class="btn btn-primary" id="pinConfirm">${needsSetup ? 'Stel op' : 'Ontsluit'}</button>
+    </div>
+  `;
+  openModal();
+  document.getElementById('pinCancel').addEventListener('click', closeModal);
+
+  const finish = (val)=>{
+    unlocked = true;
+    if(document.getElementById('rememberMe').checked) lsSet('hennops-unlocked', String(val));
+    closeModal();
+    render();
+    callback();
+  };
+
+  document.getElementById('pinConfirm').addEventListener('click', async ()=>{
+    const val = document.getElementById('modalPinInput').value.trim();
+    const errEl = document.getElementById('modalPinError');
+    if(val.length < 4){ errEl.textContent = 'PIN moet minstens 4 syfers wees.'; return; }
+    if(needsSetup){
+      try{
+        // Dubbelkontrole: as iemand anders intussen 'n PIN gestel het, moet ons dit nie oorskryf nie.
+        const snap = await get(ref(db,'config/pin'));
+        if(snap.exists()){
+          hkPin = snap.val().value;
+          errEl.textContent = 'Daar is reeds \'n PIN opgestel. Maak toe en probeer weer.';
+          return;
+        }
+        await set(ref(db,'config/pin'), { value: val });
+        hkPin = val;
+        finish(val);
+      }catch(e){
+        errEl.textContent = 'Kon nie stoor nie: ' + e.message;
+      }
+    } else if(val === String(hkPin)){
+      finish(val);
+    } else {
+      errEl.textContent = 'Verkeerde PIN.';
+    }
+  });
+  setTimeout(()=>{ const i = document.getElementById('modalPinInput'); if(i) i.focus(); }, 60);
+}
+
+// ---------- ADD / EDIT EVENT ----------
+function handleAddEventClick(){
+  if(!unlocked){ openPinModalThen(()=>openAddEventModal()); }
+  else { openAddEventModal(); }
+}
+
+function openAddEventModal(existingEvent){
+  const isEdit = !!existingEvent;
+  const catOptions = Object.entries(CATEGORIES).map(([k,v])=>`<option value="${k}" ${isEdit && existingEvent.category===k ? 'selected':''}>${v.label}</option>`).join('');
+  const rememberedName = lsGet('hennops-name') || '';
+  const isP = isEdit && existingEvent.isPeriod;
+  modalBody.innerHTML = `
+    <h3>${isEdit ? 'Wysig event' : 'Voeg event by'}</h3>
+    <div class="field"><label>Titel *</label><input type="text" id="f-title" placeholder="bv. Sport HK-vergadering" value="${escapeHtml(isEdit ? existingEvent.title : '')}"></div>
+    <div class="field check-row">
+      <input type="checkbox" id="f-period" ${isP ? 'checked':''}>
+      <label for="f-period">Dit is 'n tydperk (bv. HA-tydperk), nie net een dag nie</label>
+    </div>
+    <div class="field"><label id="f-date-label">${isP ? 'Vanaf *' : 'Datum *'}</label><input type="date" id="f-date" value="${isEdit ? existingEvent.date : todayStr()}"></div>
+    <div class="field" id="f-enddate-wrap" style="display:${isP ? 'block':'none'};"><label>Tot en met *</label><input type="date" id="f-enddate" value="${isEdit && existingEvent.endDate ? existingEvent.endDate : ''}"></div>
+    <div class="field" id="f-time-wrap" style="display:${isP ? 'none':'block'};">
+      <label>Tyd (opsioneel)</label>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <input type="time" id="f-time" value="${isEdit && existingEvent.time ? existingEvent.time : ''}" style="flex:1; min-width:0;">
+        <span style="color:var(--ink-soft); font-size:13px;">tot</span>
+        <input type="time" id="f-endtime" value="${isEdit && existingEvent.endTime ? existingEvent.endTime : ''}" style="flex:1; min-width:0;">
+      </div>
+      <p class="hint">Eindtyd is opsioneel — los dit leeg vir 'n verstek 1-uur duur in Outlook.</p>
+    </div>
+    <div class="field"><label>Kategorie</label><select id="f-cat">${catOptions}</select></div>
+    <div class="field"><label>Plek (opsioneel)</label><input type="text" id="f-loc" placeholder="bv. Hennops-lapa" value="${escapeHtml(isEdit ? (existingEvent.location||'') : '')}"></div>
+    <div class="field"><label>Wie voeg dit by (opsioneel)</label><input type="text" id="f-by" placeholder="bv. Sport-portefeulje" value="${escapeHtml(isEdit ? (existingEvent.addedBy||'') : rememberedName)}"></div>
+    <div class="field"><label>Notas (opsioneel)</label><textarea id="f-notes" placeholder="Ekstra inligting...">${escapeHtml(isEdit ? (existingEvent.notes||'') : '')}</textarea></div>
+    <div id="addEventError" class="error-msg"></div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" id="addEventCancel">Kanselleer</button>
+      <button class="btn btn-primary" id="addEventSave">${isEdit ? 'Stoor wysiging' : 'Stoor'}</button>
+    </div>
+  `;
+  openModal();
+  document.getElementById('addEventCancel').addEventListener('click', closeModal);
+
+  const periodCheckbox = document.getElementById('f-period');
+  const enddateWrap = document.getElementById('f-enddate-wrap');
+  const timeWrap = document.getElementById('f-time-wrap');
+  const dateLabel = document.getElementById('f-date-label');
+  periodCheckbox.addEventListener('change', ()=>{
+    const on = periodCheckbox.checked;
+    enddateWrap.style.display = on ? 'block' : 'none';
+    timeWrap.style.display = on ? 'none' : 'block';
+    dateLabel.textContent = on ? 'Vanaf *' : 'Datum *';
+  });
+
+  document.getElementById('addEventSave').addEventListener('click', async ()=>{
+    const title = document.getElementById('f-title').value.trim();
+    const date = document.getElementById('f-date').value;
+    const isPeriod = periodCheckbox.checked;
+    const endDate = document.getElementById('f-enddate').value;
+    const errEl = document.getElementById('addEventError');
+    if(!title || !date){ errEl.textContent = 'Titel en datum is nodig.'; return; }
+    if(isPeriod && !endDate){ errEl.textContent = 'Gee die "tot en met"-datum vir die tydperk.'; return; }
+    if(isPeriod && endDate < date){ errEl.textContent = 'Die einddatum kan nie voor die begindatum wees nie.'; return; }
+    const addedByVal = document.getElementById('f-by').value.trim();
+    if(addedByVal) lsSet('hennops-name', addedByVal);
+
+    const eventData = {
+      id: isEdit ? existingEvent.id : ('ev_' + Date.now()),
+      title,
+      date,
+      isPeriod,
+      endDate: isPeriod ? endDate : '',
+      time: isPeriod ? '' : document.getElementById('f-time').value,
+      endTime: isPeriod ? '' : document.getElementById('f-endtime').value,
+      category: document.getElementById('f-cat').value,
+      location: document.getElementById('f-loc').value.trim(),
+      addedBy: addedByVal,
+      notes: document.getElementById('f-notes').value.trim(),
+      isCancelled: isEdit ? !!existingEvent.isCancelled : false,
+      createdAt: isEdit ? (existingEvent.createdAt || Date.now()) : Date.now()
+    };
+    try{
+      await set(ref(db,'events/'+eventData.id), eventData);
+      confirmingId = null;
+      closeModal();
+      showToast(isEdit ? 'Event bygewerk' : 'Event bygevoeg');
+    }catch(e){
+      errEl.textContent = 'Kon nie stoor nie: ' + e.message;
+    }
+  });
+}
+
+async function cancelEvent(id){
+  try{
+    await update(ref(db,'events/'+id), { isCancelled: true });
+    confirmingId = null;
+    showToast('Event gekanselleer');
+  }catch(e){
+    showToast('Kon nie kanselleer nie: ' + e.message);
+  }
+}
+async function restoreEvent(id){
+  try{
+    await update(ref(db,'events/'+id), { isCancelled: false });
+    confirmingId = null;
+    showToast('Kansellasie ongedaan gemaak');
+  }catch(e){
+    showToast('Kon nie herstel nie: ' + e.message);
+  }
+}
+
+// ---------- BULK ADD ----------
+function handleBulkAddClick(){
+  if(!unlocked){ openPinModalThen(openBulkAddModal); }
+  else { openBulkAddModal(); }
+}
+
+function parseBulkLine(line){
+  const parts = line.split('|').map(p=>p.trim());
+  if(parts.length < 3) return { error: 'Te min velde (datum | kategorie | titel)' };
+  const [datePart, catPart, titlePart, locPart, notesPart] = parts;
+
+  let dateStr, endDateStr = null, isPeriod = false;
+  if(datePart.includes(' tot ')){
+    const [d1, d2] = datePart.split(' tot ').map(s=>s.trim());
+    dateStr = d1; endDateStr = d2; isPeriod = true;
+  } else {
+    dateStr = datePart.trim();
+  }
+  const dateRe = /^\d{4}-\d{2}-\d{2}$/;
+  if(!dateRe.test(dateStr)) return { error: `Ongeldige datum "${dateStr}" (gebruik JJJJ-MM-DD)` };
+  if(isPeriod && !dateRe.test(endDateStr)) return { error: `Ongeldige einddatum "${endDateStr}"` };
+
+  const catKey = Object.keys(CATEGORIES).find(k => CATEGORIES[k].label.toLowerCase() === catPart.toLowerCase());
+  if(!catKey) return { error: `Onbekende kategorie "${catPart}" (gebruik Akademies / Huis Hennops / Mede Koshuise / Akademia)` };
+  if(!titlePart) return { error: 'Geen titel nie' };
+
+  return {
+    event: {
+      title: titlePart, date: dateStr, isPeriod, endDate: isPeriod ? endDateStr : '',
+      time: '', category: catKey, location: locPart || '', addedBy: 'Bulk-invoer',
+      notes: notesPart || '', isCancelled: false, createdAt: Date.now()
+    }
+  };
+}
+
+function openBulkAddModal(){
+  modalBody.innerHTML = `
+    <h3>Voeg 'n lys datums by</h3>
+    <p class="hint" style="margin:-6px 0 12px; font-size:13px;">Een event per reël. Formaat: <b>datum | kategorie | titel | plek | notas</b> (plek en notas opsioneel). Vir 'n tydperk: <b>2026-09-15 tot 2026-09-19 | Akademies | HA-tydperk 3</b></p>
+    <div class="field">
+      <textarea id="bulk-text" style="min-height:170px; font-family:monospace; font-size:14px;" placeholder="2026-09-15 tot 2026-09-19 | Akademies | HA-tydperk 3
+2026-10-01 | Akademia | Direkteursdinee | Sentrum"></textarea>
+    </div>
+    <div id="bulkErrors" class="error-msg"></div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" id="bulkCancel">Kanselleer</button>
+      <button class="btn btn-primary" id="bulkSave">Voeg almal by</button>
+    </div>
+  `;
+  openModal();
+  document.getElementById('bulkCancel').addEventListener('click', closeModal);
+  document.getElementById('bulkSave').addEventListener('click', async ()=>{
+    const raw = document.getElementById('bulk-text').value;
+    const lines = raw.split('\n').map(l=>l.trim()).filter(l=>l.length>0);
+    const errEl = document.getElementById('bulkErrors');
+    if(lines.length === 0){ errEl.textContent = 'Plak eers ten minste een reël.'; return; }
+
+    const goodEvents = [];
+    const errors = [];
+    lines.forEach((line, i)=>{
+      const result = parseBulkLine(line);
+      if(result.error) errors.push(`Reël ${i+1}: ${result.error}`);
+      else goodEvents.push(result.event);
+    });
+    if(goodEvents.length === 0){ errEl.innerHTML = errors.map(escapeHtml).join('<br>'); return; }
+
+    const updates = {};
+    goodEvents.forEach((ev, i)=>{
+      const id = 'ev_' + Date.now() + '_' + i;
+      ev.id = id;
+      updates['events/'+id] = ev;
+    });
+    try{
+      await update(ref(db), updates);
+      closeModal();
+      showToast(`${goodEvents.length} event(s) bygevoeg${errors.length ? `, ${errors.length} oorgeslaan` : ''}`);
+    }catch(e){
+      errEl.textContent = 'Kon nie stoor nie: ' + e.message;
+    }
+  });
+}
+
+async function deleteEvent(id){
+  if(!unlocked){ openPinModalThen(()=>doDeleteEvent(id)); return; }
+  doDeleteEvent(id);
+}
+async function doDeleteEvent(id){
+  try{
+    await remove(ref(db,'events/'+id));
+    confirmingId = null;
+    showToast('Event verwyder');
+  }catch(e){
+    showToast('Kon nie verwyder nie: ' + e.message);
+  }
+}
+
+// ---------- MODAL ----------
+function openModal(){ modalOverlay.classList.add('open'); }
+function closeModal(){ modalOverlay.classList.remove('open'); modalBody.innerHTML=''; }
+modalOverlay.addEventListener('click', (e)=>{ if(e.target === modalOverlay) closeModal(); });
+
+// ---------- START ----------
+initApp();
+</script>
+</body>
+</html>
