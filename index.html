@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Huis Hennops — Kalender</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23CBC3BA'/%3E%3Cpath d='M30 45c0-12 10-22 22-22 10 0 18 6 21 15 5 1 9 5 9 11 0 6-5 11-11 11h-2v12c0 4-3 7-7 7h-9c-2 0-4-1-5-2' stroke='%23A86E53' stroke-width='4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M30 45c-6 0-11 4-11 10s5 11 11 11c2 0 4-1 5-2' stroke='%23A86E53' stroke-width='4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='62' cy='40' r='3' fill='%23A86E53'/%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23CBC3BA'/%3E%3Cpath d='M30 45c0-12 10-22 22-22 10 0 18 6 21 15 5 1 9 5 9 11 0 6-5 11-11 11h-2v12c0 4-3 7-7 7h-9c-2 0-4-1-5-2' stroke='%23A86E53' stroke-width='4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M30 45c-6 0-11 4-11 10s5 11 11 11c2 0 4-1 5-2' stroke='%23A86E53' stroke-width='4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='62' cy='40' r='3' fill='%23A86E53'/%3E%3C/svg%3E">
-<link rel="manifest" href='data:application/manifest+json,{"name":"Huis Hennops Kalender","short_name":"Hennops","start_url":".","display":"standalone","background_color":"%23CBC3BA","theme_color":"%23CBC3BA"}'>
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#CBC3BA">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -139,6 +139,22 @@ main{padding:14px 14px calc(96px + env(safe-area-inset-bottom));}
   border-radius:999px; background:var(--bg); color:var(--ink-soft);
   font-size:12px; font-weight:500; max-width:100%;
 }
+.meta-pill.port{background:rgba(168,110,83,.15); color:var(--accent-dark); font-weight:600;}
+.meta-pill.moved{background:#F3E3C8; color:#7A5410; font-weight:600;}
+.today-box{background:var(--surface); border-radius:var(--radius); padding:12px 14px; margin-bottom:12px; border:1.5px solid var(--accent);}
+.today-box h2{font-size:14px; font-family:'Work Sans',sans-serif; font-weight:700; color:var(--accent-dark); margin-bottom:6px; letter-spacing:.02em;}
+.tb-row{display:flex; gap:10px; align-items:baseline; padding:5px 0; border-top:1px solid var(--bg); font-size:14.5px;}
+.tb-row:first-of-type{border-top:none;}
+.tb-when{flex-shrink:0; width:92px; font-size:12.5px; font-weight:700; color:var(--ink-soft);}
+.tb-title{flex:1; min-width:0; font-weight:600; overflow-wrap:anywhere;}
+.tb-ports{flex-shrink:0; font-size:14px;}
+.chip-label{font-size:11px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--ink-soft); margin:0 2px 5px;}
+.chips.ports{padding-bottom:6px;}
+.chips.ports .chip{height:34px; font-size:13px;}
+.chips.ports .chip.active{background:var(--accent); border-color:var(--accent);}
+.port-grid{display:grid; grid-template-columns:1fr 1fr; gap:8px;}
+.port-opt{display:flex; align-items:center; gap:8px; min-height:44px; padding:0 10px; border:1px solid var(--line); border-radius:var(--radius-sm); background:#fff; font-size:14px; cursor:pointer;}
+.port-opt input{width:20px; height:20px; min-height:0; flex-shrink:0; padding:0;}
 .event-notes{font-size:13.5px; color:var(--ink-soft); margin-top:7px; overflow-wrap:anywhere;}
 .event-side{display:flex; flex-direction:column; align-items:flex-end; gap:5px; flex-shrink:0; max-width:104px;}
 .cat-tag{
@@ -294,6 +310,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import { getDatabase, ref, set, update, remove, onValue, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 window.__hennopsBooted = true;
+if("serviceWorker" in navigator){ window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{})); }
 
 const firebaseConfig = {
   apiKey: "AIzaSyAnD6HlukBh10Vghx4Mr60u4XsIvEJD_SI",
@@ -326,6 +343,7 @@ let slowConnection = false;
 let confirmingId = null;
 let searchQuery = '';
 let showPast = false;
+let activePortfolio = 'all';
 
 const CATEGORIES = {
   akademies: { label:'Akademies', hex:'#33291F' },
@@ -333,6 +351,21 @@ const CATEGORIES = {
   ander:     { label:'Mede Koshuise', hex:'#758378' },
   kampus:    { label:'Akademia', hex:'#8C8073' }
 };
+
+const PORTFOLIOS = {
+  sport:       { label:'Sport',           emoji:'⚽' },
+  eerstejaars: { label:'Eerstejaars',     emoji:'🌱' },
+  seniors:     { label:'Seniors',         emoji:'🎓' },
+  kultuur:     { label:'Kuns en Kultuur', emoji:'🎭' },
+  gemeenskap:  { label:'Gemeenskap',      emoji:'🤝' },
+  sosiaal:     { label:'Sosiaal',         emoji:'🎉' }
+};
+function getPorts(e){
+  const p = e && e.portfolios;
+  if(!p) return [];
+  const arr = Array.isArray(p) ? p : Object.values(p);
+  return arr.filter(k => PORTFOLIOS[k]);
+}
 
 const AF_MAANDE = ['Januarie','Februarie','Maart','April','Mei','Junie','Julie','Augustus','September','Oktober','November','Desember'];
 const AF_MAANDE_KORT = ['Jan','Feb','Mrt','Apr','Mei','Jun','Jul','Aug','Sep','Okt','Nov','Des'];
@@ -464,7 +497,7 @@ function buildICS(){
     lines.push('SUMMARY:'+escapeICS(e.title));
     if(e.location) lines.push('LOCATION:'+escapeICS(e.location));
     if(e.notes) lines.push('DESCRIPTION:'+escapeICS(e.notes));
-    lines.push('CATEGORIES:'+escapeICS(cat.label));
+    lines.push('CATEGORIES:'+[cat.label].concat(getPorts(e).map(k=>PORTFOLIOS[k].label)).map(escapeICS).join(','));
     lines.push('BEGIN:VALARM');
     lines.push('ACTION:DISPLAY');
     lines.push('DESCRIPTION:Herinnering');
@@ -510,11 +543,49 @@ async function downloadBackup(){
 function shareOnWhatsApp(e){
   const cat = CATEGORIES[e.category] || CATEGORIES.hennops;
   const dateText = e.isPeriod && e.endDate ? `${formatDateLabel(e.date)} tot ${formatDateLabel(e.endDate)}` : formatDateLabel(e.date);
-  let text = `*${e.title}*\n${cat.label}\n📅 ${dateText}`;
+  const pl = getPorts(e).map(k=>PORTFOLIOS[k].emoji+' '+PORTFOLIOS[k].label).join(', ');
+  let text = `*${e.title}*\n${cat.label}${pl ? ' · '+pl : ''}\n📅 ${dateText}`;
   if(e.time) text += `\n🕐 ${e.time}${e.endTime ? '–'+e.endTime : ''}`;
   if(e.location) text += `\n📍 ${e.location}`;
   if(e.notes) text += `\n\n${e.notes}`;
   window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+}
+
+function shareWeek(){
+  const today = todayStr();
+  const end = addDaysToDateStr(today, 6);
+  const evs = events.filter(e => {
+    if(e.isCancelled) return false;
+    const endC = (e.isPeriod && e.endDate) ? e.endDate : e.date;
+    return endC >= today && e.date <= end && (activePortfolio === 'all' || getPorts(e).includes(activePortfolio));
+  }).sort((a,b)=> sortKey(a).localeCompare(sortKey(b)));
+  if(evs.length === 0){ showToast('Niks op die kalender vir die volgende 7 dae nie'); return; }
+  const pf = activePortfolio !== 'all' ? ` (${PORTFOLIOS[activePortfolio].label})` : '';
+  let text = `*Hierdie week by Hennops*${pf} 📅\n${formatShortDate(today)} – ${formatShortDate(end)}\n`;
+  evs.forEach(e=>{
+    const p = parseDate(e.date);
+    const when = (e.isPeriod && e.endDate)
+      ? `${formatShortDate(e.date)}–${formatShortDate(e.endDate)}`
+      : `${AF_DAE_KORT[p.wd]} ${p.d} ${AF_MAANDE_KORT[p.m-1]}${e.time ? ' '+e.time : ''}`;
+    const em = getPorts(e).map(k=>PORTFOLIOS[k].emoji).join('');
+    text += `\n• ${when} — ${e.title}${e.location ? ' 📍'+e.location : ''}${em ? ' '+em : ''}`;
+  });
+  text += `\n\nKalender: ${location.href.split('#')[0]}`;
+  window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+}
+
+function todayBoxHtml(){
+  if(activeFilter !== 'alle' || activePortfolio !== 'all' || searchQuery.trim()) return '';
+  const today = todayStr(), tom = addDaysToDateStr(today,1);
+  const items = events.filter(e => !e.isCancelled && (e.date === today || e.date === tom))
+    .sort((a,b)=> sortKey(a).localeCompare(sortKey(b)));
+  if(!items.length) return '';
+  const rows = items.map(e=>{
+    const em = getPorts(e).map(k=>PORTFOLIOS[k].emoji).join('');
+    const day = e.date === today ? 'Vandag' : 'Môre';
+    return `<div class="tb-row"><span class="tb-when">${day}${e.time ? ' · '+e.time : ''}</span><span class="tb-title">${escapeHtml(e.title)}</span>${em ? `<span class="tb-ports">${em}</span>` : ''}</div>`;
+  }).join('');
+  return `<div class="today-box"><h2>📌 VANDAG &amp; MÔRE</h2>${rows}</div>`;
 }
 
 // ---------- FIREBASE ----------
@@ -617,6 +688,7 @@ function cardHtml(e, today){
   const isCancelled = !!e.isCancelled;
   const isConfirming = confirmingId === e.id;
   const isNew = e.createdAt && (Date.now() - e.createdAt < THREE_DAYS);
+  const movedRecently = !!(e.movedFrom && e.movedAt && (Date.now() - e.movedAt < 14*24*60*60*1000));
 
   const whenPill = isPeriod
     ? `<span class="meta-pill">🗓 ${formatShortDate(e.date)} – ${formatShortDate(e.endDate)}</span>`
@@ -630,12 +702,17 @@ function cardHtml(e, today){
         ${e.location ? `<span class="meta-pill">📍 ${escapeHtml(e.location)}</span>` : ''}
         ${e.addedBy ? `<span class="meta-pill">👤 ${escapeHtml(e.addedBy)}</span>` : ''}
       </div>
+      ${(getPorts(e).length || movedRecently) ? `<div class="event-meta" style="margin-top:6px;">
+        ${getPorts(e).map(k=>`<span class="meta-pill port">${PORTFOLIOS[k].emoji} ${PORTFOLIOS[k].label}</span>`).join('')}
+        ${movedRecently ? `<span class="meta-pill moved">↪ Verskuif van ${formatShortDate(e.movedFrom)}</span>` : ''}
+      </div>` : ''}
       ${e.notes ? `<div class="event-notes">${escapeHtml(e.notes)}</div>` : ''}
       <div class="card-actions">
         <button class="link-btn" data-share-event="${e.id}">↗ Deel op WhatsApp</button>
       </div>
       ${unlocked && isConfirming ? `<div class="manage">
         <button class="mini-btn" data-edit-event="${e.id}">Wysig</button>
+        <button class="mini-btn" data-copy-event="${e.id}">Kopieer</button>
         ${!isCancelled ? `<button class="mini-btn" data-cancel-event="${e.id}">Kanselleer</button>` : `<button class="mini-btn" data-restore-event="${e.id}">Herstel</button>`}
         <button class="mini-btn danger" data-remove-event="${e.id}">Verwyder heeltemal</button>
         <button class="mini-btn" data-close-confirm="1">Los dit</button>
@@ -666,6 +743,9 @@ function buildListHtml(){
   if(searchQuery.trim()){
     const q = searchQuery.trim().toLowerCase();
     filtered = filtered.filter(e => (e.title||'').toLowerCase().includes(q) || (e.location||'').toLowerCase().includes(q) || (e.notes||'').toLowerCase().includes(q));
+  }
+  if(activePortfolio !== 'all'){
+    filtered = filtered.filter(e => getPorts(e).includes(activePortfolio));
   }
   if(!showPast){
     filtered = filtered.filter(e => ((e.isPeriod && e.endDate) ? e.endDate : e.date) >= today);
@@ -733,6 +813,12 @@ function bindListHandlers(){
       if(ev) openAddEventModal(ev);
     });
   });
+  root.querySelectorAll('[data-copy-event]').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      const ev = events.find(e=>e.id === b.dataset.copyEvent);
+      if(ev) openAddEventModal(ev, true);
+    });
+  });
   root.querySelectorAll('[data-cancel-event]').forEach(b=>{
     b.addEventListener('click', ()=> cancelEvent(b.dataset.cancelEvent));
   });
@@ -751,6 +837,9 @@ function renderKalender(){
     return `<button class="chip ${activeFilter===key?'active':''}" data-filter="${key}">${dot}${label}</button>`;
   }).join('');
 
+  const portChips = [['all','Almal']].concat(Object.keys(PORTFOLIOS).map(k=>[k, PORTFOLIOS[k].emoji+' '+PORTFOLIOS[k].label]))
+    .map(([key,label])=>`<button class="chip ${activePortfolio===key?'active':''}" data-port="${key}">${label}</button>`).join('');
+
   const next = getNextEvent();
   let bannerHtml = '';
   if(next){
@@ -768,10 +857,14 @@ function renderKalender(){
 
   content.innerHTML = `
     ${bannerHtml}
+    ${todayBoxHtml()}
     <div class="search"><span>🔍</span><input type="search" id="searchInput" placeholder="Soek events..." value="${escapeHtml(searchQuery)}" autocomplete="off"></div>
     <div class="chips">${chipsHtml}</div>
+    <div class="chip-label">Portefeulje</div>
+    <div class="chips ports">${portChips}</div>
     <div id="listArea">${buildListHtml()}</div>
     <div class="foot">
+      <button class="ics-btn" id="shareWeekBtn" style="border-color:var(--accent); color:var(--accent-dark);">📲 Deel hierdie week op WhatsApp</button>
       <button class="ics-btn" id="downloadIcsBtn">📥 Voeg by my Outlook / Kalender</button>
       <button class="toggle-past" id="togglePast">${showPast ? 'Versteek verlede events' : 'Wys verlede events'}</button>
     </div>
@@ -788,6 +881,10 @@ function renderKalender(){
   content.querySelectorAll('.chip[data-filter]').forEach(c=>{
     c.addEventListener('click', ()=>{ activeFilter = c.dataset.filter; render(); });
   });
+  content.querySelectorAll('.chip[data-port]').forEach(c=>{
+    c.addEventListener('click', ()=>{ activePortfolio = c.dataset.port; render(); });
+  });
+  document.getElementById('shareWeekBtn').addEventListener('click', shareWeek);
   document.getElementById('downloadIcsBtn').addEventListener('click', downloadICS);
   bindListHandlers();
 }
@@ -901,33 +998,37 @@ function handleAddEventClick(){
   else { openAddEventModal(); }
 }
 
-function openAddEventModal(existingEvent){
-  const isEdit = !!existingEvent;
-  const catOptions = Object.entries(CATEGORIES).map(([k,v])=>`<option value="${k}" ${isEdit && existingEvent.category===k ? 'selected':''}>${v.label}</option>`).join('');
+function openAddEventModal(existingEvent, asCopy){
+  const src = existingEvent || null;
+  const isEdit = !!src && !asCopy;
+  const catOptions = Object.entries(CATEGORIES).map(([k,v])=>`<option value="${k}" ${src && src.category===k ? 'selected':''}>${v.label}</option>`).join('');
   const rememberedName = lsGet('hennops-name') || '';
-  const isP = isEdit && existingEvent.isPeriod;
+  const isP = !!(src && src.isPeriod);
+  const srcPorts = src ? getPorts(src) : [];
+  const portHtml = Object.entries(PORTFOLIOS).map(([k,v])=>`<label class="port-opt"><input type="checkbox" name="f-port" value="${k}" ${srcPorts.includes(k)?'checked':''}>${v.emoji} ${v.label}</label>`).join('');
   modalBody.innerHTML = `
-    <h3>${isEdit ? 'Wysig event' : 'Voeg event by'}</h3>
-    <div class="field"><label>Titel *</label><input type="text" id="f-title" placeholder="bv. Sport HK-vergadering" value="${escapeHtml(isEdit ? existingEvent.title : '')}"></div>
+    <h3>${isEdit ? 'Wysig event' : (asCopy ? 'Kopieer event' : 'Voeg event by')}</h3>
+    <div class="field"><label>Titel *</label><input type="text" id="f-title" placeholder="bv. Sport HK-vergadering" value="${escapeHtml(src ? src.title : '')}"></div>
     <div class="field check-row">
       <input type="checkbox" id="f-period" ${isP ? 'checked':''}>
       <label for="f-period">Dit is 'n tydperk (bv. HA-tydperk), nie net een dag nie</label>
     </div>
-    <div class="field"><label id="f-date-label">${isP ? 'Vanaf *' : 'Datum *'}</label><input type="date" id="f-date" value="${isEdit ? existingEvent.date : todayStr()}"></div>
-    <div class="field" id="f-enddate-wrap" style="display:${isP ? 'block':'none'};"><label>Tot en met *</label><input type="date" id="f-enddate" value="${isEdit && existingEvent.endDate ? existingEvent.endDate : ''}"></div>
+    <div class="field"><label id="f-date-label">${isP ? 'Vanaf *' : 'Datum *'}</label><input type="date" id="f-date" value="${isEdit ? src.date : todayStr()}"></div>
+    <div class="field" id="f-enddate-wrap" style="display:${isP ? 'block':'none'};"><label>Tot en met *</label><input type="date" id="f-enddate" value="${isEdit && src.endDate ? src.endDate : ''}"></div>
     <div class="field" id="f-time-wrap" style="display:${isP ? 'none':'block'};">
       <label>Tyd (opsioneel)</label>
       <div style="display:flex; gap:8px; align-items:center;">
-        <input type="time" id="f-time" value="${isEdit && existingEvent.time ? existingEvent.time : ''}" style="flex:1; min-width:0;">
+        <input type="time" id="f-time" value="${src && src.time ? src.time : ''}" style="flex:1; min-width:0;">
         <span style="color:var(--ink-soft); font-size:13px;">tot</span>
-        <input type="time" id="f-endtime" value="${isEdit && existingEvent.endTime ? existingEvent.endTime : ''}" style="flex:1; min-width:0;">
+        <input type="time" id="f-endtime" value="${src && src.endTime ? src.endTime : ''}" style="flex:1; min-width:0;">
       </div>
       <p class="hint">Eindtyd is opsioneel — los dit leeg vir 'n verstek 1-uur duur in Outlook.</p>
     </div>
     <div class="field"><label>Kategorie</label><select id="f-cat">${catOptions}</select></div>
-    <div class="field"><label>Plek (opsioneel)</label><input type="text" id="f-loc" placeholder="bv. Hennops-lapa" value="${escapeHtml(isEdit ? (existingEvent.location||'') : '')}"></div>
-    <div class="field"><label>Wie voeg dit by (opsioneel)</label><input type="text" id="f-by" placeholder="bv. Sport-portefeulje" value="${escapeHtml(isEdit ? (existingEvent.addedBy||'') : rememberedName)}"></div>
-    <div class="field"><label>Notas (opsioneel)</label><textarea id="f-notes" placeholder="Ekstra inligting...">${escapeHtml(isEdit ? (existingEvent.notes||'') : '')}</textarea></div>
+    <div class="field"><label>Portefeulje / vir wie (kies een of meer, opsioneel)</label><div class="port-grid">${portHtml}</div></div>
+    <div class="field"><label>Plek (opsioneel)</label><input type="text" id="f-loc" placeholder="bv. Hennops-lapa" value="${escapeHtml(src ? (src.location||'') : '')}"></div>
+    <div class="field"><label>Wie voeg dit by (opsioneel)</label><input type="text" id="f-by" placeholder="bv. Sport-portefeulje" value="${escapeHtml(src ? (src.addedBy||rememberedName) : rememberedName)}"></div>
+    <div class="field"><label>Notas (opsioneel)</label><textarea id="f-notes" placeholder="Ekstra inligting...">${escapeHtml(src ? (src.notes||'') : '')}</textarea></div>
     <div id="addEventError" class="error-msg"></div>
     <div class="modal-actions">
       <button class="btn btn-secondary" id="addEventCancel">Kanselleer</button>
@@ -959,9 +1060,17 @@ function openAddEventModal(existingEvent){
     if(isPeriod && endDate < date){ errEl.textContent = 'Die einddatum kan nie voor die begindatum wees nie.'; return; }
     const addedByVal = document.getElementById('f-by').value.trim();
     if(addedByVal) lsSet('hennops-name', addedByVal);
+    const portfolios = Array.from(modalBody.querySelectorAll('input[name="f-port"]:checked')).map(i=>i.value);
+
+    // Verskuif-merker: as 'n bestaande event se datum verander, onthou die ou datum sodat die manne dit kan sien.
+    let movedFrom = '', movedAt = 0;
+    if(isEdit){
+      if(src.date !== date){ movedFrom = src.date; movedAt = Date.now(); }
+      else { movedFrom = src.movedFrom || ''; movedAt = src.movedAt || 0; }
+    }
 
     const eventData = {
-      id: isEdit ? existingEvent.id : ('ev_' + Date.now()),
+      id: isEdit ? src.id : ('ev_' + Date.now()),
       title,
       date,
       isPeriod,
@@ -969,17 +1078,19 @@ function openAddEventModal(existingEvent){
       time: isPeriod ? '' : document.getElementById('f-time').value,
       endTime: isPeriod ? '' : document.getElementById('f-endtime').value,
       category: document.getElementById('f-cat').value,
+      portfolios,
       location: document.getElementById('f-loc').value.trim(),
       addedBy: addedByVal,
       notes: document.getElementById('f-notes').value.trim(),
-      isCancelled: isEdit ? !!existingEvent.isCancelled : false,
-      createdAt: isEdit ? (existingEvent.createdAt || Date.now()) : Date.now()
+      isCancelled: isEdit ? !!src.isCancelled : false,
+      movedFrom, movedAt,
+      createdAt: isEdit ? (src.createdAt || Date.now()) : Date.now()
     };
     try{
       await set(ref(db,'events/'+eventData.id), eventData);
       confirmingId = null;
       closeModal();
-      showToast(isEdit ? 'Event bygewerk' : 'Event bygevoeg');
+      showToast(isEdit ? 'Event bygewerk' : (asCopy ? 'Kopie bygevoeg' : 'Event bygevoeg'));
     }catch(e){
       errEl.textContent = 'Kon nie stoor nie: ' + e.message;
     }
@@ -1014,7 +1125,7 @@ function handleBulkAddClick(){
 function parseBulkLine(line){
   const parts = line.split('|').map(p=>p.trim());
   if(parts.length < 3) return { error: 'Te min velde (datum | kategorie | titel)' };
-  const [datePart, catPart, titlePart, locPart, notesPart] = parts;
+  const [datePart, catPart, titlePart, locPart, notesPart, portPart] = parts;
 
   let dateStr, endDateStr = null, isPeriod = false;
   if(datePart.includes(' tot ')){
@@ -1030,11 +1141,19 @@ function parseBulkLine(line){
   const catKey = Object.keys(CATEGORIES).find(k => CATEGORIES[k].label.toLowerCase() === catPart.toLowerCase());
   if(!catKey) return { error: `Onbekende kategorie "${catPart}" (gebruik Akademies / Huis Hennops / Mede Koshuise / Akademia)` };
   if(!titlePart) return { error: 'Geen titel nie' };
+  const portfolios = [];
+  if(portPart){
+    for(const name of portPart.split(',').map(x=>x.trim()).filter(Boolean)){
+      const pk = Object.keys(PORTFOLIOS).find(k => PORTFOLIOS[k].label.toLowerCase() === name.toLowerCase());
+      if(!pk) return { error: `Onbekende portefeulje "${name}" (Sport, Eerstejaars, Seniors, Kuns en Kultuur, Gemeenskap, Sosiaal)` };
+      portfolios.push(pk);
+    }
+  }
 
   return {
     event: {
       title: titlePart, date: dateStr, isPeriod, endDate: isPeriod ? endDateStr : '',
-      time: '', category: catKey, location: locPart || '', addedBy: 'Bulk-invoer',
+      time: '', category: catKey, portfolios, location: locPart || '', addedBy: 'Bulk-invoer',
       notes: notesPart || '', isCancelled: false, createdAt: Date.now()
     }
   };
@@ -1043,7 +1162,7 @@ function parseBulkLine(line){
 function openBulkAddModal(){
   modalBody.innerHTML = `
     <h3>Voeg 'n lys datums by</h3>
-    <p class="hint" style="margin:-6px 0 12px; font-size:13px;">Een event per reël. Formaat: <b>datum | kategorie | titel | plek | notas</b> (plek en notas opsioneel). Vir 'n tydperk: <b>2026-09-15 tot 2026-09-19 | Akademies | HA-tydperk 3</b></p>
+    <p class="hint" style="margin:-6px 0 12px; font-size:13px;">Een event per reël. Formaat: <b>datum | kategorie | titel | plek | notas | portefeuljes</b> (plek, notas en portefeuljes opsioneel; portefeuljes met komma, bv. <i>Sport, Eerstejaars</i>). Vir 'n tydperk: <b>2026-09-15 tot 2026-09-19 | Akademies | HA-tydperk 3</b></p>
     <div class="field">
       <textarea id="bulk-text" style="min-height:170px; font-family:monospace; font-size:14px;" placeholder="2026-09-15 tot 2026-09-19 | Akademies | HA-tydperk 3
 2026-10-01 | Akademia | Direkteursdinee | Sentrum"></textarea>
