@@ -14,7 +14,7 @@
 <meta name="apple-mobile-web-app-title" content="Hennops">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#CBC3BA;
@@ -257,7 +257,162 @@ main{padding:14px 14px calc(96px + env(safe-area-inset-bottom));}
 }
 .back-today-btn.show{display:block;}
 
-@media(prefers-reduced-motion: reduce){ .modal{animation:none;} }
+
+.verse{margin:0 0 12px;padding:14px 16px 12px;background:var(--surface);border-radius:var(--radius);border-left:4px solid var(--sage);}
+.verse blockquote{margin:0;font-family:'Fraunces',Georgia,serif;font-size:17px;line-height:1.5;font-weight:600;color:var(--ink);}
+.verse figcaption{margin-top:7px;font-size:12.5px;color:var(--ink-soft);font-weight:600;}
+.vtabs{display:flex;gap:4px;margin:0 0 12px;background:rgba(0,0,0,.08);padding:4px;border-radius:12px;}
+.vtab{flex:1;min-height:42px;border:0;border-radius:9px;background:transparent;font-family:inherit;font-weight:700;font-size:13.5px;color:var(--ink-soft);cursor:pointer;position:relative;}
+.vtab.active{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.14);}
+.vtab em{font-style:normal;background:var(--accent);color:#fff;border-radius:99px;font-size:10.5px;padding:1px 6px;margin-left:4px;}
+.filterbar{display:flex;gap:8px;align-items:center;margin:0 -14px 10px;padding:0 14px;}
+.filterbar .chips{margin:0;padding:2px 0 2px;flex:1;min-width:0;}
+.chip.pf{border-color:var(--ink);} .chip.pf.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+.fwrap{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 14px;}
+.fwrap .chip{background:#fff;}
+.fwrap .chip.active{background:var(--ink);color:#fff;}
+/* maand */
+.mv-top{display:flex;justify-content:space-between;align-items:flex-end;margin:2px 2px 10px;}
+.mv-name{font-family:'Archivo',system-ui,sans-serif;font-variation-settings:'wdth' 62;font-stretch:62%;font-weight:900;font-size:104px;line-height:.8;letter-spacing:-.01em;color:var(--ink);}
+.mv-meta{text-align:right;}
+.mv-year{font-family:'Archivo',system-ui,sans-serif;font-weight:800;font-size:22px;line-height:1;}
+.mv-full{font-size:12.5px;color:var(--ink-soft);margin-top:2px;}
+.mv-nav{display:flex;gap:6px;margin-top:10px;justify-content:flex-end;}
+.mv-nav button{min-width:44px;height:44px;padding:0 12px;border-radius:10px;border:1.5px solid var(--ink);background:transparent;font-family:inherit;font-weight:700;font-size:15px;cursor:pointer;color:var(--ink);}
+.mgrid{display:grid;grid-template-columns:repeat(7,1fr);row-gap:3px;background:var(--surface);border-radius:14px;padding:10px 6px 8px;}
+.mh{text-align:center;font-size:11.5px;font-weight:700;color:var(--ink-soft);padding-bottom:6px;}
+.mcell{position:relative;height:52px;border:0;background:transparent;font-family:inherit;display:flex;flex-direction:column;align-items:center;padding-top:4px;cursor:pointer;color:var(--ink);}
+.mcell .n{width:30px;height:30px;display:grid;place-items:center;border-radius:50%;font-weight:700;font-size:14.5px;}
+.mcell.has .n{background:var(--accent);color:#fff;}
+.mcell.today .n{box-shadow:0 0 0 2px var(--ink);}
+.mcell.sel{background:rgba(51,41,31,.10);border-radius:10px;}
+.mcell.per{background:rgba(168,110,83,.30);}
+.mcell.per.ps{border-top-left-radius:999px;border-bottom-left-radius:999px;}
+.mcell.per.pe{border-top-right-radius:999px;border-bottom-right-radius:999px;}
+.mcell.past .n{opacity:.5;}
+.mcell.empty{pointer-events:none;}
+.dots{display:flex;gap:3px;margin-top:3px;height:6px;}
+.dots i{width:5px;height:5px;border-radius:50%;display:block;}
+.day-head{font-family:'Fraunces',Georgia,serif;font-size:18px;font-weight:700;margin:16px 2px 8px;}
+/* week-plakkaat */
+.wk-top{display:flex;justify-content:space-between;align-items:flex-end;margin:2px 2px 10px;gap:8px;}
+.wk-top h2{font-family:'Archivo',system-ui,sans-serif;font-variation-settings:'wdth' 62;font-stretch:62%;font-weight:900;font-size:68px;line-height:.82;margin:0;text-transform:uppercase;}
+.wk-sub{font-size:13px;color:var(--ink-soft);font-weight:600;margin-top:4px;}
+.wband{display:flex;gap:12px;align-items:center;padding:11px 14px;border-radius:12px;margin-bottom:6px;color:#F6F3EE;min-height:76px;}
+.wband.b1{background:#A86E53;} .wband.b2{background:#8A5640;} .wband.bz{background:rgba(51,41,31,.12);color:var(--ink-soft);}
+.wband .dc{width:56px;flex-shrink:0;text-align:center;}
+.wband .dn{font-family:'Archivo',system-ui,sans-serif;font-variation-settings:'wdth' 62;font-stretch:62%;font-weight:900;font-size:56px;line-height:.9;}
+.wband .dw{font-size:10.5px;font-weight:700;letter-spacing:.04em;opacity:.9;margin-top:2px;}
+.wband .evs{flex:1;min-width:0;font-size:14.5px;line-height:1.3;font-weight:600;}
+.wband .evs div{margin:1px 0;overflow-wrap:anywhere;} .wband .evs .t{font-weight:800;margin-right:6px;}
+.wband.today{box-shadow:0 0 0 3px var(--ink);}
+.row-acts{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 4px;}
+.row-acts .ics-btn{flex:1;min-width:140px;}
+/* bord */
+.post{background:var(--surface);border-radius:14px;padding:14px 16px;margin-bottom:10px;border-left:4px solid var(--sage);}
+.post.imp{border-left-color:var(--accent);}
+.post-top{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:11.5px;color:var(--ink-soft);}
+.post-cat{font-weight:700;background:var(--bg);border-radius:99px;padding:3px 10px;color:var(--ink);}
+.post h3{font-family:'Fraunces',Georgia,serif;font-size:18px;margin:8px 0 4px;overflow-wrap:anywhere;}
+.post p{margin:0 0 8px;font-size:14.5px;overflow-wrap:anywhere;white-space:pre-wrap;}
+.post-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-soft);flex-wrap:wrap;}
+.wa{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border-radius:999px;background:var(--sage);color:#fff;font-weight:700;font-size:13.5px;text-decoration:none;}
+.bord-intro{font-size:13.5px;color:var(--ink-soft);margin:0 2px 12px;}
+.sec-h{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-dark);margin:16px 2px 8px;}
+.link-btn.on{color:var(--accent-dark);font-weight:700;}
+.event-card.flash{animation:flash 2.4s ease-out;}
+@keyframes flash{0%,35%{box-shadow:0 0 0 4px var(--accent);}100%{box-shadow:0 0 0 0 transparent;}}
+@media(prefers-reduced-motion: reduce){ .modal{animation:none;} .event-card.flash{animation:none;box-shadow:0 0 0 3px var(--accent);} }
+/* ===== POLEER ===== */
+.field .port-opt{display:flex;align-items:center;gap:6px;margin:0;padding:0 8px;font-weight:500;color:var(--ink);font-size:13px;white-space:nowrap;}
+.field .port-opt input{width:20px;height:20px;margin:0;padding:0;flex-shrink:0;}
+.field input[type=date],.field input[type=time]{min-width:0;width:100%;max-width:100%;}
+.field{min-width:0;}
+.card-actions{border-top:0 !important;margin-top:2px;padding-top:0;}
+.section-label{margin:16px 2px 8px;}
+.filterbar + .mv-top,.filterbar + .wk-top{margin-top:18px;}
+.wk-strips{margin:0 0 10px;display:flex;flex-direction:column;gap:5px;}
+.wk-strip{display:flex;align-items:center;gap:8px;background:rgba(168,110,83,.2);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:600;color:var(--ink);}
+.wk-strip span{color:var(--ink-soft);font-weight:500;}
+.a2hs{display:flex;gap:10px;align-items:flex-start;background:var(--surface);border-radius:var(--radius);padding:12px 12px 12px 14px;margin-bottom:12px;box-shadow:var(--shadow);font-size:13.5px;line-height:1.4;}
+.a2hs b{display:block;font-size:14px;margin-bottom:2px;}
+.a2hs .x{flex-shrink:0;width:40px;height:40px;margin:-8px -6px 0 0;border:0;background:transparent;font-size:20px;color:var(--ink-soft);cursor:pointer;border-radius:50%;}
+.a2hs .go{margin-top:8px;min-height:38px;padding:0 14px;border-radius:999px;border:0;background:var(--accent);color:#fff;font-weight:700;font-size:13px;cursor:pointer;}
+.warn-msg{color:#8A5A12;background:#F7E8CB;border-radius:10px;padding:10px 12px;font-size:13px;margin-top:8px;}
+.hrow{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 0;border-top:1px solid rgba(51,41,31,.08);font-size:13.5px;}
+.hrow:first-of-type{border-top:0;}
+.hrow .t{min-width:0;overflow-wrap:anywhere;}
+.hrow small{display:block;color:var(--ink-soft);font-size:12px;margin-top:2px;}
+.hrow.undone{opacity:.5;}
+.wk-top h2{font-size:64px;}
+.wk-top{margin-bottom:8px;}
+.wband .dc{width:62px;}
+.wband .dn{font-size:50px;}
+.wband{gap:10px;}
+.chip{height:32px;padding:0 12px;font-size:12.5px;}
+:root{ --shadow:0 1px 2px rgba(51,41,31,.06),0 4px 14px rgba(51,41,31,.06); }
+.topbar{background:rgba(203,195,186,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);}
+main{padding-top:12px;}
+.countdown-banner{box-shadow:var(--shadow);font-size:14.5px;letter-spacing:.005em;}
+.today-box{box-shadow:var(--shadow);}
+.verse{box-shadow:var(--shadow);padding:15px 18px 13px;}
+.verse blockquote{font-weight:500;font-size:17.5px;}
+.vtabs{background:rgba(51,41,31,.09);padding:3px;gap:2px;}
+.vtab{min-height:40px;font-size:13px;border-radius:10px;}
+.vtab.active{box-shadow:0 1px 4px rgba(51,41,31,.18);}
+.search input{box-shadow:var(--shadow);border-color:transparent;}
+/* filters: pak netjies in, geen afgesnyde chips nie */
+.filterbar{display:block;margin:0 0 12px;padding:0;}
+.filterbar .chips{display:flex;flex-wrap:wrap;overflow:visible;gap:6px;margin:0;padding:0;}
+.chip{height:34px;padding:0 13px;font-size:13px;border-color:transparent;box-shadow:0 1px 2px rgba(51,41,31,.08);}
+.chip .dot{margin-right:6px;}
+.chip.pf{border:1.5px solid var(--ink);box-shadow:none;background:transparent;color:var(--ink);font-weight:600;}
+.chip.pf.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+/* kaarte */
+.event-card{box-shadow:var(--shadow);padding:13px 13px 6px 14px;margin-bottom:10px;}
+.event-title{font-size:16px;font-weight:600;letter-spacing:-.005em;}
+.meta-pill{background:rgba(203,195,186,.45);}
+.cat-tag{font-size:10.5px;letter-spacing:.02em;}
+.card-actions{border-top:1px solid rgba(51,41,31,.07);margin-top:6px;padding-top:2px;width:100%;}
+.link-btn{font-weight:600;color:var(--ink-soft);}
+.link-btn.on{color:var(--accent-dark);}
+.month-label{font-size:18px;margin:26px 2px 12px;}
+.day-num{font-size:20px;}
+/* maand: een deurlopende band agter die syfers */
+.mgrid{box-shadow:var(--shadow);padding:12px 8px 10px;row-gap:2px;}
+.mcell{height:50px;padding-top:2px;}
+.mcell.per{background:transparent;}
+.mcell.per::before{content:'';position:absolute;left:0;right:0;top:3px;height:30px;background:rgba(168,110,83,.22);z-index:0;}
+.mcell.per.ps::before{left:3px;border-radius:15px 0 0 15px;}
+.mcell.per.pe::before{right:3px;border-radius:0 15px 15px 0;}
+.mcell.per.ps.pe::before{border-radius:15px;}
+.mcell.ps,.mcell.pe{border-radius:0;}
+.mcell .n{position:relative;z-index:1;}
+.mcell.sel{background:transparent;}
+.mcell.sel .n{box-shadow:0 0 0 2px var(--ink);}
+.mcell.today .n{box-shadow:0 0 0 2px var(--ink);}
+.mcell.has.sel .n,.mcell.has.today .n{box-shadow:0 0 0 2px var(--ink),0 0 0 4px var(--surface);}
+.mv-nav button{border-width:1.5px;border-color:rgba(51,41,31,.35);}
+.mv-nav button:active{background:rgba(51,41,31,.1);}
+.day-head{font-size:19px;margin:18px 2px 10px;}
+/* week */
+.wband{box-shadow:0 1px 2px rgba(51,41,31,.1);margin-bottom:5px;}
+.wband.bz{box-shadow:none;}
+/* bord */
+.post{box-shadow:var(--shadow);}
+.post-cat{background:rgba(203,195,186,.5);}
+/* knoppies onder */
+.foot{margin-top:22px;gap:8px;}
+.ics-btn{min-height:48px;font-size:14px;border-width:1.5px;border-color:rgba(117,131,120,.7);}
+#shareWeekBtn{border-color:rgba(168,110,83,.7)!important;}
+.toggle-past{color:var(--ink-soft);margin-top:4px;}
+/* modal */
+.modal{border-radius:22px 22px 0 0;box-shadow:0 -8px 40px rgba(0,0,0,.18);}
+.modal h3{font-size:20px;}
+.btn{border-radius:12px;min-height:50px;}
+.btn-primary{box-shadow:0 2px 8px rgba(168,110,83,.35);}
+.field input,.field select,.field textarea{border-color:rgba(51,41,31,.18);border-radius:10px;}
+
 </style>
 </head>
 <body>
@@ -303,6 +458,7 @@ setTimeout(function(){
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getDatabase, ref, set, update, remove, onValue, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 window.__hennopsBooted = true;
 if("serviceWorker" in navigator){ window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{})); }
@@ -318,10 +474,12 @@ const firebaseConfig = {
 };
 
 let db = null;
+let auth = null;
 let firebaseError = null;
 try{
   const firebaseApp = initializeApp(firebaseConfig);
   db = getDatabase(firebaseApp);
+  auth = getAuth(firebaseApp);
 }catch(e){
   firebaseError = e.message;
 }
@@ -339,6 +497,9 @@ let confirmingId = null;
 let searchQuery = '';
 let showPast = false;
 let activePortfolio = 'all';
+let activeAudience = 'all';
+let view = 'lys';
+let mCur = null, selDay = null, weekOffset = 0, deepHandled = false;
 
 const CATEGORIES = {
   akademies: { label:'Akademies', hex:'#33291F' },
@@ -348,18 +509,30 @@ const CATEGORIES = {
 };
 
 const PORTFOLIOS = {
-  sport:       { label:'Sport',           emoji:'⚽' },
-  eerstejaars: { label:'Eerstejaars',     emoji:'🌱' },
-  seniors:     { label:'Seniors',         emoji:'🎓' },
-  kultuur:     { label:'Kuns en Kultuur', emoji:'🎭' },
-  gemeenskap:  { label:'Gemeenskap',      emoji:'🤝' },
-  sosiaal:     { label:'Sosiaal',         emoji:'🎉' }
+  orientering: { label:'Orientering', emoji:'🧭' },
+  sport:       { label:'Sport',       emoji:'⚽' },
+  bemarking:   { label:'Bemarking',   emoji:'📣' },
+  gemeenskap:  { label:'Gemeenskap',  emoji:'🤝' },
+  kultuur:     { label:'Kultuur',     emoji:'🎭' },
+  kamp:        { label:'Kamp',        emoji:'⛺' },
+  klubhuis:    { label:'Klubhuis',    emoji:'🏠' },
+  geelbekke:   { label:'Geelbekke',   emoji:'🐥' },
+  argiewe:     { label:'Argiewe',     emoji:'🗄️' },
+  geloofslewe: { label:'Geloofslewe', emoji:'✝️' },
+  sosiaal:     { label:'Sosiaal',     emoji:'🎉' }
 };
-function getPorts(e){
+const AUDIENCES = { eerstejaars:'Eerstejaars', seniors:'Seniors' };
+const AUD_EMOJI = { eerstejaars:'🌱', seniors:'🎓' };
+function rawPorts(e){
   const p = e && e.portfolios;
   if(!p) return [];
-  const arr = Array.isArray(p) ? p : Object.values(p);
-  return arr.filter(k => PORTFOLIOS[k]);
+  return Array.isArray(p) ? p : Object.values(p);
+}
+function getPorts(e){ return rawPorts(e).filter(k => PORTFOLIOS[k]); }
+// Ou events het Eerstejaars/Seniors as portefeulje gestoor; dit is nou 'n aparte "vir wie"-etiket.
+function getAudience(e){
+  if(e && AUDIENCES[e.audience]) return e.audience;
+  return rawPorts(e).find(k => AUDIENCES[k]) || '';
 }
 
 const AF_MAANDE = ['Januarie','Februarie','Maart','April','Mei','Junie','Julie','Augustus','September','Oktober','November','Desember'];
@@ -492,7 +665,7 @@ function buildICS(){
     lines.push('SUMMARY:'+escapeICS(e.title));
     if(e.location) lines.push('LOCATION:'+escapeICS(e.location));
     if(e.notes) lines.push('DESCRIPTION:'+escapeICS(e.notes));
-    lines.push('CATEGORIES:'+[cat.label].concat(getPorts(e).map(k=>PORTFOLIOS[k].label)).map(escapeICS).join(','));
+    lines.push('CATEGORIES:'+[cat.label].concat(getPorts(e).map(k=>PORTFOLIOS[k].label)).concat(getAudience(e)?[AUDIENCES[getAudience(e)]]:[]).map(escapeICS).join(','));
     lines.push('BEGIN:VALARM');
     lines.push('ACTION:DISPLAY');
     lines.push('DESCRIPTION:Herinnering');
@@ -538,11 +711,12 @@ async function downloadBackup(){
 function shareOnWhatsApp(e){
   const cat = CATEGORIES[e.category] || CATEGORIES.hennops;
   const dateText = e.isPeriod && e.endDate ? `${formatDateLabel(e.date)} tot ${formatDateLabel(e.endDate)}` : formatDateLabel(e.date);
-  const pl = getPorts(e).map(k=>PORTFOLIOS[k].emoji+' '+PORTFOLIOS[k].label).join(', ');
+  const pl = getPorts(e).map(k=>PORTFOLIOS[k].emoji+' '+PORTFOLIOS[k].label).concat(getAudience(e)?[AUD_EMOJI[getAudience(e)]+' '+AUDIENCES[getAudience(e)]]:[]).join(', ');
   let text = `*${e.title}*\n${cat.label}${pl ? ' · '+pl : ''}\n📅 ${dateText}`;
   if(e.time) text += `\n🕐 ${e.time}${e.endTime ? '–'+e.endTime : ''}`;
   if(e.location) text += `\n📍 ${e.location}`;
   if(e.notes) text += `\n\n${e.notes}`;
+  text += `\n\n🔗 ${location.href.split('#')[0].split('?')[0]}#e=${e.id}`;
   window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
 }
 
@@ -570,7 +744,7 @@ function shareWeek(){
 }
 
 function todayBoxHtml(){
-  if(activeFilter !== 'alle' || activePortfolio !== 'all' || searchQuery.trim()) return '';
+  if(activeFilter !== 'alle' || activePortfolio !== 'all' || activeAudience !== 'all' || searchQuery.trim()) return '';
   const today = todayStr(), tom = addDaysToDateStr(today,1);
   const items = events.filter(e => !e.isCancelled && (e.date === today || e.date === tom))
     .sort((a,b)=> sortKey(a).localeCompare(sortKey(b)));
@@ -615,11 +789,19 @@ function initApp(){
     render();
   });
 
-  get(ref(db,'config/pin')).then(snap=>{
-    hkPin = snap.exists() ? snap.val().value : null;
-    pinLoaded = true;
-    if(hkPin && lsGet('hennops-unlocked') === String(hkPin)){ unlocked = true; render(); }
-  }).catch(()=>{ hkPin = null; pinLoaded = false; });
+  const liveRender = ()=>{ if(!loading) render(); };
+  onValue(ref(db,'rsvp'), (snap)=>{ rsvp = snap.val() || {}; liveRender(); }, ()=>{});
+  onValue(ref(db,'bord'), (snap)=>{ bord = snap.val() || {}; liveRender(); }, ()=>{});
+  onValue(ref(db,'vers'), (snap)=>{ vers = snap.val() || {}; liveRender(); }, ()=>{});
+
+  pinLoaded = true;
+  lsDel('hennops-unlocked');
+  if(auth){
+    onAuthStateChanged(auth, (user)=>{
+      const now = !!user;
+      if(now !== unlocked){ unlocked = now; confirmingId = null; if(!loading) render(); }
+    });
+  }
 }
 
 // ---------- RENDER ----------
@@ -689,7 +871,12 @@ function cardHtml(e, today){
     ? `<span class="meta-pill">🗓 ${formatShortDate(e.date)} – ${formatShortDate(e.endDate)}</span>`
     : (e.time ? `<span class="meta-pill">🕐 ${e.time}${e.endTime ? '–'+e.endTime : ''}</span>` : '');
 
-  return `<div class="event-card ${(isPast||isCancelled)?'past':''}" style="border-left-color:${cat.hex}">
+  const audience = getAudience(e);
+  const rs = rsvp[e.id] || {};
+  const rsCount = Object.keys(rs).length;
+  const iGo = !!rs[deviceId()];
+  const canRsvp = !isPast && !isCancelled;
+  return `<div class="event-card ${(isPast||isCancelled)?'past':''}" data-card-id="${e.id}" style="border-left-color:${cat.hex}">
     <div class="event-main">
       <div class="event-title" style="${isCancelled?'text-decoration:line-through;':''}">${escapeHtml(e.title)}</div>
       <div class="event-meta">
@@ -697,19 +884,23 @@ function cardHtml(e, today){
         ${e.location ? `<span class="meta-pill">📍 ${escapeHtml(e.location)}</span>` : ''}
         ${e.addedBy ? `<span class="meta-pill">👤 ${escapeHtml(e.addedBy)}</span>` : ''}
       </div>
-      ${(getPorts(e).length || movedRecently) ? `<div class="event-meta" style="margin-top:6px;">
+      ${(getPorts(e).length || movedRecently || audience) ? `<div class="event-meta" style="margin-top:6px;">
         ${getPorts(e).map(k=>`<span class="meta-pill port">${PORTFOLIOS[k].emoji} ${PORTFOLIOS[k].label}</span>`).join('')}
+        ${audience ? `<span class="meta-pill port">${AUD_EMOJI[audience]} ${AUDIENCES[audience]}</span>` : ''}
         ${movedRecently ? `<span class="meta-pill moved">↪ Verskuif van ${formatShortDate(e.movedFrom)}</span>` : ''}
       </div>` : ''}
       ${e.notes ? `<div class="event-notes">${escapeHtml(e.notes)}</div>` : ''}
       <div class="card-actions">
-        <button class="link-btn" data-share-event="${e.id}">↗ Deel op WhatsApp</button>
+        ${canRsvp ? `<button class="link-btn ${iGo?'on':''}" data-act="rsvp" data-id="${e.id}">${iGo?'✋ Ek gaan ✓':'✋ Ek gaan'}${rsCount?` (${rsCount})`:''}</button>` : ''}
+        <button class="link-btn" data-share-event="${e.id}">↗ Deel</button>
       </div>
+      ${unlocked && rsCount ? `<div class="event-notes" style="margin-top:2px">Gaan: ${Object.values(rs).map(x=>escapeHtml(x.name||'(sonder naam)')).join(', ')}</div>` : ''}
       ${unlocked && isConfirming ? `<div class="manage">
         <button class="mini-btn" data-edit-event="${e.id}">Wysig</button>
         <button class="mini-btn" data-copy-event="${e.id}">Kopieer</button>
         ${!isCancelled ? `<button class="mini-btn" data-cancel-event="${e.id}">Kanselleer</button>` : `<button class="mini-btn" data-restore-event="${e.id}">Herstel</button>`}
         <button class="mini-btn danger" data-remove-event="${e.id}">Verwyder heeltemal</button>
+        ${e.seriesId ? `<button class="mini-btn danger" data-remove-series="${e.id}">Verwyder hele reeks</button>` : ''}
         <button class="mini-btn" data-close-confirm="1">Los dit</button>
       </div>` : ''}
     </div>
@@ -727,20 +918,10 @@ function buildListHtml(){
   const tomorrow = addDaysToDateStr(today, 1);
   const currentYear = parseDate(today).y;
 
-  let filtered = events.filter(e => {
-    if(activeFilter === 'alle') return true;
-    if(activeFilter === 'week'){
-      const endCompare = (e.isPeriod && e.endDate) ? e.endDate : e.date;
-      return endCompare >= today && e.date <= addDaysToDateStr(today, 7);
-    }
-    return e.category === activeFilter;
-  });
+  let filtered = applyFilters(events, false);
   if(searchQuery.trim()){
     const q = searchQuery.trim().toLowerCase();
     filtered = filtered.filter(e => (e.title||'').toLowerCase().includes(q) || (e.location||'').toLowerCase().includes(q) || (e.notes||'').toLowerCase().includes(q));
-  }
-  if(activePortfolio !== 'all'){
-    filtered = filtered.filter(e => getPorts(e).includes(activePortfolio));
   }
   if(!showPast){
     filtered = filtered.filter(e => ((e.isPeriod && e.endDate) ? e.endDate : e.date) >= today);
@@ -787,9 +968,12 @@ function buildListHtml(){
   return html;
 }
 
-function bindListHandlers(){
-  const root = document.getElementById('listArea');
+function bindListHandlers(rootId){
+  const root = document.getElementById(rootId || 'listArea');
   if(!root) return;
+  root.querySelectorAll('[data-remove-series]').forEach(b=>{
+    b.addEventListener('click', ()=> deleteSeries(b.dataset.removeSeries));
+  });
   root.querySelectorAll('[data-share-event]').forEach(b=>{
     b.addEventListener('click', ()=>{
       const ev = events.find(e=>e.id === b.dataset.shareEvent);
@@ -825,75 +1009,148 @@ function bindListHandlers(){
   });
 }
 
-function renderKalender(){
-  const chipDefs = [['alle','Alle'], ['week','Hierdie week'], ...Object.keys(CATEGORIES).map(k=>[k, CATEGORIES[k].label])];
-  const chipsHtml = chipDefs.map(([key,label])=>{
+function applyFilters(list, ignoreWeek){
+  const today = todayStr();
+  return list.filter(e=>{
+    if(activeFilter === 'week' && !ignoreWeek){
+      const endC = (e.isPeriod && e.endDate) ? e.endDate : e.date;
+      if(!(endC >= today && e.date <= addDaysToDateStr(today, 7))) return false;
+    } else if(activeFilter !== 'alle' && activeFilter !== 'week' && e.category !== activeFilter){
+      return false;
+    }
+    if(activePortfolio !== 'all' && !getPorts(e).includes(activePortfolio)) return false;
+    if(activeAudience !== 'all' && getAudience(e) !== activeAudience) return false;
+    return true;
+  });
+}
+
+function filterBarHtml(){
+  const defs = [['alle','Alle']].concat(view==='lys' ? [['week','Hierdie week']] : []).concat(Object.keys(CATEGORIES).map(k=>[k, CATEGORIES[k].label]));
+  const chips = defs.map(([key,label])=>{
     const dot = CATEGORIES[key] ? `<span class="dot" style="background:${CATEGORIES[key].hex}"></span>` : '';
     return `<button class="chip ${activeFilter===key?'active':''}" data-filter="${key}">${dot}${label}</button>`;
   }).join('');
+  const on = activePortfolio !== 'all' || activeAudience !== 'all';
+  const lab = on ? [activePortfolio!=='all'?PORTFOLIOS[activePortfolio].label:'', activeAudience!=='all'?AUDIENCES[activeAudience]:''].filter(Boolean).join(' · ') : 'Portefeulje';
+  return `<div class="filterbar"><div class="chips">${chips}<button class="chip pf ${on?'active':''}" data-act="openfilter">${escapeHtml(lab)} ▾</button></div></div>`;
+}
 
-  const portChips = [['all','Almal']].concat(Object.keys(PORTFOLIOS).map(k=>[k, PORTFOLIOS[k].emoji+' '+PORTFOLIOS[k].label]))
-    .map(([key,label])=>`<button class="chip ${activePortfolio===key?'active':''}" data-port="${key}">${label}</button>`).join('');
+function footHtml(withPast){
+  return `<div class="foot">
+      <button class="ics-btn" id="shareWeekBtn" style="border-color:var(--accent); color:var(--accent-dark);">📲 Deel die week as teks op WhatsApp</button>
+      <button class="ics-btn" id="subscribeBtn">🔄 Outlook-intekening (opdateer vanself)</button>
+      <button class="ics-btn" id="downloadIcsBtn">📥 Laai af met herinnerings (eenmalig)</button>
+      ${withPast ? `<button class="toggle-past" id="togglePast">${showPast ? 'Versteek verlede events' : 'Wys verlede events'}</button>` : ''}
+    </div>`;
+}
 
+function vtabsHtml(){
+  const pend = pendingPosts().length;
+  const tabs = [['lys','Lys'],['maand','Maand'],['week','Week'],['bord','Mededelings']];
+  return `<div class="vtabs" role="tablist">${tabs.map(([k,l])=>`<button class="vtab ${view===k?'active':''}" data-act="view" data-v="${k}">${l}${(k==='bord'&&unlocked&&pend)?`<em>${pend}</em>`:''}</button>`).join('')}</div>`;
+}
+
+function bannerHtmlFn(){
   const next = getNextEvent();
-  let bannerHtml = '';
-  if(next){
-    const t = escapeHtml(next.event.title);
-    if(next.ongoing){
-      bannerHtml = `<div class="countdown-banner">🎉 "${t}" is nou aan die gang<span class="sub">tot ${formatShortDate(next.event.endDate)}</span></div>`;
-    } else if(next.days === 0){
-      bannerHtml = `<div class="countdown-banner">📍 "${t}" is vandag${next.event.time ? ' om '+next.event.time : ''}</div>`;
-    } else if(next.days === 1){
-      bannerHtml = `<div class="countdown-banner">⏳ "${t}" is môre${next.event.time ? ' om '+next.event.time : ''}</div>`;
-    } else {
-      bannerHtml = `<div class="countdown-banner">⏳ ${next.days} dae tot "${t}"<span class="sub">${formatDateLabel(next.event.date)}</span></div>`;
-    }
+  if(!next) return '';
+  const t = escapeHtml(next.event.title);
+  if(next.ongoing) return `<div class="countdown-banner">🎉 "${t}" is nou aan die gang<span class="sub">tot ${formatShortDate(next.event.endDate)}</span></div>`;
+  if(next.days === 0) return `<div class="countdown-banner">📍 "${t}" is vandag${next.event.time ? ' om '+next.event.time : ''}</div>`;
+  if(next.days === 1) return `<div class="countdown-banner">⏳ "${t}" is môre${next.event.time ? ' om '+next.event.time : ''}</div>`;
+  return `<div class="countdown-banner">⏳ ${next.days} dae tot "${t}"<span class="sub">${formatDateLabel(next.event.date)}</span></div>`;
+}
+
+function renderKalender(){
+  let html = view === 'lys' ? verseHtml() + a2hsHtml() : '';
+  html += vtabsHtml();
+  if(view === 'lys'){
+    html += bannerHtmlFn() + todayBoxHtml() + `
+      <div class="search"><span>🔍</span><input type="search" id="searchInput" placeholder="Soek events..." value="${escapeHtml(searchQuery)}" autocomplete="off"></div>
+      ${filterBarHtml()}
+      <div id="listArea">${buildListHtml()}</div>
+      ${footHtml(true)}`;
+  } else if(view === 'maand'){
+    html += filterBarHtml() + monthHtml() + footHtml(false);
+  } else if(view === 'week'){
+    html += filterBarHtml() + weekHtml() + footHtml(false);
+  } else {
+    html += bordHtml();
   }
+  content.innerHTML = html;
 
-  content.innerHTML = `
-    ${bannerHtml}
-    ${todayBoxHtml()}
-    <div class="search"><span>🔍</span><input type="search" id="searchInput" placeholder="Soek events..." value="${escapeHtml(searchQuery)}" autocomplete="off"></div>
-    <div class="chips">${chipsHtml}</div>
-    <div class="chip-label">Portefeulje</div>
-    <div class="chips ports">${portChips}</div>
-    <div id="listArea">${buildListHtml()}</div>
-    <div class="foot">
-      <button class="ics-btn" id="shareWeekBtn" style="border-color:var(--accent); color:var(--accent-dark);">📲 Deel hierdie week op WhatsApp</button>
-      <button class="ics-btn" id="downloadIcsBtn">📥 Voeg by my Outlook / Kalender</button>
-      <button class="toggle-past" id="togglePast">${showPast ? 'Versteek verlede events' : 'Wys verlede events'}</button>
-    </div>
-  `;
-
-  // Soek werk net die lys op, nie die hele bladsy nie — anders maak die sleutelbord op foon aanhoudend toe.
   const searchInput = document.getElementById('searchInput');
-  searchInput.addEventListener('input', ()=>{
-    searchQuery = searchInput.value;
-    document.getElementById('listArea').innerHTML = buildListHtml();
-    bindListHandlers();
-  });
-  document.getElementById('togglePast').addEventListener('click', ()=>{ showPast = !showPast; render(); });
+  if(searchInput){
+    // Soek werk net die lys op, nie die hele bladsy nie, sodat die sleutelbord op 'n foon nie toemaak nie.
+    searchInput.addEventListener('input', ()=>{
+      searchQuery = searchInput.value;
+      document.getElementById('listArea').innerHTML = buildListHtml();
+      bindListHandlers();
+    });
+  }
+  const tp = document.getElementById('togglePast');
+  if(tp) tp.addEventListener('click', ()=>{ showPast = !showPast; render(); });
   content.querySelectorAll('.chip[data-filter]').forEach(c=>{
     c.addEventListener('click', ()=>{ activeFilter = c.dataset.filter; render(); });
   });
-  content.querySelectorAll('.chip[data-port]').forEach(c=>{
-    c.addEventListener('click', ()=>{ activePortfolio = c.dataset.port; render(); });
+  const sw = document.getElementById('shareWeekBtn'); if(sw) sw.addEventListener('click', shareWeek);
+  const sb = document.getElementById('subscribeBtn'); if(sb) sb.addEventListener('click', openSubscribeModal);
+  const dl = document.getElementById('downloadIcsBtn'); if(dl) dl.addEventListener('click', downloadICS);
+  bindListHandlers('listArea');
+  bindListHandlers('dayList');
+  afterRender();
+}
+
+// ---------- OUTLOOK-INTEKENING ----------
+function openSubscribeModal(){
+  const base = location.href.split('#')[0].split('?')[0];
+  const feedUrl = new URL('hennops.ics', base).href;
+  const webcal = feedUrl.replace(/^https?:/, 'webcal:');
+  modalBody.innerHTML = `
+    <h3>Outlook-intekening</h3>
+    <p class="hint" style="margin:-8px 0 12px; font-size:13.5px;">Teken een keer in, dan verskyn nuwe events en veranderings vanself in jou Outlook. Dit werk ook met Google Kalender en iPhone-kalender.</p>
+    <div class="field"><label>Kalender-skakel</label>
+      <input type="text" id="feedUrl" readonly value="${escapeHtml(feedUrl)}" onclick="this.select()">
+    </div>
+    <button class="btn btn-primary" id="copyFeed" style="width:100%; margin-bottom:14px;">Kopieer skakel</button>
+    <div class="notice" style="margin:0 0 12px; padding:14px 16px;">
+      <p style="margin:0 0 6px;"><b>Outlook (web of Akademia-rekening)</b></p>
+      <ol style="margin:0;">
+        <li>Maak outlook.office.com oop → <b>Kalender</b></li>
+        <li><b>Voeg kalender by</b> → <b>Teken in vanaf web</b></li>
+        <li>Plak die skakel, noem dit "Huis Hennops" → <b>Importeer</b></li>
+      </ol>
+      <p style="margin:8px 0 0;">Die Outlook-app op jou foon kry dit dan ook vanself.</p>
+    </div>
+    <div class="notice" style="margin:0 0 12px; padding:14px 16px;">
+      <p style="margin:0 0 6px;"><b>iPhone-kalender</b></p>
+      <p style="margin:0;">Tik <a href="${escapeHtml(webcal)}">hier om in te teken</a> en kies <b>Teken in</b>.</p>
+    </div>
+    <p class="hint">Opdaterings kom binne ongeveer 'n uur tot 'n paar uur by (Outlook besluit self wanneer). Herinnerings werk dalk nie in 'n intekening nie, so gebruik die <b>Laai af met herinnerings</b>-knoppie as jy dit wil hê.</p>
+    <div class="modal-actions"><button class="btn btn-secondary" id="subClose">Sluit</button></div>
+  `;
+  openModal();
+  document.getElementById('subClose').addEventListener('click', closeModal);
+  document.getElementById('copyFeed').addEventListener('click', async ()=>{
+    const inp = document.getElementById('feedUrl');
+    try{ await navigator.clipboard.writeText(feedUrl); showToast('Skakel gekopieer'); }
+    catch(e){ inp.focus(); inp.select(); try{ document.execCommand('copy'); showToast('Skakel gekopieer'); }catch(e2){ showToast('Hou die skakel vas en kies Kopieer'); } }
   });
-  document.getElementById('shareWeekBtn').addEventListener('click', shareWeek);
-  document.getElementById('downloadIcsBtn').addEventListener('click', downloadICS);
-  bindListHandlers();
 }
 
 // ---------- HK MENU ----------
 function openHKMenu(){
   modalBody.innerHTML = `
     <h3>HK-opsies</h3>
-    <p class="hint" style="margin:-8px 0 14px;">${unlocked ? 'Jy is ingeteken as HK.' : 'Hierdie aksies is agter die HK-PIN.'}</p>
+    <p class="hint" style="margin:-8px 0 14px;">${unlocked ? 'Jy is ingeteken as HK.' : 'Teken in om events en die bord te bestuur.'}</p>
     <div class="menu-list">
       <button class="btn btn-primary" id="hkAddEvent">+ Voeg event by</button>
       <button class="btn btn-secondary" id="hkBulkAdd">📋 Voeg lys van datums by</button>
+      <button class="btn btn-secondary" id="hkVers">📖 Bybelvers</button>
+      <button class="btn btn-secondary" id="hkBord">📌 Mededelings${pendingPosts().length ? ' ('+pendingPosts().length+' wag vir goedkeuring)' : ''}</button>
+      <button class="btn btn-secondary" id="hkHist">🕘 Geskiedenis en ontdoen</button>
+      <button class="btn btn-secondary" id="hkOpkoms">📊 Opkoms</button>
       <button class="btn btn-secondary" id="hkBackup">💾 Rugsteun (JSON)</button>
-      ${unlocked ? `<button class="btn btn-secondary" id="hkLogout">🔒 Teken uit op hierdie foon</button>` : ''}
+      ${unlocked ? `<button class="btn btn-secondary" id="hkLogout">🔒 Teken uit</button>` : ''}
       <button class="btn btn-secondary" id="hkClose">Sluit</button>
     </div>
   `;
@@ -901,9 +1158,16 @@ function openHKMenu(){
   document.getElementById('hkAddEvent').addEventListener('click', ()=>{ closeModal(); handleAddEventClick(); });
   document.getElementById('hkBulkAdd').addEventListener('click', ()=>{ closeModal(); handleBulkAddClick(); });
   document.getElementById('hkBackup').addEventListener('click', ()=>{ closeModal(); handleBackupClick(); });
+  document.getElementById('hkHist').addEventListener('click', ()=>{ if(!unlocked){ openPinModalThen(openHistoryModal); } else { openHistoryModal(); } });
+  document.getElementById('hkOpkoms').addEventListener('click', openOpkomsModal);
+  document.getElementById('hkVers').addEventListener('click', ()=>{ if(!unlocked){ openPinModalThen(openVersModal); } else { openVersModal(); } });
+  document.getElementById('hkBord').addEventListener('click', ()=>{
+    const go = ()=>{ closeModal(); view = 'bord'; render(); window.scrollTo({top:0}); };
+    if(!unlocked){ openPinModalThen(go); } else { go(); }
+  });
   document.getElementById('hkClose').addEventListener('click', closeModal);
   const lo = document.getElementById('hkLogout');
-  if(lo) lo.addEventListener('click', ()=>{ unlocked = false; confirmingId = null; lsDel('hennops-unlocked'); closeModal(); render(); showToast('Uitgeteken'); });
+  if(lo) lo.addEventListener('click', async ()=>{ try{ await signOut(auth); }catch(e){} unlocked = false; confirmingId = null; closeModal(); render(); showToast('Uitgeteken'); });
 }
 
 function handleBackupClick(){
@@ -923,68 +1187,52 @@ window.addEventListener('scroll', ()=>{
   backTodayBtn.classList.toggle('show', window.scrollY > 400);
 }, { passive:true });
 
-// ---------- PIN ----------
+// ---------- HK-INTEKEN (Firebase Auth) ----------
+function authErrorText(e){
+  const c = (e && e.code) || '';
+  if(c.includes('invalid-credential') || c.includes('wrong-password') || c.includes('user-not-found') || c.includes('invalid-login')) return 'Verkeerde e-pos of wagwoord.';
+  if(c.includes('invalid-email')) return 'Daardie e-posadres lyk nie reg nie.';
+  if(c.includes('too-many-requests')) return 'Te veel pogings. Wag \'n paar minute en probeer weer.';
+  if(c.includes('network')) return 'Geen internet nie. Probeer weer.';
+  if(c.includes('operation-not-allowed')) return 'E-pos-inteken is nog nie in Firebase aangeskakel nie.';
+  return 'Kon nie inteken nie' + (e && e.message ? ': ' + e.message : '.');
+}
 function openPinModalThen(callback){
-  if(!pinLoaded){
-    showToast('Wag net \'n oomblik, die kalender laai nog...');
-    return;
-  }
-  const needsSetup = !hkPin;
+  if(!auth){ showToast('Inteken is nie beskikbaar nie. Maak die blad toe en oop.'); return; }
   modalBody.innerHTML = `
-    <h3>${needsSetup ? 'Stel HK-PIN op' : 'HK-PIN'}</h3>
-    <p class="hint" style="margin:-8px 0 14px; font-size:13.5px;">
-      ${needsSetup ? 'Kies \'n PIN wat almal op HK gebruik. Net HK-lede met hierdie PIN kan events byvoeg of verwyder.' : 'Voer die HK-PIN in om voort te gaan.'}
-    </p>
-    <div class="field">
-      <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" id="modalPinInput" placeholder="••••" autocomplete="off" style="text-align:center; letter-spacing:8px; font-size:22px;">
-    </div>
-    <div class="field check-row">
-      <input type="checkbox" id="rememberMe" checked>
-      <label for="rememberMe">Onthou my op hierdie foon</label>
-    </div>
+    <h3>HK-inteken</h3>
+    <p class="hint" style="margin:-8px 0 14px; font-size:13.5px;">Net die HK kan events, verse en die bord bestuur. Jy bly ingeteken op hierdie toestel tot jy uitteken.</p>
+    <div class="field"><label for="authEmail">E-pos</label><input type="email" id="authEmail" inputmode="email" autocomplete="username" autocapitalize="none" value="${escapeHtml(lsGet('hennops-email')||'')}"></div>
+    <div class="field"><label for="authPass">Wagwoord</label><input type="password" id="authPass" autocomplete="current-password"></div>
     <div id="modalPinError" class="error-msg"></div>
     <div class="modal-actions">
       <button class="btn btn-secondary" id="pinCancel">Kanselleer</button>
-      <button class="btn btn-primary" id="pinConfirm">${needsSetup ? 'Stel op' : 'Ontsluit'}</button>
-    </div>
-  `;
+      <button class="btn btn-primary" id="pinConfirm">Teken in</button>
+    </div>`;
   openModal();
   document.getElementById('pinCancel').addEventListener('click', closeModal);
-
-  const finish = (val)=>{
-    unlocked = true;
-    if(document.getElementById('rememberMe').checked) lsSet('hennops-unlocked', String(val));
-    closeModal();
-    render();
-    callback();
-  };
-
-  document.getElementById('pinConfirm').addEventListener('click', async ()=>{
-    const val = document.getElementById('modalPinInput').value.trim();
+  const go = async ()=>{
+    const email = document.getElementById('authEmail').value.trim();
+    const pass = document.getElementById('authPass').value;
     const errEl = document.getElementById('modalPinError');
-    if(val.length < 4){ errEl.textContent = 'PIN moet minstens 4 syfers wees.'; return; }
-    if(needsSetup){
-      try{
-        // Dubbelkontrole: as iemand anders intussen 'n PIN gestel het, moet ons dit nie oorskryf nie.
-        const snap = await get(ref(db,'config/pin'));
-        if(snap.exists()){
-          hkPin = snap.val().value;
-          errEl.textContent = 'Daar is reeds \'n PIN opgestel. Maak toe en probeer weer.';
-          return;
-        }
-        await set(ref(db,'config/pin'), { value: val });
-        hkPin = val;
-        finish(val);
-      }catch(e){
-        errEl.textContent = 'Kon nie stoor nie: ' + e.message;
-      }
-    } else if(val === String(hkPin)){
-      finish(val);
-    } else {
-      errEl.textContent = 'Verkeerde PIN.';
+    const btn = document.getElementById('pinConfirm');
+    if(!email || !pass){ errEl.textContent = 'Vul albei in.'; return; }
+    btn.disabled = true; btn.textContent = 'Teken in...'; errEl.textContent = '';
+    try{
+      await signInWithEmailAndPassword(auth, email, pass);
+      lsSet('hennops-email', email);
+      unlocked = true;
+      closeModal();
+      render();
+      callback();
+    }catch(e){
+      errEl.textContent = authErrorText(e);
+      btn.disabled = false; btn.textContent = 'Teken in';
     }
-  });
-  setTimeout(()=>{ const i = document.getElementById('modalPinInput'); if(i) i.focus(); }, 60);
+  };
+  document.getElementById('pinConfirm').addEventListener('click', go);
+  document.getElementById('authPass').addEventListener('keydown', (ev)=>{ if(ev.key === 'Enter') go(); });
+  setTimeout(()=>{ const em = document.getElementById('authEmail'); if(!em) return; const i = em.value ? document.getElementById('authPass') : em; if(i) i.focus(); }, 60);
 }
 
 // ---------- ADD / EDIT EVENT ----------
@@ -994,6 +1242,7 @@ function handleAddEventClick(){
 }
 
 function openAddEventModal(existingEvent, asCopy){
+  window.__ackConf = '';
   const src = existingEvent || null;
   const isEdit = !!src && !asCopy;
   const catOptions = Object.entries(CATEGORIES).map(([k,v])=>`<option value="${k}" ${src && src.category===k ? 'selected':''}>${v.label}</option>`).join('');
@@ -1019,8 +1268,13 @@ function openAddEventModal(existingEvent, asCopy){
       </div>
       <p class="hint">Eindtyd is opsioneel — los dit leeg vir 'n verstek 1-uur duur in Outlook.</p>
     </div>
+    ${!isEdit ? `<div class="field"><label>Herhaal</label>
+      <select id="f-rep"><option value="">Nie</option><option value="w1">Elke week</option><option value="w2">Elke 2 weke</option><option value="m1">Elke maand</option></select>
+      <div id="f-repwrap" style="display:none; margin-top:8px;"><label>Herhaal tot en met</label><input type="date" id="f-repuntil"></div>
+    </div>` : ''}
     <div class="field"><label>Kategorie</label><select id="f-cat">${catOptions}</select></div>
-    <div class="field"><label>Portefeulje / vir wie (kies een of meer, opsioneel)</label><div class="port-grid">${portHtml}</div></div>
+    <div class="field"><label>Portefeulje (kies een of meer, opsioneel)</label><div class="port-grid">${portHtml}</div></div>
+    <div class="field"><label>Vir wie</label><select id="f-aud"><option value="">Almal</option><option value="eerstejaars" ${src && getAudience(src)==='eerstejaars'?'selected':''}>🌱 Eerstejaars</option><option value="seniors" ${src && getAudience(src)==='seniors'?'selected':''}>🎓 Seniors</option></select></div>
     <div class="field"><label>Plek (opsioneel)</label><input type="text" id="f-loc" placeholder="bv. Hennops-lapa" value="${escapeHtml(src ? (src.location||'') : '')}"></div>
     <div class="field"><label>Wie voeg dit by (opsioneel)</label><input type="text" id="f-by" placeholder="bv. Sport-portefeulje" value="${escapeHtml(src ? (src.addedBy||rememberedName) : rememberedName)}"></div>
     <div class="field"><label>Notas (opsioneel)</label><textarea id="f-notes" placeholder="Ekstra inligting...">${escapeHtml(src ? (src.notes||'') : '')}</textarea></div>
@@ -1033,6 +1287,14 @@ function openAddEventModal(existingEvent, asCopy){
   openModal();
   document.getElementById('addEventCancel').addEventListener('click', closeModal);
 
+  const repSel = document.getElementById('f-rep');
+  if(repSel){
+    repSel.addEventListener('change', ()=>{
+      document.getElementById('f-repwrap').style.display = repSel.value ? 'block' : 'none';
+      const u = document.getElementById('f-repuntil');
+      if(repSel.value && !u.value){ const d0 = document.getElementById('f-date').value || todayStr(); u.value = addDaysToDateStr(d0, 90); }
+    });
+  }
   const periodCheckbox = document.getElementById('f-period');
   const enddateWrap = document.getElementById('f-enddate-wrap');
   const timeWrap = document.getElementById('f-time-wrap');
@@ -1050,6 +1312,7 @@ function openAddEventModal(existingEvent, asCopy){
     const isPeriod = periodCheckbox.checked;
     const endDate = document.getElementById('f-enddate').value;
     const errEl = document.getElementById('addEventError');
+    errEl.className = 'error-msg';
     if(!title || !date){ errEl.textContent = 'Titel en datum is nodig.'; return; }
     if(isPeriod && !endDate){ errEl.textContent = 'Gee die "tot en met"-datum vir die tydperk.'; return; }
     if(isPeriod && endDate < date){ errEl.textContent = 'Die einddatum kan nie voor die begindatum wees nie.'; return; }
@@ -1074,6 +1337,8 @@ function openAddEventModal(existingEvent, asCopy){
       endTime: isPeriod ? '' : document.getElementById('f-endtime').value,
       category: document.getElementById('f-cat').value,
       portfolios,
+      audience: document.getElementById('f-aud').value,
+      seriesId: isEdit ? (src.seriesId || '') : '',
       location: document.getElementById('f-loc').value.trim(),
       addedBy: addedByVal,
       notes: document.getElementById('f-notes').value.trim(),
@@ -1081,8 +1346,35 @@ function openAddEventModal(existingEvent, asCopy){
       movedFrom, movedAt,
       createdAt: isEdit ? (src.createdAt || Date.now()) : Date.now()
     };
+    const conf = conflictText(eventData);
+    if(conf.length){
+      const key = conf.join('|');
+      if(window.__ackConf !== key){
+        window.__ackConf = key;
+        errEl.className = 'warn-msg';
+        errEl.innerHTML = '⚠ Let op:<br>' + conf.map(escapeHtml).join('<br>') + '<br><b>Tik Stoor weer as dit reg is.</b>';
+        return;
+      }
+    }
+    window.__ackConf = '';
+    errEl.className = 'error-msg';
     try{
+      const repEl = document.getElementById('f-rep');
+      const rep = repEl ? repEl.value : '';
+      if(!isEdit && rep){
+        const until = document.getElementById('f-repuntil').value;
+        if(!until || until < date){ errEl.textContent = 'Kies tot wanneer dit herhaal (na die begindatum).'; return; }
+        const occ = makeOccurrences(eventData, rep, until);
+        const updates = {};
+        occ.forEach(o=>{ updates['events/'+o.id] = o; });
+        await update(ref(db), updates);
+        logAct('nuut', title + ' (reeks)', null, occ.map(o=>o.id));
+        confirmingId = null; closeModal();
+        showToast(occ.length + ' events bygevoeg');
+        return;
+      }
       await set(ref(db,'events/'+eventData.id), eventData);
+      logAct(isEdit ? 'wysig' : 'nuut', title, isEdit ? src : null, [eventData.id]);
       confirmingId = null;
       closeModal();
       showToast(isEdit ? 'Event bygewerk' : (asCopy ? 'Kopie bygevoeg' : 'Event bygevoeg'));
@@ -1094,7 +1386,9 @@ function openAddEventModal(existingEvent, asCopy){
 
 async function cancelEvent(id){
   try{
+    const b = events.find(e=>e.id===id);
     await update(ref(db,'events/'+id), { isCancelled: true });
+    if(b) logAct('kanselleer', b.title, b, [id]);
     confirmingId = null;
     showToast('Event gekanselleer');
   }catch(e){
@@ -1103,7 +1397,9 @@ async function cancelEvent(id){
 }
 async function restoreEvent(id){
   try{
+    const b = events.find(e=>e.id===id);
     await update(ref(db,'events/'+id), { isCancelled: false });
+    if(b) logAct('herstel', b.title, b, [id]);
     confirmingId = null;
     showToast('Kansellasie ongedaan gemaak');
   }catch(e){
@@ -1137,10 +1433,14 @@ function parseBulkLine(line){
   if(!catKey) return { error: `Onbekende kategorie "${catPart}" (gebruik Akademies / Huis Hennops / Mede Koshuise / Akademia)` };
   if(!titlePart) return { error: 'Geen titel nie' };
   const portfolios = [];
+  let audience = '';
   if(portPart){
     for(const name of portPart.split(',').map(x=>x.trim()).filter(Boolean)){
-      const pk = Object.keys(PORTFOLIOS).find(k => PORTFOLIOS[k].label.toLowerCase() === name.toLowerCase());
-      if(!pk) return { error: `Onbekende portefeulje "${name}" (Sport, Eerstejaars, Seniors, Kuns en Kultuur, Gemeenskap, Sosiaal)` };
+      const n = name.toLowerCase();
+      if(n === 'eerstejaars' || n === 'seniors'){ audience = n; continue; }
+      if(n === 'kuns en kultuur'){ portfolios.push('kultuur'); continue; }
+      const pk = Object.keys(PORTFOLIOS).find(k => PORTFOLIOS[k].label.toLowerCase() === n);
+      if(!pk) return { error: `Onbekende portefeulje "${name}" (${Object.values(PORTFOLIOS).map(p=>p.label).join(', ')}, of Eerstejaars/Seniors)` };
       portfolios.push(pk);
     }
   }
@@ -1148,7 +1448,7 @@ function parseBulkLine(line){
   return {
     event: {
       title: titlePart, date: dateStr, isPeriod, endDate: isPeriod ? endDateStr : '',
-      time: '', category: catKey, portfolios, location: locPart || '', addedBy: 'Bulk-invoer',
+      time: '', category: catKey, portfolios, audience, location: locPart || '', addedBy: 'Bulk-invoer',
       notes: notesPart || '', isCancelled: false, createdAt: Date.now()
     }
   };
@@ -1157,7 +1457,7 @@ function parseBulkLine(line){
 function openBulkAddModal(){
   modalBody.innerHTML = `
     <h3>Voeg 'n lys datums by</h3>
-    <p class="hint" style="margin:-6px 0 12px; font-size:13px;">Een event per reël. Formaat: <b>datum | kategorie | titel | plek | notas | portefeuljes</b> (plek, notas en portefeuljes opsioneel; portefeuljes met komma, bv. <i>Sport, Eerstejaars</i>). Vir 'n tydperk: <b>2026-09-15 tot 2026-09-19 | Akademies | HA-tydperk 3</b></p>
+    <p class="hint" style="margin:-6px 0 12px; font-size:13px;">Een event per reël. Formaat: <b>datum | kategorie | titel | plek | notas | portefeuljes</b> (plek, notas en portefeuljes is opsioneel; portefeuljes met komma, bv. <i>Sport, Sosiaal</i>; <i>Eerstejaars</i> of <i>Seniors</i> mag ook). Vir 'n tydperk: <b>2026-09-15 tot 2026-09-19 | Akademies | HA-tydperk 3</b></p>
     <div class="field">
       <textarea id="bulk-text" style="min-height:170px; font-family:monospace; font-size:14px;" placeholder="2026-09-15 tot 2026-09-19 | Akademies | HA-tydperk 3
 2026-10-01 | Akademia | Direkteursdinee | Sentrum"></textarea>
@@ -1207,7 +1507,10 @@ async function deleteEvent(id){
 }
 async function doDeleteEvent(id){
   try{
+    const b = events.find(e=>e.id===id);
     await remove(ref(db,'events/'+id));
+    if(b) logAct('verwyder', b.title, b, [id]);
+    try{ await remove(ref(db,'rsvp/'+id)); }catch(e2){}
     confirmingId = null;
     showToast('Event verwyder');
   }catch(e){
@@ -1219,6 +1522,529 @@ async function doDeleteEvent(id){
 function openModal(){ modalOverlay.classList.add('open'); }
 function closeModal(){ modalOverlay.classList.remove('open'); modalBody.innerHTML=''; }
 modalOverlay.addEventListener('click', (e)=>{ if(e.target === modalOverlay) closeModal(); });
+
+// ---------- NUWE AANSIGTE: STATE ----------
+let rsvp = {};
+let bord = {};
+let vers = {};
+let _dev = null;
+function deviceId(){
+  if(_dev) return _dev;
+  let d = lsGet('hennops-dev');
+  if(!d){ d = 'd' + Date.now().toString(36) + Math.random().toString(36).slice(2,7); lsSet('hennops-dev', d); }
+  _dev = d;
+  return d;
+}
+
+function dateOfMs(ms){ const d = new Date(ms); return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate()); }
+function eventsOn(d, list){
+  return list.filter(e => !e.isCancelled && (e.date === d || (e.isPeriod && e.endDate && e.date <= d && d <= e.endDate)));
+}
+function emojiOf(e){
+  return getPorts(e).map(k=>PORTFOLIOS[k].emoji).concat(getAudience(e)?[AUD_EMOJI[getAudience(e)]]:[]).join('');
+}
+
+// ---------- HERHALENDE EVENTS ----------
+function makeOccurrences(base, rep, until){
+  const out = [];
+  const p = parseDate(base.date);
+  const span = (base.isPeriod && base.endDate) ? daysBetween(base.date, base.endDate) : 0;
+  const seriesId = 'ser_' + Date.now();
+  const stamp = Date.now();
+  for(let i=0; i<60; i++){
+    let d;
+    if(rep === 'm1'){
+      const dim = new Date(p.y, p.m - 1 + i + 1, 0).getDate();
+      const dt = new Date(p.y, p.m - 1 + i, Math.min(p.d, dim));
+      d = dt.getFullYear()+'-'+pad2(dt.getMonth()+1)+'-'+pad2(dt.getDate());
+    } else {
+      d = addDaysToDateStr(base.date, i * (rep === 'w2' ? 14 : 7));
+    }
+    if(d > until) break;
+    out.push(Object.assign({}, base, {
+      id: 'ev_' + stamp + '_' + i,
+      date: d,
+      endDate: span ? addDaysToDateStr(d, span) : '',
+      seriesId
+    }));
+  }
+  return out;
+}
+async function deleteSeries(id){
+  const ev = events.find(e=>e.id === id);
+  if(!ev || !ev.seriesId) return;
+  const all = events.filter(e=>e.seriesId === ev.seriesId);
+  if(!confirm(`Verwyder al ${all.length} events in hierdie reeks?`)) return;
+  const upd = {};
+  all.forEach(e=>{ upd['events/'+e.id] = null; upd['rsvp/'+e.id] = null; });
+  try{ await update(ref(db), upd); logAct('reeks', ev.title + ' (' + all.length + ')', all, all.map(e=>e.id)); confirmingId = null; showToast(all.length + ' events verwyder'); }
+  catch(e){ showToast('Kon nie verwyder nie: ' + e.message); }
+}
+
+// ---------- EK GAAN ----------
+async function toggleRsvp(id){
+  const dev = deviceId();
+  const mine = rsvp[id] && rsvp[id][dev];
+  try{
+    if(mine){ await remove(ref(db,'rsvp/'+id+'/'+dev)); showToast('Jy gaan nie meer nie'); return; }
+    const name = lsGet('hennops-name');
+    if(!name){ askRsvpName(id); return; }
+    await set(ref(db,'rsvp/'+id+'/'+dev), { name, at: Date.now() });
+    showToast('Jy gaan. Lekker!');
+  }catch(e){ showToast('Kon nie stoor nie: ' + e.message); }
+}
+function askRsvpName(id){
+  modalBody.innerHTML = `<h3>Jou naam</h3>
+    <p class="hint" style="margin:-8px 0 12px;">Die HK sien wie gaan, sodat hulle kan beplan. Net die getal wys vir almal.</p>
+    <div class="field"><input type="text" id="rv-name" placeholder="bv. Jan Pieterse" autocomplete="name"></div>
+    <div class="modal-actions"><button class="btn btn-secondary" data-act="rvskip" data-id="${id}">Sonder naam</button><button class="btn btn-primary" data-act="rvgo" data-id="${id}">Ek gaan</button></div>`;
+  openModal();
+  setTimeout(()=>{ const i = document.getElementById('rv-name'); if(i) i.focus(); }, 60);
+}
+async function rsvpSave(id, withName){
+  const el = document.getElementById('rv-name');
+  const name = withName && el ? el.value.trim() : '';
+  if(name) lsSet('hennops-name', name);
+  try{ await set(ref(db,'rsvp/'+id+'/'+deviceId()), { name, at: Date.now() }); closeModal(); showToast('Jy gaan. Lekker!'); }
+  catch(e){ showToast('Kon nie stoor nie: ' + e.message); }
+}
+
+// ---------- BYBELVERS ----------
+function activeVerse(){
+  const t = todayStr();
+  const list = Object.values(vers || {}).filter(v => v && v.text && v.from <= t && t <= v.to).sort((a,b)=> b.from.localeCompare(a.from));
+  return list[0] || null;
+}
+function verseHtml(){
+  const v = activeVerse();
+  if(!v) return '';
+  return `<figure class="verse"><blockquote>${escapeHtml(v.text)}</blockquote><figcaption>${escapeHtml(v.ref||'')}${v.version ? ' · ' + escapeHtml(v.version) : ''}</figcaption></figure>`;
+}
+function openVersModal(){
+  const t = todayStr();
+  const list = Object.values(vers || {}).filter(Boolean).sort((a,b)=> b.from.localeCompare(a.from)).slice(0,8);
+  modalBody.innerHTML = `<h3>Bybelvers</h3>
+    <p class="hint" style="margin:-8px 0 12px;">Tik die vers self in en noem die vertaling. Dit wys bo-aan die kalender vir die datums wat jy kies.</p>
+    <div class="field"><label>Vers *</label><textarea id="v-text" style="min-height:90px" placeholder="Die vers se woorde"></textarea></div>
+    <div class="field"><label>Verwysing *</label><input type="text" id="v-ref" placeholder="bv. Psalm 23:1"></div>
+    <div class="field"><label>Vertaling (opsioneel)</label><input type="text" id="v-ver" value="${escapeHtml(lsGet('hennops-vers-ver')||'')}" placeholder="bv. 1983-vertaling"></div>
+    <div style="display:flex; gap:8px;">
+      <div class="field" style="flex:1"><label>Wys van</label><input type="date" id="v-from" value="${t}"></div>
+      <div class="field" style="flex:1"><label>Tot en met</label><input type="date" id="v-to" value="${addDaysToDateStr(t,6)}"></div>
+    </div>
+    <div id="vErr" class="error-msg"></div>
+    <div class="modal-actions"><button class="btn btn-secondary" data-act="mclose">Sluit</button><button class="btn btn-primary" data-act="vsave">Stoor</button></div>
+    ${list.length ? `<div class="sec-h">Vorige en beplande verse</div>${list.map(v=>`<div style="display:flex;justify-content:space-between;gap:8px;align-items:center;padding:8px 0;border-top:1px solid var(--bg)"><div style="font-size:13.5px"><b>${escapeHtml(v.ref||'')}</b><br><span style="color:var(--ink-soft)">${formatShortDate(v.from)} – ${formatShortDate(v.to)}</span></div><button class="mini-btn danger" data-act="vdel" data-id="${v.id}">Verwyder</button></div>`).join('')}` : ''}`;
+  openModal();
+}
+async function saveVerse(){
+  const text = document.getElementById('v-text').value.trim();
+  const refT = document.getElementById('v-ref').value.trim();
+  const ver = document.getElementById('v-ver').value.trim();
+  const from = document.getElementById('v-from').value;
+  const to = document.getElementById('v-to').value;
+  const err = document.getElementById('vErr');
+  if(!text || !refT){ err.textContent = 'Die vers en sy verwysing is nodig.'; return; }
+  if(!from || !to || to < from){ err.textContent = 'Kies \'n geldige begin- en einddatum.'; return; }
+  if(ver) lsSet('hennops-vers-ver', ver);
+  const id = 'v_' + Date.now();
+  try{ await set(ref(db,'vers/'+id), { id, text, ref: refT, version: ver, from, to }); showToast('Vers gestoor'); openVersModal(); }
+  catch(e){ err.textContent = 'Kon nie stoor nie: ' + e.message; }
+}
+
+// ---------- MAAND-AANSIG ----------
+function monthHtml(){
+  const today = todayStr();
+  if(!mCur){ const p = parseDate(today); mCur = { y:p.y, m:p.m }; }
+  const mm = pad2(mCur.m);
+  const first = `${mCur.y}-${mm}-01`;
+  const lead = (parseDate(first).wd + 6) % 7;
+  const dim = new Date(mCur.y, mCur.m, 0).getDate();
+  const total = Math.ceil((lead + dim) / 7) * 7;
+  const list = applyFilters(events, true).filter(e=>!e.isCancelled);
+  const inMonth = d => d.slice(0,7) === `${mCur.y}-${mm}`;
+  if(!selDay || !inMonth(selDay)) selDay = inMonth(today) ? today : first;
+  let cells = '';
+  for(let i=0;i<total;i++){
+    const dn = i - lead + 1;
+    if(dn < 1 || dn > dim){ cells += `<div class="mcell empty"></div>`; continue; }
+    const d = `${mCur.y}-${mm}-${pad2(dn)}`;
+    const evs = eventsOn(d, list);
+    const singles = evs.filter(e=>!(e.isPeriod && e.endDate));
+    const per = evs.find(e=>e.isPeriod && e.endDate);
+    const col = i % 7;
+    const cls = ['mcell', singles.length?'has':'', d===today?'today':'', d===selDay?'sel':'', d<today?'past':'', per?'per':'', (per && d===per.date)?'ps':'', (per && d===per.endDate)?'pe':''].filter(Boolean).join(' ');
+    const dots = singles.slice(0,3).map(e=>`<i style="background:${(CATEGORIES[e.category]||CATEGORIES.hennops).hex}"></i>`).join('');
+    cells += `<button class="${cls}" data-act="mday" data-d="${d}" aria-label="${dn} ${AF_MAANDE[mCur.m-1]}${singles.length?', '+singles.length+' event(s)':''}"><span class="n">${dn}</span><span class="dots">${singles.length>1?dots:''}</span></button>`;
+  }
+  const dayEvs = applyFilters(events, true).filter(e => e.date === selDay || (e.isPeriod && e.endDate && e.date <= selDay && selDay <= e.endDate)).sort((a,b)=> sortKey(a).localeCompare(sortKey(b)));
+  const sp = parseDate(selDay);
+  return `<div class="mv-top"><div class="mv-name">${AF_MAANDE_KORT[mCur.m-1].toUpperCase()}</div>
+      <div class="mv-meta"><div class="mv-year">${mCur.y}</div><div class="mv-full">${AF_MAANDE[mCur.m-1]}</div>
+      </div></div>
+    <div class="mv-nav" style="margin:0 0 10px;justify-content:space-between"><button data-act="mnav" data-d="-1" aria-label="Vorige maand">‹</button><button data-act="mtoday" style="flex:1">Vandag</button><button data-act="mnav" data-d="1" aria-label="Volgende maand">›</button></div>
+    <div class="mgrid">${['Ma','Di','Wo','Do','Vr','Sa','So'].map(h=>`<div class="mh">${h}</div>`).join('')}${cells}</div>
+    <div class="day-head">${AF_DAE[sp.wd]} ${sp.d} ${AF_MAANDE[sp.m-1]}</div>
+    <div id="dayList">${dayEvs.length ? dayEvs.map(e=>cardHtml(e, today)).join('') : `<div class="empty-state" style="padding:22px 10px"><p>Niks op hierdie dag nie.</p></div>`}</div>`;
+}
+
+// ---------- WEEK-PLAKKAAT ----------
+function weekMonday(){
+  const t = todayStr();
+  return addDaysToDateStr(t, -((parseDate(t).wd + 6) % 7) + 7 * weekOffset);
+}
+function weekData(){
+  const mon = weekMonday();
+  const list = applyFilters(events, true).filter(e=>!e.isCancelled);
+  const days = [];
+  for(let i=0;i<7;i++){
+    const d = addDaysToDateStr(mon, i);
+    days.push({ d, evs: eventsOn(d, list).filter(e=>!(e.isPeriod && e.endDate)).sort((a,b)=> sortKey(a).localeCompare(sortKey(b))) });
+  }
+  const sun = addDaysToDateStr(mon,6);
+  const periods = list.filter(e=>e.isPeriod && e.endDate && e.date <= sun && e.endDate >= mon).sort((a,b)=>a.date.localeCompare(b.date));
+  return { mon, sun, days, periods };
+}
+function weekTitle(){
+  return weekOffset === 0 ? 'Hierdie week' : weekOffset === 1 ? 'Volgende week' : weekOffset === -1 ? 'Verlede week' : 'Week';
+}
+function weekHtml(){
+  const today = todayStr();
+  const w = weekData();
+  const bands = w.days.map((day,i)=>{
+    const p = parseDate(day.d);
+    const evs = day.evs.length ? day.evs.map(e=>{
+      const t = e.time || '';
+      const em = emojiOf(e);
+      return `<div>${t ? `<span class="t">${escapeHtml(t)}</span>` : ''}${escapeHtml(e.title)}${em ? ' '+em : ''}</div>`;
+    }).join('') : `<div>Niks</div>`;
+    return `<div class="wband ${day.evs.length ? (i%2?'b2':'b1') : 'bz'} ${day.d===today?'today':''}"><div class="dc"><div class="dn">${p.d}</div><div class="dw">${AF_DAE_KORT[p.wd].toUpperCase()}</div></div><div class="evs">${evs}</div></div>`;
+  }).join('');
+  return `<div class="wk-top"><div><h2>${weekTitle()}</h2><div class="wk-sub">${formatShortDate(w.mon)} – ${formatShortDate(w.sun)}</div></div></div>
+    <div class="mv-nav" style="margin:0 0 10px;justify-content:space-between"><button data-act="wnav" data-d="-1" aria-label="Vorige week">‹</button><button data-act="wtoday" style="flex:1">Vandag</button><button data-act="wnav" data-d="1" aria-label="Volgende week">›</button></div>
+    ${w.periods.length ? `<div class="wk-strips">${w.periods.map(e=>`<div class="wk-strip">📅 ${escapeHtml(e.title)} <span>${formatShortDate(e.date)} – ${formatShortDate(e.endDate)}</span></div>`).join('')}</div>` : ''}
+    ${bands}
+    <div class="row-acts"><button class="ics-btn" data-act="weekimg" style="background:var(--accent);border-color:var(--accent);color:#fff">🖼 Deel as prent</button></div>`;
+}
+function canvasFit(ctx, text, maxW){
+  if(ctx.measureText(text).width <= maxW) return text;
+  let t = text;
+  while(t.length > 1 && ctx.measureText(t + '…').width > maxW) t = t.slice(0,-1);
+  return t.trimEnd() + '…';
+}
+async function makeWeekPoster(){
+  const w = weekData();
+  try{ if(document.fonts && document.fonts.load){ await document.fonts.load('900 60px Archivo'); await document.fonts.load('700 30px Archivo'); } }catch(e){}
+  const W = 1080, H = 1350;
+  const c = document.createElement('canvas'); c.width = W; c.height = H;
+  const x = c.getContext('2d');
+  const FF = "Archivo, 'Work Sans', Arial, sans-serif";
+  x.fillStyle = '#CBC3BA'; x.fillRect(0,0,W,H);
+  const logo = document.querySelector('.brand img');
+  if(logo && logo.complete && logo.naturalWidth) x.drawImage(logo, 56, 46, 123, 102);
+  x.fillStyle = '#33291F'; x.textBaseline = 'alphabetic';
+  x.font = `900 82px ${FF}`; x.fillText(weekTitle().toUpperCase(), 206, 108);
+  x.font = `600 34px ${FF}`; x.fillStyle = '#6E6459';
+  x.fillText(`${formatShortDate(w.mon)} – ${formatShortDate(w.sun)}  ·  Huis Hennops`, 208, 152);
+  const per = w.periods.slice(0,3);
+  per.forEach((e,i)=>{
+    const y = 176 + i*50;
+    x.fillStyle = 'rgba(168,110,83,0.28)'; x.beginPath(); x.roundRect ? x.roundRect(40, y, W-80, 40, 20) : x.rect(40, y, W-80, 40); x.fill();
+    x.fillStyle = '#33291F'; x.font = `700 24px ${FF}`; x.textAlign = 'left';
+    x.fillText(canvasFit(x, `${e.title}   ${formatShortDate(e.date)} – ${formatShortDate(e.endDate)}`, W-130), 64, y + 28);
+  });
+  const top = 190 + per.length*50, bandH = Math.floor((H - 131 - top) / 7), gap = 0;
+  w.days.forEach((day,i)=>{
+    const y = top + i*bandH;
+    const has = day.evs.length > 0;
+    x.fillStyle = has ? (i%2 ? '#8A5640' : '#A86E53') : '#B7ACA0';
+    x.fillRect(0, y, W, bandH - gap);
+    const fg = has ? '#F6F3EE' : '#4A4036';
+    x.fillStyle = fg;
+    const p = parseDate(day.d);
+    const k = bandH / 147;
+    x.font = `900 ${Math.round(104*k)}px ${FF}`; x.textAlign = 'center';
+    x.fillText(String(p.d), 100, y + Math.round(104*k));
+    x.font = `700 ${Math.round(24*k)}px ${FF}`; x.fillText(AF_DAE_KORT[p.wd].toUpperCase(), 100, y + Math.round(134*k));
+    x.textAlign = 'left';
+    const lines = [];
+    if(!has) lines.push('Niks');
+    else day.evs.forEach(e=>{
+      const t = e.time || '';
+      const em = emojiOf(e);
+      lines.push((t ? t + '   ' : '') + e.title + (em ? '  ' + em : ''));
+    });
+    const shown = lines.length > 3 ? lines.slice(0,2).concat([`+ ${lines.length-2} meer`]) : lines;
+    x.font = `700 32px ${FF}`;
+    const lh = Math.min(40, Math.floor((bandH - 20) / Math.max(1, shown.length)));
+    const y0 = y + (bandH - lh*shown.length)/2 + lh*0.72;
+    shown.forEach((ln,j)=>{ x.fillText(canvasFit(x, ln, W - 210 - 50), 200, y0 + j*lh); });
+  });
+  x.fillStyle = '#33291F'; x.fillRect(0, H-131, W, 131);
+  x.fillStyle = '#F6F3EE'; x.font = `800 34px ${FF}`; x.fillText('Huis Hennops kalender', 56, H-72);
+  x.font = `500 26px ${FF}`; x.fillStyle = '#CBC3BA';
+  x.fillText(canvasFit(x, location.href.split('#')[0].split('?')[0].replace(/^https?:\/\//,''), W-112), 56, H-30);
+  return await new Promise(res => c.toBlob(res, 'image/png'));
+}
+async function shareWeekImage(){
+  const w = weekData();
+  if(!w.days.some(d=>d.evs.length) && !w.periods.length){ showToast('Niks op hierdie week se kalender nie'); return; }
+  showToast('Maak die prent reg...');
+  let blob;
+  try{ blob = await makeWeekPoster(); }catch(e){ showToast('Kon nie die prent maak nie'); return; }
+  if(!blob){ showToast('Kon nie die prent maak nie'); return; }
+  const file = new File([blob], 'hennops-week.png', { type:'image/png' });
+  if(navigator.canShare && navigator.canShare({ files:[file] })){
+    try{ await navigator.share({ files:[file], title:'Hierdie week by Hennops' }); return; }
+    catch(e){ if(e && e.name === 'AbortError') return; }
+  }
+  triggerDownload(blob, 'hennops-week.png');
+  showToast('Prent afgelaai. Stuur dit in die groep.');
+}
+
+// ---------- FILTER-BLAD ----------
+function openFilterSheet(){
+  const pf = [['all','Almal']].concat(Object.keys(PORTFOLIOS).map(k=>[k, PORTFOLIOS[k].emoji+' '+PORTFOLIOS[k].label]));
+  const au = [['all','Almal']].concat(Object.keys(AUDIENCES).map(k=>[k, AUD_EMOJI[k]+' '+AUDIENCES[k]]));
+  modalBody.innerHTML = `<h3>Filter</h3>
+    <p class="hint">Portefeulje</p><div class="fwrap">${pf.map(([k,l])=>`<button class="chip ${activePortfolio===k?'active':''}" data-act="fport" data-k="${k}">${l}</button>`).join('')}</div>
+    <p class="hint">Vir wie</p><div class="fwrap">${au.map(([k,l])=>`<button class="chip ${activeAudience===k?'active':''}" data-act="faud" data-k="${k}">${l}</button>`).join('')}</div>
+    <div class="modal-actions"><button class="btn btn-secondary" data-act="fclear">Maak skoon</button><button class="btn btn-primary" data-act="mclose">Klaar</button></div>`;
+  openModal();
+}
+
+// ---------- MEDEDELINGSBORD ----------
+const BCATS = { besigheid:'Besigheid', diens:'Dienste en hulp', koop:'Te koop', belangrik:'Belangrik' };
+const DAY30 = 30*24*60*60*1000;
+function myPosts(){ try{ return JSON.parse(lsGet('hennops-myposts') || '[]'); }catch(e){ return []; } }
+function addMyPost(id){ const a = myPosts(); a.push(id); lsSet('hennops-myposts', JSON.stringify(a.slice(-30))); }
+function pendingPosts(){ return Object.values(bord || {}).filter(p=>p && p.status === 'wag').sort((a,b)=>a.at-b.at); }
+function activePosts(){
+  const n = Date.now();
+  return Object.values(bord || {}).filter(p=>p && p.status === 'oop' && p.exp > n)
+    .sort((a,b)=> ((b.cat==='belangrik')-(a.cat==='belangrik')) || (b.at - a.at));
+}
+function normPhone(s){
+  let d = String(s||'').replace(/[^\d+]/g,'').replace(/^\+/,'');
+  if(!d) return '';
+  if(d.startsWith('00')) d = d.slice(2);
+  if(d.startsWith('0')) d = '27' + d.slice(1);
+  return /^\d{9,15}$/.test(d) ? d : null;
+}
+function postHtml(p, mode){
+  const mine = myPosts().includes(p.id);
+  const wa = p.phone ? `https://wa.me/${p.phone}?text=${encodeURIComponent('Hi, ek het jou plasing "'+p.title+'" op die Hennops-mededelingsbord gesien.')}` : '';
+  return `<article class="post ${p.cat==='belangrik'?'imp':''}">
+    <div class="post-top"><span class="post-cat">${escapeHtml(BCATS[p.cat]||'')}</span><span>${mode==='wag' ? 'Wag vir goedkeuring' : 'Verval '+formatShortDate(dateOfMs(p.exp))}</span></div>
+    <h3>${escapeHtml(p.title)}</h3><p>${escapeHtml(p.text)}</p>
+    <div class="post-foot"><span>${p.name ? 'deur '+escapeHtml(p.name) : ''}</span>${(wa && mode!=='wag') ? `<a class="wa" href="${wa}" target="_blank" rel="noopener">💬 WhatsApp</a>` : ''}</div>
+    <div class="row-btns" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
+      ${(unlocked && mode==='wag') ? `<button class="mini-btn" style="background:var(--sage);color:#fff;border-color:var(--sage)" data-act="bapprove" data-id="${p.id}">Keur goed</button><button class="mini-btn danger" data-act="breject" data-id="${p.id}">Wys af</button>` : ''}
+      ${(mode!=='wag' && unlocked) ? `<button class="mini-btn" data-act="brenew" data-id="${p.id}">Hernu 30 dae</button><button class="mini-btn danger" data-act="bdel" data-id="${p.id}">Verwyder</button>` : ''}
+      ${(mode==='wag' && mine && !unlocked) ? `<button class="mini-btn danger" data-act="bdel" data-id="${p.id}">Trek terug</button>` : ''}
+    </div>
+  </article>`;
+}
+function bordHtml(){
+  const act = activePosts();
+  const pend = pendingPosts();
+  const mineIds = myPosts();
+  const myPend = pend.filter(p=>mineIds.includes(p.id));
+  let html = `<p class="bord-intro">Besighede, dienste en belangrike aankondigings van manne van die huis. Die HK keur alles goed voor dit wys, en plasings verval ná 30 dae. Wil jy joune verwyder of hernu? Vra die HK.</p>
+    <button class="ics-btn" data-act="bnew" style="width:100%;background:var(--accent);border-color:var(--accent);color:#fff;margin-bottom:6px">+ Plaas iets</button>`;
+  if(unlocked && pend.length){
+    html += `<div class="sec-h">Wag vir goedkeuring (${pend.length})</div>` + pend.map(p=>postHtml(p,'wag')).join('');
+  } else if(myPend.length){
+    html += `<div class="sec-h">Jou plasings wat wag</div>` + myPend.map(p=>postHtml(p,'wag')).join('');
+  }
+  html += `<div class="sec-h">Op die bord</div>`;
+  html += act.length ? act.map(p=>postHtml(p,'oop')).join('') : `<div class="empty-state"><div class="big">📌</div><p>Nog niks op die bord nie.</p><p>Wees die eerste een en plaas iets.</p></div>`;
+  return html;
+}
+function openPostModal(){
+  const cats = Object.entries(BCATS).filter(([k])=>k!=='belangrik' || unlocked).map(([k,l])=>`<option value="${k}">${l}</option>`).join('');
+  modalBody.innerHTML = `<h3>Plaas op die bord</h3>
+    <div class="field"><label>Soort</label><select id="pb-cat">${cats}</select></div>
+    <div class="field"><label>Titel *</label><input type="text" id="pb-title" maxlength="60" placeholder="bv. Jan se Biltong"></div>
+    <div class="field"><label>Wat bied jy aan? *</label><textarea id="pb-text" maxlength="400" style="min-height:100px" placeholder="Kort en duidelik: wat, hoeveel, waar"></textarea></div>
+    <div class="field"><label>Jou naam</label><input type="text" id="pb-name" value="${escapeHtml(lsGet('hennops-name')||'')}" placeholder="bv. Jan Pieterse"></div>
+    <div class="field"><label>WhatsApp-nommer (opsioneel)</label><input type="tel" id="pb-phone" placeholder="bv. 082 123 4567">
+      <p class="hint">Jou nommer is sigbaar vir almal met hierdie skakel. Los dit leeg as jy nie wil hê mense moet jou WhatsApp nie.</p></div>
+    <div id="pbErr" class="error-msg"></div>
+    <div class="modal-actions"><button class="btn btn-secondary" data-act="mclose">Kanselleer</button><button class="btn btn-primary" data-act="bsave">Plaas</button></div>`;
+  openModal();
+}
+async function savePost(){
+  const err = document.getElementById('pbErr');
+  const cat = document.getElementById('pb-cat').value;
+  const title = document.getElementById('pb-title').value.trim();
+  const text = document.getElementById('pb-text').value.trim();
+  const name = document.getElementById('pb-name').value.trim();
+  const ph = normPhone(document.getElementById('pb-phone').value);
+  if(!title || !text){ err.textContent = 'Die titel en beskrywing is nodig.'; return; }
+  if(ph === null){ err.textContent = 'Daai nommer lyk nie reg nie. Gee \'n volle nommer, of los dit leeg.'; return; }
+  const still = myPosts().filter(id => bord[id]).length;
+  if(!unlocked && still >= 3){ err.textContent = 'Jy het reeds 3 plasings op die bord. Verwyder eers een.'; return; }
+  if(name) lsSet('hennops-name', name);
+  const id = 'b_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+  const auto = unlocked;
+  const post = { id, cat, title, text, name, phone: ph || '', at: Date.now(), status: auto ? 'oop' : 'wag', exp: auto ? Date.now() + DAY30 : 0 };
+  try{
+    await set(ref(db,'bord/'+id), post);
+    bord[id] = post;
+    addMyPost(id);
+    closeModal();
+    render();
+    showToast(auto ? 'Geplaas' : 'Ontvang. Dit wys sodra die HK dit goedkeur.');
+  }catch(e){ err.textContent = 'Kon nie stoor nie: ' + e.message; }
+}
+
+// ---------- DELEGEERDE KLIKKE ----------
+document.addEventListener('click', async (ev)=>{
+  const t = ev.target.closest('[data-act]');
+  if(!t) return;
+  const a = t.dataset.act;
+  switch(a){
+    case 'view': view = t.dataset.v; render(); window.scrollTo({top:0}); break;
+    case 'mnav': { if(!mCur){ const p = parseDate(todayStr()); mCur = {y:p.y,m:p.m}; }
+      let m = mCur.m + (+t.dataset.d), y = mCur.y; if(m<1){m=12;y--;} if(m>12){m=1;y++;} mCur = {y,m}; selDay = null; render(); break; }
+    case 'mtoday': mCur = null; selDay = null; render(); break;
+    case 'mday': selDay = t.dataset.d; render(); { const dl = document.getElementById('dayList'); if(dl) dl.scrollIntoView({behavior:'smooth', block:'nearest'}); } break;
+    case 'wnav': weekOffset += (+t.dataset.d); render(); break;
+    case 'wtoday': weekOffset = 0; render(); break;
+    case 'weekimg': shareWeekImage(); break;
+    case 'openfilter': openFilterSheet(); break;
+    case 'fport': activePortfolio = t.dataset.k; render(); openFilterSheet(); break;
+    case 'faud': activeAudience = t.dataset.k; render(); openFilterSheet(); break;
+    case 'fclear': activePortfolio = 'all'; activeAudience = 'all'; activeFilter = 'alle'; render(); openFilterSheet(); break;
+    case 'mclose': closeModal(); break;
+    case 'hundo': undoLog(t.dataset.id); break;
+    case 'a2hs-x': lsSet('hennops-a2hs','1'); render(); break;
+    case 'a2hs-go': if(deferredInstall){ deferredInstall.prompt(); try{ await deferredInstall.userChoice; }catch(e){} deferredInstall = null; lsSet('hennops-a2hs','1'); render(); } break;
+    case 'rsvp': toggleRsvp(t.dataset.id); break;
+    case 'rvgo': rsvpSave(t.dataset.id, true); break;
+    case 'rvskip': rsvpSave(t.dataset.id, false); break;
+    case 'vsave': saveVerse(); break;
+    case 'vdel': try{ await remove(ref(db,'vers/'+t.dataset.id)); showToast('Vers verwyder'); openVersModal(); }catch(e){ showToast('Kon nie: '+e.message); } break;
+    case 'bnew': openPostModal(); break;
+    case 'bsave': savePost(); break;
+    case 'bapprove': try{ await update(ref(db,'bord/'+t.dataset.id), { status:'oop', exp: Date.now()+DAY30 }); showToast('Goedgekeur'); }catch(e){ showToast('Kon nie: '+e.message); } break;
+    case 'breject': if(confirm('Wys hierdie plasing af en verwyder dit?')){ try{ await remove(ref(db,'bord/'+t.dataset.id)); showToast('Afgewys'); }catch(e){ showToast('Kon nie: '+e.message); } } break;
+    case 'brenew': try{ await update(ref(db,'bord/'+t.dataset.id), { exp: Date.now()+DAY30 }); showToast('Hernu vir 30 dae'); }catch(e){ showToast('Kon nie: '+e.message); } break;
+    case 'bdel': if(confirm('Verwyder hierdie plasing?')){ try{ await remove(ref(db,'bord/'+t.dataset.id)); showToast('Verwyder'); }catch(e){ showToast('Kon nie: '+e.message); } } break;
+  }
+});
+
+// ---------- GESKIEDENIS (ontdoen) ----------
+const clean = (o)=> o == null ? null : JSON.parse(JSON.stringify(o));
+async function logAct(action, title, before, ids){
+  if(!db) return;
+  try{
+    const id = 'l_' + Date.now() + '_' + Math.random().toString(36).slice(2,5);
+    await set(ref(db,'log/'+id), { id, at: Date.now(), who: lsGet('hennops-name') || 'HK', action, title: title || '', before: clean(before), ids: ids || [] });
+    const snap = await get(ref(db,'log'));
+    const all = Object.values(snap.val() || {}).sort((a,b)=>a.at-b.at);
+    for(const old of all.slice(0, Math.max(0, all.length - 40))){ await remove(ref(db,'log/'+old.id)); }
+  }catch(e){ /* geskiedenis is 'n bonus, moet nooit die werklike aksie keer nie */ }
+}
+const ACTION_TXT = { nuut:'Bygevoeg', wysig:'Gewysig', kanselleer:'Gekanselleer', herstel:'Herstel (nie meer gekanselleer)', verwyder:'Verwyder', reeks:'Reeks verwyder' };
+async function openHistoryModal(){
+  modalBody.innerHTML = `<h3>Geskiedenis</h3><p class="hint" style="margin:-8px 0 10px;">Die laaste 40 veranderings. "Ontdoen" sit dit terug soos dit was.</p><div id="hist"><p class="hint">Laai...</p></div><div class="modal-actions"><button class="btn btn-secondary" data-act="mclose">Sluit</button></div>`;
+  openModal();
+  let list = [];
+  try{ const snap = await get(ref(db,'log')); list = Object.values(snap.val() || {}).sort((a,b)=>b.at-a.at).slice(0,25); }
+  catch(e){ document.getElementById('hist').innerHTML = `<p class="error-msg">Kon nie laai nie: ${escapeHtml(e.message)}</p>`; return; }
+  const box = document.getElementById('hist'); if(!box) return;
+  box.innerHTML = list.length ? list.map(l=>{
+    const d = new Date(l.at);
+    const when = `${d.getDate()} ${AF_MAANDE_KORT[d.getMonth()]} ${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+    return `<div class="hrow ${l.undone?'undone':''}"><div class="t"><b>${escapeHtml(l.title||'(sonder titel)')}</b><small>${ACTION_TXT[l.action]||l.action} · ${escapeHtml(l.who||'')} · ${when}${l.undone?' · ontdoen':''}</small></div>${l.undone?'':`<button class="mini-btn" data-act="hundo" data-id="${l.id}">Ontdoen</button>`}</div>`;
+  }).join('') : `<p class="hint">Nog niks nie.</p>`;
+}
+async function undoLog(id){
+  try{
+    const snap = await get(ref(db,'log/'+id));
+    const l = snap.val(); if(!l || l.undone) return;
+    const upd = {};
+    if(l.action === 'nuut'){ (l.ids||[]).forEach(i=>{ upd['events/'+i] = null; }); }
+    else if(l.action === 'reeks'){ (l.before||[]).forEach(e=>{ upd['events/'+e.id] = e; }); }
+    else if(l.before){ upd['events/'+l.before.id] = l.before; }
+    else return;
+    upd['log/'+id+'/undone'] = true;
+    await update(ref(db), upd);
+    showToast('Ontdoen');
+    openHistoryModal();
+  }catch(e){ showToast('Kon nie ontdoen nie: ' + e.message); }
+}
+
+// ---------- OPKOMS ----------
+function openOpkomsModal(){
+  const rows = events.filter(e=>rsvp[e.id] && Object.keys(rsvp[e.id]).length).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,30);
+  modalBody.innerHTML = `<h3>Opkoms</h3><p class="hint" style="margin:-8px 0 10px;">Hoeveel het gesê hulle gaan, per event.</p>` +
+    (rows.length ? rows.map(e=>{ const r = Object.values(rsvp[e.id]); const names = r.map(x=>x.name).filter(Boolean);
+      return `<div class="hrow"><div class="t"><b>${escapeHtml(e.title)}</b><small>${formatShortDate(e.date)}${names.length?' · '+escapeHtml(names.join(', ')):''}</small></div><b style="font-size:20px">${r.length}</b></div>`; }).join('') : `<p class="hint">Niemand het nog "Ek gaan" gekies nie.</p>`) +
+    `<div class="modal-actions"><button class="btn btn-secondary" data-act="mclose">Sluit</button></div>`;
+  openModal();
+}
+
+// ---------- BOTSINGS ----------
+function toMin(t){ if(!t) return null; const [h,m] = t.split(':').map(Number); return h*60+(m||0); }
+function conflictText(data){
+  const out = [];
+  const a0 = toMin(data.time), a1 = a0 == null ? null : (toMin(data.endTime) ?? a0 + 60);
+  const lo = (data.location||'').trim().toLowerCase();
+  const dEnd = data.isPeriod && data.endDate ? data.endDate : data.date;
+  events.forEach(e=>{
+    if(e.id === data.id || e.isCancelled) return;
+    const eEnd = e.isPeriod && e.endDate ? e.endDate : e.date;
+    if(e.date > dEnd || eEnd < data.date) return;
+    if(e.isPeriod && e.endDate && e.category === 'akademies' && data.category !== 'akademies'){ out.push(`Hierdie datum val binne "${e.title}" (${formatShortDate(e.date)} – ${formatShortDate(e.endDate)}).`); return; }
+    const el = (e.location||'').trim().toLowerCase();
+    if(!lo || !el || lo !== el || data.isPeriod || e.isPeriod) return;
+    const b0 = toMin(e.time), b1 = b0 == null ? null : (toMin(e.endTime) ?? b0 + 60);
+    const overlap = (a0 == null || b0 == null) ? true : (a0 < b1 && b0 < a1);
+    if(overlap) out.push(`"${e.title}" gebruik ook ${e.location} op ${formatShortDate(e.date)}${e.time ? ' om '+e.time : ''}.`);
+  });
+  return out;
+}
+
+// ---------- VOEG BY TUISSKERM ----------
+let deferredInstall = null;
+window.addEventListener('beforeinstallprompt', (e)=>{ e.preventDefault(); deferredInstall = e; if(!loading && view==='lys') render(); });
+function a2hsHtml(){
+  let standalone = false;
+  try{ standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true; }catch(e){}
+  if(standalone || lsGet('hennops-a2hs')) return '';
+  const ua = navigator.userAgent || '';
+  const ios = /iPhone|iPad|iPod/.test(ua);
+  const how = deferredInstall ? `<button class="go" data-act="a2hs-go">Installeer</button>`
+    : ios ? `Tik onder op <b style="display:inline">Deel</b> (die vierkant met 'n pyltjie) en kies <b style="display:inline">Voeg by tuisskerm</b>.`
+    : `Maak die blaaier se kieslys (⋮) oop en kies <b style="display:inline">Voeg by tuisskerm</b> of <b style="display:inline">Installeer app</b>.`;
+  return `<div class="a2hs"><div style="flex:1"><b>Sit die kalender op jou foon</b>Dan is dit een tik weg, soos 'n app.<div style="margin-top:4px">${how}</div></div><button class="x" data-act="a2hs-x" aria-label="Maak toe">×</button></div>`;
+}
+
+// ---------- NA ELKE RENDER: SKAKEL NA 'N EVENT ----------
+let flashId = '', flashUntil = 0;
+function afterRender(){
+  if(flashId && Date.now() < flashUntil){
+    const el0 = document.querySelector(`[data-card-id="${flashId}"]`);
+    if(el0) el0.classList.add('flash');
+  }
+  if(deepHandled || !events.length) return;
+  const m = /[#&]e=([\w-]+)/.exec(location.hash || '');
+  deepHandled = true;
+  if(!m) return;
+  const ev = events.find(e=>e.id === m[1]);
+  if(!ev){ showToast('Daai event bestaan nie meer nie'); return; }
+  const endC = (ev.isPeriod && ev.endDate) ? ev.endDate : ev.date;
+  activeFilter = 'alle'; activePortfolio = 'all'; activeAudience = 'all'; searchQuery = '';
+  view = 'lys';
+  if(endC < todayStr()) showPast = true;
+  flashId = ev.id; flashUntil = Date.now() + 3000;
+  render();
+  const el = document.querySelector(`[data-card-id="${ev.id}"]`);
+  if(el) el.scrollIntoView({ block:'center' });
+}
 
 // ---------- START ----------
 initApp();
