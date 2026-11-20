@@ -518,6 +518,15 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 
 .bday .big span{color:inherit !important;opacity:.8;}
 @media (max-width:340px){.hdr-actions{gap:6px}.hdr-actions .hk-btn{padding:0 10px;font-size:13px;max-width:110px}}
+/* ===== RONDTE 3 ===== */
+.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 12px;}
+.quick button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:84px;padding:10px 6px;border:0;border-radius:var(--radius);background:var(--surface);box-shadow:var(--shadow);cursor:pointer;color:var(--ink);font:inherit;text-align:center;}
+.quick .qe{font-size:26px;line-height:1;} .quick b{font-size:12.5px;line-height:1.2;} .quick small{font-size:11px;color:var(--accent-dark);font-weight:700;}
+.quick-ex{margin:-4px 2px 12px;font-size:13px;color:var(--ink-soft);} .quick-ex b{color:var(--ink);}
+.staffban{display:flex;flex-direction:column;gap:8px;margin:0 0 12px;}
+.staffban button{display:block;width:100%;min-height:52px;padding:12px 18px;border:0;border-radius:var(--radius);background:var(--roes-diep);color:#F6F3EE;font:inherit;font-size:15px;text-align:left;cursor:pointer;box-shadow:var(--shadow);}
+.card-lite{padding:12px 14px;margin:0 0 10px;border-radius:14px;background:rgba(51,41,31,.05);}
+.st{display:block;font-weight:700;margin-top:3px;} .st-wag{color:#8a6a1f;} .st-goedgekeur{color:var(--groen-diep);} .st-afgekeur{color:#9B3B2F;}
 </style>
 </head>
 <body>
@@ -1168,7 +1177,7 @@ function bannerHtmlFn(){
 }
 
 function renderKalender(){
-  let html = view === 'lys' ? verseHtml() + bigHtml() + bevestigHtml() + bdCardHtml() + mvdwHtml() + a2hsHtml() : '';
+  let html = view === 'lys' ? verseHtml() + bigHtml() + staffBannerHtml() + bevestigHtml() + bdCardHtml() + mvdwHtml() + quickHtml() + a2hsHtml() : '';
   html += vtabsHtml();
   if(view === 'lys'){
     html += bannerHtmlFn() + todayBoxHtml() + `
@@ -1255,6 +1264,8 @@ function openHKMenu(){
       <button class="btn btn-secondary" id="hkBulkAdd">📋 Voeg lys van datums by</button>
       <button class="btn btn-secondary" id="hkPeople">👥 Mense en rolle</button>
       <button class="btn btn-secondary" id="hkMvdw">🐘 Man van die week</button>
+      ${isPrim ? `<button class="btn btn-secondary" id="hkAans">📨 Aansoeke</button>` : ''}
+      <button class="btn btn-secondary" id="hkGed">💬 Gedagtes</button>
       <button class="btn btn-secondary" id="hkVers">📖 Bybelvers</button>
       <button class="btn btn-secondary" id="hkBd">🎂 Verjaarsdae</button>
       <button class="btn btn-secondary" id="hkBord">📌 Mededelings${pendingPosts().length ? ' ('+pendingPosts().length+' wag vir goedkeuring)' : ''}</button>
@@ -1274,6 +1285,8 @@ function openHKMenu(){
   document.getElementById('hkBd').addEventListener('click', ()=>{ if(!unlocked){ openPinModalThen(()=>openBdModal()); } else { openBdModal(); } });
   document.getElementById('hkPeople').addEventListener('click', openPeopleModal);
   document.getElementById('hkMvdw').addEventListener('click', openMvdwModal);
+  const ha = document.getElementById('hkAans'); if(ha) ha.addEventListener('click', openAansPrim);
+  document.getElementById('hkGed').addEventListener('click', openGedHK);
   document.getElementById('hkVers').addEventListener('click', ()=>{ if(!unlocked){ openPinModalThen(openVersModal); } else { openVersModal(); } });
   document.getElementById('hkBord').addEventListener('click', ()=>{
     const go = ()=>{ closeModal(); view = 'bord'; render(); window.scrollTo({top:0}); };
@@ -1988,6 +2001,19 @@ document.addEventListener('click', async (ev)=>{
     case 'fclear': activePortfolio = 'all'; activeAudience = 'all'; activeFilter = 'alle'; render(); openFilterSheet(); break;
     case 'mclose': closeModal(); break;
     case 'signin': openAuthModal('in'); break;
+    case 'aansopen': openAansModal(); break;
+    case 'anssend': sendAans(); break;
+    case 'anscancel': cancelAans(t.dataset.id); break;
+    case 'ansprim': openAansPrim(); break;
+    case 'ansdec': decideAans(t.dataset.uid, t.dataset.id, t.dataset.s); break;
+    case 'gedopen': openGedModal(); break;
+    case 'gedsend': sendGed(); break;
+    case 'gedhk': openGedHK(); break;
+    case 'gedstat': gedStat(t.dataset.id, t.dataset.s); break;
+    case 'geddel': gedDel(t.dataset.id); break;
+    case 'rstopen': openRstModal(); break;
+    case 'rstadd': addRst(); break;
+    case 'rstdel': delRst(t.dataset.id); break;
     case 'evopen': openEv(t.dataset.id); break;
     case 'evx': closeEv(); break;
     case 'evedit': { const ev = events.find(e=>e.id===t.dataset.id); if(ev){ closeEv(); openAddEventModal(ev); } break; }
@@ -2275,7 +2301,7 @@ function attachAuth(){
   onAuthStateChanged(auth, (user)=>{
     stopListeners(_memberUnsubs); stopListeners(_authUnsubs);
     me = user || null; myRole = {}; myProfile = null; profLoaded = false; roleLoaded = false;
-    rsvp = {}; bord = {}; verjaar = {}; mvdw = null; myOpk = {};
+    rsvp = {}; bord = {}; verjaar = {}; mvdw = null; myOpk = {}; myAans = {}; myGed = {}; myRooster = {}; allAans = {}; allGed = {}; _staff.hk = false; _staff.prim = false;
     recalcRoles();
     const first = !authReady; authReady = true;
     if(!me){
@@ -2286,13 +2312,16 @@ function attachAuth(){
       return;
     }
     const uid = me.uid;
-    _authUnsubs.push(onValue(ref(db,'roles/'+uid), s=>{ myRole = s.val() || {}; roleLoaded = true; recalcRoles(); if(!loading) render(); }, ()=>{ roleLoaded = true; }));
+    _authUnsubs.push(onValue(ref(db,'roles/'+uid), s=>{ myRole = s.val() || {}; roleLoaded = true; recalcRoles(); syncStaff(); if(!loading) render(); }, ()=>{ roleLoaded = true; }));
     _authUnsubs.push(onValue(ref(db,'profiles/'+uid), s=>{ myProfile = s.val(); profLoaded = true; routeOnb(); tryOpk(); maybeBdPopup(); if(!loading) render(); }, ()=>{ profLoaded = true; routeOnb(); }));
     const live = ()=>{ if(!loading) render(); };
     _memberUnsubs.push(onValue(ref(db,'bord'), s=>{ bord = s.val() || {}; live(); }, ()=>{}));
     _memberUnsubs.push(onValue(ref(db,'rsvp'), s=>{ rsvp = s.val() || {}; live(); }, ()=>{}));
     _memberUnsubs.push(onValue(ref(db,'verjaar'), s=>{ verjaar = s.val() || {}; live(); maybeBdPopup(); }, ()=>{}));
     _memberUnsubs.push(onValue(ref(db,'mvdw'), s=>{ mvdw = s.val() || null; live(); }, ()=>{}));
+    _memberUnsubs.push(onValue(ref(db,'aansoeke/'+uid), s=>{ myAans = s.val() || {}; live(); }, ()=>{}));
+    _memberUnsubs.push(onValue(ref(db,'mygedagtes/'+uid), s=>{ myGed = s.val() || {}; live(); }, ()=>{}));
+    _memberUnsubs.push(onValue(ref(db,'rooster/'+uid), s=>{ myRooster = s.val() || {}; live(); }, ()=>{}));
     invitePending = false;
     if(!loading) render();
   });
@@ -2580,6 +2609,8 @@ async function meDelete(){
   ['profiles','nood','medies','verjaar','kodetoets'].forEach(k=>{ upd[k+'/'+uid] = null; });
   Object.keys(rsvp || {}).forEach(eid=>{ if(rsvp[eid] && rsvp[eid][uid]) upd['rsvp/'+eid+'/'+uid] = null; });
   events.forEach(e=>{ upd['opkoms/'+e.id+'/'+uid] = null; });
+  upd['aansoeke/'+uid] = null; upd['mygedagtes/'+uid] = null; upd['rooster/'+uid] = null;
+  Object.keys(myGed || {}).forEach(id=>{ upd['gedagtes/'+id] = null; });
   try{
     await update(ref(db), upd);
     await deleteUser(auth.currentUser);
@@ -3099,6 +3130,186 @@ document.addEventListener('click', (ev)=>{ const c = ev.target.closest('.event-c
 document.addEventListener('keydown', (ev)=>{ if(ev.key === 'Escape'){ if(qrS && modalOverlay.classList.contains('open') === false) return; if(evOpen && !modalOverlay.classList.contains('open')) closeEv(); } });
 window.addEventListener('hashchange', ()=>{ readOpkHash(); tryOpk(); });
 readOpkHash(); loadWx();
+// ---------- RONDTE 3: AANSOEKE, GEDAGTES, ROOSTER ----------
+const PING_URL = '';   // Google Apps Script-skakel (sien ping-skrip.gs). Los leeg as jy dit nog nie opgestel het nie.
+const PING_TOKEN = '';
+let myAans = {}, myGed = {}, myRooster = {}, allAans = {}, allGed = {};
+const _staff = { hk: false, prim: false };
+const AANS_ST = { wag: '⏳ Wag vir die Prim', goedgekeur: '✅ Goedgekeur', afgekeur: '❌ Afgekeur' };
+const GED_ST = { ontvang: '📥 Ontvang', besig: '🛠 Besig', opgelos: '✅ Opgelos' };
+const GED_SOORT = ['Gedagte', 'Klagte', 'Voorstel', 'Kompliment'];
+function newId(p){ return p + Date.now().toString(36) + Math.random().toString(36).slice(2, 5); }
+function liveR(){ if(!loading) render(); }
+function syncStaff(){
+  if(!me) return;
+  if(unlocked && !_staff.hk){ _staff.hk = true; _memberUnsubs.push(onValue(ref(db, 'gedagtes'), s=>{ allGed = s.val() || {}; liveR(); }, ()=>{ _staff.hk = false; })); }
+  if(isPrim && !_staff.prim){ _staff.prim = true; _memberUnsubs.push(onValue(ref(db, 'aansoeke'), s=>{ allAans = s.val() || {}; liveR(); }, ()=>{ _staff.prim = false; })); }
+}
+function ping(kind){
+  if(!PING_URL) return;
+  try{ fetch(PING_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ t: PING_TOKEN, k: kind }) }).catch(()=>{}); }catch(e){}
+}
+function flatAans(){
+  const out = [];
+  Object.entries(allAans || {}).forEach(([uid, o])=>Object.entries(o || {}).forEach(([id, r])=>out.push({ uid, id, ...r })));
+  return out;
+}
+function rosterList(){ return Object.entries(myRooster || {}).map(([id, x])=>({ id, ...x })).sort((a,b)=>(a.datum + (a.tyd||'')).localeCompare(b.datum + (b.tyd||''))); }
+
+// ----- Vinnige knoppies op die lys -----
+function quickHtml(){
+  if(!me || !myProfile) return '';
+  const t = todayStr();
+  const wag = Object.values(myAans || {}).filter(a=>a.status === 'wag').length;
+  const dec = Object.values(myAans || {}).filter(a=>a.status !== 'wag' && a.bat && Date.now() - a.bat < 3 * 864e5).length;
+  const ex = rosterList().find(x=>x.datum >= t);
+  const n = ex ? daysBetween(t, ex.datum) : 0;
+  return `<div class="quick">
+    <button data-act="aansopen"><span class="qe">🛏</span><b>Oorslaap of kuier</b>${wag ? `<small>${wag} wag</small>` : (dec ? '<small>Nuwe antwoord</small>' : '')}</button>
+    <button data-act="gedopen"><span class="qe">💬</span><b>Stuur gedagte</b></button>
+    <button data-act="rstopen"><span class="qe">📚</span><b>My rooster</b></button>
+  </div>${ex ? `<div class="quick-ex">📚 Volgende: <b>${escapeHtml(ex.vak)}</b> · ${n === 0 ? 'vandag' : n === 1 ? 'môre' : 'oor ' + n + ' dae'}</div>` : ''}`;
+}
+function staffBannerHtml(){
+  if(!unlocked) return '';
+  const pa = isPrim ? flatAans().filter(a=>a.status === 'wag').length : 0;
+  const ng = Object.values(allGed || {}).filter(g=>g.status === 'ontvang').length;
+  if(!pa && !ng) return '';
+  return `<div class="staffban">${pa ? `<button data-act="ansprim">📨 <b>${pa}</b> aansoek${pa === 1 ? '' : 'e'} wag vir jou</button>` : ''}${ng ? `<button data-act="gedhk">💬 <b>${ng}</b> nuwe gedagte${ng === 1 ? '' : 's'}</button>` : ''}</div>`;
+}
+
+// ----- Aansoeke (lid) -----
+function openAansModal(){
+  const t = todayStr();
+  const mine = Object.entries(myAans || {}).map(([id, a])=>({ id, ...a })).sort((a,b)=>(b.at||0)-(a.at||0)).slice(0, 8);
+  modalBody.innerHTML = `<h3>🛏 Oorslaap of kuier</h3>
+    <p class="hint" style="margin:-8px 0 12px">Net die Prim keur dit goed. Jy sien hier die antwoord.</p>
+    <div class="field"><label for="aType">Wat is dit?</label><select id="aType"><option value="oorslaap">Oorslaap (gas slaap oor)</option><option value="kuier">Kuier (gas kuier net)</option></select></div>
+    <div class="field"><label for="aDate">Datum</label><input type="date" id="aDate" min="${t}" value="${t}"></div>
+    <div class="field"><label for="aGast">Gas se naam</label><input id="aGast" maxlength="60" autocomplete="off"></div>
+    <div class="field"><label for="aKamer">In watter kamer?</label><input id="aKamer" maxlength="20" value="${escapeHtml((myProfile && myProfile.kamer) || '')}"></div>
+    <div class="field"><label for="aRede">Rede (opsioneel)</label><textarea id="aRede" maxlength="200" placeholder="bv. Haar ouers kuier in die dorp"></textarea></div>
+    <div id="aErr" class="error-msg"></div>
+    <div class="modal-actions"><button class="btn btn-secondary" data-act="mclose">Kanselleer</button><button class="btn btn-primary" data-act="anssend">Stuur aansoek</button></div>
+    ${mine.length ? `<div class="sec-h">My aansoeke</div>` + mine.map(a=>`<div class="hrow" style="align-items:flex-start"><div class="t"><b>${a.type === 'kuier' ? 'Kuier' : 'Oorslaap'}: ${escapeHtml(a.gast)}</b><small>${formatShortDate(a.date)}${a.kamer ? ' · kamer ' + escapeHtml(a.kamer) : ''}</small><small class="st st-${a.status}">${AANS_ST[a.status] || a.status}${a.besluit ? ' · ' + escapeHtml(a.besluit) : ''}</small></div>${a.status === 'wag' ? `<button class="mini-btn danger" data-act="anscancel" data-id="${a.id}">Trek terug</button>` : ''}</div>`).join('') : ''}`;
+  openModal();
+}
+async function sendAans(){
+  const g = id=>document.getElementById(id).value.trim(), err = document.getElementById('aErr');
+  const rec = { type: g('aType'), date: g('aDate'), gast: g('aGast'), kamer: g('aKamer'), rede: g('aRede'), status: 'wag', naam: myName(), at: Date.now() };
+  if(!rec.gast){ err.textContent = 'Tik die gas se naam in.'; return; }
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(rec.date) || rec.date < todayStr()){ err.textContent = 'Kies \'n datum van vandag af.'; return; }
+  if(daysBetween(todayStr(), rec.date) > 180){ err.textContent = 'Kies \'n datum binne die volgende 6 maande.'; return; }
+  const id = newId('a_');
+  try{ await set(ref(db, 'aansoeke/' + me.uid + '/' + id), rec); myAans[id] = rec; ping('aansoek'); showToast('Aansoek gestuur. Die Prim besluit.'); openAansModal(); liveR(); }
+  catch(e){ err.textContent = 'Kon nie stuur nie: ' + e.message; }
+}
+async function cancelAans(id){
+  try{ await remove(ref(db, 'aansoeke/' + me.uid + '/' + id)); delete myAans[id]; showToast('Teruggetrek'); openAansModal(); liveR(); }
+  catch(e){ showToast('Kon nie: ' + e.message); }
+}
+// ----- Aansoeke (Prim) -----
+function openAansPrim(){
+  if(!isPrim){ showToast('Net die Prim sien dit.'); return; }
+  const all = flatAans();
+  const wag = all.filter(a=>a.status === 'wag').sort((a,b)=>a.date.localeCompare(b.date));
+  const done = all.filter(a=>a.status !== 'wag').sort((a,b)=>(b.bat||0)-(a.bat||0)).slice(0, 15);
+  const okOn = d=>all.filter(a=>a.status === 'goedgekeur' && a.type === 'oorslaap' && a.date === d).length;
+  modalBody.innerHTML = `<h3>📨 Aansoeke</h3>` +
+    (wag.length ? wag.map(a=>{ const k = a.type === 'oorslaap' ? okOn(a.date) : 0; return `<div class="card-lite"><div><b>${a.type === 'kuier' ? '👋 Kuier' : '🛏 Oorslaap'}</b> · ${escapeHtml(a.naam || '?')}</div>
+      <div class="hint" style="margin:4px 0">${formatDateLabel(a.date)} · gas: <b>${escapeHtml(a.gast)}</b>${a.kamer ? ' · kamer ' + escapeHtml(a.kamer) : ''}</div>
+      ${a.rede ? `<div style="font-size:14px;margin-bottom:6px">${escapeHtml(a.rede)}</div>` : ''}
+      ${k ? `<div class="hint" style="color:var(--accent-dark)">Daardie aand het ${k} oorslaap-aansoek${k === 1 ? '' : 'e'} reeds goedgekeur.</div>` : ''}
+      <input id="an-${a.id}" maxlength="200" placeholder="Opmerking (opsioneel)" style="width:100%;margin:6px 0">
+      <div style="display:flex;gap:8px"><button class="btn btn-primary" style="flex:1" data-act="ansdec" data-uid="${a.uid}" data-id="${a.id}" data-s="goedgekeur">Goedkeur</button><button class="btn btn-secondary" style="flex:1" data-act="ansdec" data-uid="${a.uid}" data-id="${a.id}" data-s="afgekeur">Keur af</button></div></div>`; }).join('') : `<p class="hint">Geen aansoeke wag nie. 🎉</p>`) +
+    (done.length ? `<div class="sec-h">Onlangs besluit</div>` + done.map(a=>`<div class="hrow"><div class="t"><b>${escapeHtml(a.naam || '?')} · ${escapeHtml(a.gast)}</b><small>${formatShortDate(a.date)} · ${a.type === 'kuier' ? 'kuier' : 'oorslaap'}</small></div><small class="st st-${a.status}">${a.status === 'goedgekeur' ? '✅' : '❌'}</small></div>`).join('') : '') +
+    `<div class="modal-actions"><button class="btn btn-secondary" data-act="mclose">Sluit</button></div>`;
+  openModal();
+}
+async function decideAans(uid, id, s){
+  const note = ((document.getElementById('an-' + id) || {}).value || '').trim().slice(0, 200);
+  const cur = (allAans[uid] || {})[id]; if(!cur) return;
+  const rec = Object.assign({}, cur, { status: s, besluit: note, deur: myName(), bat: Date.now() });
+  try{ await set(ref(db, 'aansoeke/' + uid + '/' + id), rec); (allAans[uid] = allAans[uid] || {})[id] = rec; showToast(s === 'goedgekeur' ? 'Goedgekeur' : 'Afgekeur'); openAansPrim(); liveR(); }
+  catch(e){ showToast('Kon nie: ' + e.message); }
+}
+
+// ----- Gedagtes -----
+function openGedModal(){
+  const mine = Object.entries(myGed || {}).map(([id, g])=>({ id, ...g })).sort((a,b)=>(b.at||0)-(a.at||0)).slice(0, 6);
+  modalBody.innerHTML = `<h3>💬 Stuur 'n gedagte</h3>
+    <p class="hint" style="margin:-8px 0 12px">Dit gaan na die HK. Jy kan dit anoniem stuur.</p>
+    <div class="field"><label for="gSoort">Soort</label><select id="gSoort">${GED_SOORT.map(s=>`<option>${s}</option>`).join('')}</select></div>
+    <div class="field"><label for="gTeks">Jou boodskap</label><textarea id="gTeks" maxlength="1000" style="min-height:110px"></textarea></div>
+    <label class="port-opt" style="padding:4px 0;white-space:normal"><input type="checkbox" id="gAnon"> Stuur anoniem (die HK sal nie weet wie jy is nie, en jy sal nie 'n antwoord sien nie)</label>
+    <div id="gErr" class="error-msg"></div>
+    <div class="modal-actions"><button class="btn btn-secondary" data-act="mclose">Kanselleer</button><button class="btn btn-primary" data-act="gedsend">Stuur</button></div>
+    ${mine.length ? `<div class="sec-h">My boodskappe</div>` + mine.map(g=>`<div class="hrow" style="align-items:flex-start"><div class="t"><b>${escapeHtml(g.soort || 'Gedagte')}</b><small>${escapeHtml(g.teks || '')}</small></div><small class="st">${GED_ST[g.status] || ''}</small></div>`).join('') : ''}`;
+  openModal();
+}
+async function sendGed(){
+  const teks = document.getElementById('gTeks').value.trim(), soort = document.getElementById('gSoort').value, anon = document.getElementById('gAnon').checked;
+  const err = document.getElementById('gErr');
+  if(teks.length < 3){ err.textContent = 'Skryf eers iets.'; return; }
+  const id = newId('g_'), at = Date.now();
+  const rec = { soort, teks, status: 'ontvang', at, uid: anon ? '' : me.uid, name: anon ? '' : myName() };
+  const upd = { ['gedagtes/' + id]: rec };
+  if(!anon) upd['mygedagtes/' + me.uid + '/' + id] = { soort, teks: teks.slice(0, 80), status: 'ontvang', at };
+  try{ await update(ref(db), upd); ping('gedagte'); closeModal(); showToast(anon ? 'Anoniem gestuur. Dankie!' : 'Gestuur. Dankie!'); }
+  catch(e){ err.textContent = 'Kon nie stuur nie: ' + e.message; }
+}
+function openGedHK(){
+  if(!unlocked){ showToast('Net die HK sien dit.'); return; }
+  const ord = { ontvang: 0, besig: 1, opgelos: 2 };
+  const list = Object.entries(allGed || {}).map(([id, g])=>({ id, ...g })).sort((a,b)=>(ord[a.status] - ord[b.status]) || (b.at - a.at)).slice(0, 40);
+  modalBody.innerHTML = `<h3>💬 Gedagtes</h3>` + (list.length ? list.map(g=>{ const d = new Date(g.at || 0); return `<div class="card-lite">
+      <div style="display:flex;justify-content:space-between;gap:8px"><b>${escapeHtml(g.soort || 'Gedagte')}</b><small class="st">${GED_ST[g.status] || ''}</small></div>
+      <div class="hint" style="margin:2px 0 6px">${g.name ? escapeHtml(g.name) : 'Anoniem'} · ${d.getDate()} ${AF_MAANDE_KORT[d.getMonth()]}</div>
+      <div style="font-size:14.5px;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere">${escapeHtml(g.teks || '')}</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">${Object.keys(GED_ST).filter(s=>s !== g.status).map(s=>`<button class="mini-btn" data-act="gedstat" data-id="${g.id}" data-s="${s}">${GED_ST[s]}</button>`).join('')}${g.status === 'opgelos' ? `<button class="mini-btn danger" data-act="geddel" data-id="${g.id}">Verwyder</button>` : ''}</div></div>`; }).join('') : `<p class="hint">Nog niks nie.</p>`) +
+    `<div class="modal-actions"><button class="btn btn-secondary" data-act="mclose">Sluit</button></div>`;
+  openModal();
+}
+async function gedStat(id, s){
+  const g = allGed[id]; if(!g) return;
+  const upd = { ['gedagtes/' + id + '/status']: s };
+  if(g.uid) upd['mygedagtes/' + g.uid + '/' + id + '/status'] = s;
+  try{ await update(ref(db), upd); g.status = s; openGedHK(); liveR(); }catch(e){ showToast('Kon nie: ' + e.message); }
+}
+async function gedDel(id){
+  const g = allGed[id]; if(!g) return;
+  const upd = { ['gedagtes/' + id]: null }; if(g.uid) upd['mygedagtes/' + g.uid + '/' + id] = null;
+  try{ await update(ref(db), upd); delete allGed[id]; openGedHK(); liveR(); }catch(e){ showToast('Kon nie: ' + e.message); }
+}
+
+// ----- Eie eksamenrooster (net die lid self) -----
+function openRstModal(){
+  const t = todayStr(), list = rosterList();
+  modalBody.innerHTML = `<h3>📚 My eksamenrooster</h3>
+    <p class="hint" style="margin:-8px 0 12px">Net jy sien dit. Tik jou vakke en datums in vanaf jou eie rooster.</p>
+    ${list.length ? list.map(x=>{ const n = daysBetween(t, x.datum), past = n < 0; return `<div class="hrow" style="${past ? 'opacity:.5' : ''}"><div class="t"><b>${escapeHtml(x.vak)}</b><small>${formatDateLabel(x.datum)}${x.tyd ? ' · ' + escapeHtml(x.tyd) : ''}${x.plek ? ' · ' + escapeHtml(x.plek) : ''}</small></div><div style="text-align:right"><b style="font-family:Archivo,sans-serif;font-size:22px;color:var(--accent-dark)">${past ? '✓' : n === 0 ? 'Vandag' : n}</b>${!past && n > 0 ? `<small style="display:block">${n === 1 ? 'dag' : 'dae'}</small>` : ''}</div><button class="mini-btn danger" data-act="rstdel" data-id="${x.id}" aria-label="Verwyder">✕</button></div>`; }).join('') : `<p class="hint">Nog geen vakke nie.</p>`}
+    <div class="sec-h">Voeg 'n vak by</div>
+    <div class="field"><label for="rVak">Vak</label><input id="rVak" maxlength="60" placeholder="bv. Ekonomie 101"></div>
+    <div class="row2" style="display:flex;gap:10px"><div class="field" style="flex:1;min-width:0"><label for="rDat">Datum</label><input type="date" id="rDat"></div><div class="field" style="flex:1;min-width:0"><label for="rTyd">Tyd</label><input type="time" id="rTyd"></div></div>
+    <div class="field"><label for="rPlek">Saal (opsioneel)</label><input id="rPlek" maxlength="40"></div>
+    <div id="rErr" class="error-msg"></div>
+    <div class="modal-actions"><button class="btn btn-secondary" data-act="mclose">Sluit</button><button class="btn btn-primary" data-act="rstadd">Voeg by</button></div>`;
+  openModal();
+}
+async function addRst(){
+  const g = id=>document.getElementById(id).value.trim(), err = document.getElementById('rErr');
+  const x = { vak: g('rVak'), datum: g('rDat'), tyd: g('rTyd'), plek: g('rPlek') };
+  if(!x.vak){ err.textContent = 'Tik die vak se naam in.'; return; }
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(x.datum)){ err.textContent = 'Kies die datum.'; return; }
+  const id = newId('r_');
+  try{ await set(ref(db, 'rooster/' + me.uid + '/' + id), x); myRooster[id] = x; openRstModal(); liveR(); }
+  catch(e){ err.textContent = 'Kon nie stoor nie: ' + e.message; }
+}
+async function delRst(id){
+  try{ await remove(ref(db, 'rooster/' + me.uid + '/' + id)); delete myRooster[id]; openRstModal(); liveR(); }
+  catch(e){ showToast('Kon nie: ' + e.message); }
+}
+
 // ---------- START ----------
 initApp();
 </script>
