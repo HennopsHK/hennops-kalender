@@ -443,6 +443,8 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 .day-wd{font-size:10.5px;letter-spacing:.06em;}
 .month-label{font-family:'Archivo',system-ui,sans-serif;font-variation-settings:'wdth' 62;font-stretch:62%;font-weight:900;font-size:52px;line-height:.85;text-transform:uppercase;letter-spacing:0;margin:30px 2px 14px;align-items:flex-end;gap:12px;}
 .month-label::after{height:3px;background:var(--ink);margin-bottom:6px;opacity:.85;}
+#listArea > .month-label:first-child{margin-top:22px;}
+.seg button,.viewtabs button{white-space:nowrap;}
 .event-card{border-radius:16px;}
 /* leë skerms met die olifant */
 .empty-state .big{font-size:0 !important;width:96px;height:80px;margin:0 auto 12px;background:var(--ink-soft);opacity:.4;
@@ -1162,7 +1164,7 @@ function footHtml(withPast){
 
 function vtabsHtml(){
   const pend = pendingPosts().length;
-  const tabs = [['lys','Lys'],['maand','Maand'],['week','Week'],['bord','Mededelings']];
+  const tabs = [['lys','Lys'],['maand','Maand'],['week','Week'],['bord','Bord']];
   return `<div class="vtabs" role="tablist">${tabs.map(([k,l])=>`<button class="vtab ${view===k?'active':''}" data-act="view" data-v="${k}">${l}${(k==='bord'&&unlocked&&pend)?`<em>${pend}</em>`:''}</button>`).join('')}</div>`;
 }
 
