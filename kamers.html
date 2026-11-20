@@ -334,6 +334,7 @@ a{color:var(--roes-d);}
   .who::before{height:118px;}
   .foot{grid-column:1/-1;}
 }
+.foot-out{margin:34px max(16px,env(safe-area-inset-left,0px)) 0;padding-bottom:calc(28px + env(safe-area-inset-bottom));position:relative;z-index:0;}
 @media (prefers-reduced-motion:reduce){.modal{animation:none;}.ph-steps li.cur i{animation:none;}.btn{transition:none;}}
 .done{text-align:center;padding:4px 0 2px;}
 .done .plate.big{display:grid;place-items:center;margin:2px auto 12px;min-width:88px;width:88px;height:88px;border:0;background:var(--ink);border-radius:16px;font-size:40px;font-weight:800;color:var(--paper2);font-variant-numeric:tabular-nums;}
@@ -392,8 +393,8 @@ details.nl .list{padding:0 8px 8px;margin-top:0;max-height:none;}
       <div class="gangchips" id="gangChips"></div>
     </section>
     <div id="rest"></div>
-    <footer class="foot"><span class="mark-topo" aria-hidden="true"></span><div><b>Huis Hennops</b><span>Ek sal vuurvas staan</span><small>Sedert 2022</small></div></footer>
   </main>
+    <footer class="foot foot-out"><span class="mark-topo" aria-hidden="true"></span><div><b>Huis Hennops</b><span>Ek sal vuurvas staan</span><small>Sedert 2022</small></div></footer>
 </div>
 
 <div class="modal-overlay" id="ov"><div class="modal" id="mb"></div></div>
