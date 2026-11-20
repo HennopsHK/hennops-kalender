@@ -519,7 +519,7 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 .bday .big span{color:inherit !important;opacity:.8;}
 @media (max-width:340px){.hdr-actions{gap:6px}.hdr-actions .hk-btn{padding:0 10px;font-size:13px;max-width:110px}}
 /* ===== RONDTE 3 ===== */
-.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 12px;}
+.quick{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:0 0 12px;}
 .quick button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:84px;padding:10px 6px;border:0;border-radius:var(--radius);background:var(--surface);box-shadow:var(--shadow);cursor:pointer;color:var(--ink);font:inherit;text-align:center;}
 .quick .qe{font-size:26px;line-height:1;} .quick b{font-size:12.5px;line-height:1.2;} .quick small{font-size:11px;color:var(--accent-dark);font-weight:700;}
 .quick-ex{margin:-4px 2px 12px;font-size:13px;color:var(--ink-soft);} .quick-ex b{color:var(--ink);}
@@ -1264,6 +1264,7 @@ function openHKMenu(){
       <button class="btn btn-secondary" id="hkBulkAdd">📋 Voeg lys van datums by</button>
       <button class="btn btn-secondary" id="hkPeople">👥 Mense en rolle</button>
       <button class="btn btn-secondary" id="hkMvdw">🐘 Man van die week</button>
+      <button class="btn btn-secondary" id="hkKamer">🏠 Kamerkaart</button>
       ${isPrim ? `<button class="btn btn-secondary" id="hkAans">📨 Aansoeke</button>` : ''}
       <button class="btn btn-secondary" id="hkGed">💬 Gedagtes</button>
       <button class="btn btn-secondary" id="hkVers">📖 Bybelvers</button>
@@ -1285,6 +1286,7 @@ function openHKMenu(){
   document.getElementById('hkBd').addEventListener('click', ()=>{ if(!unlocked){ openPinModalThen(()=>openBdModal()); } else { openBdModal(); } });
   document.getElementById('hkPeople').addEventListener('click', openPeopleModal);
   document.getElementById('hkMvdw').addEventListener('click', openMvdwModal);
+  document.getElementById('hkKamer').addEventListener('click', ()=>{ location.href = 'kamers.html'; });
   const ha = document.getElementById('hkAans'); if(ha) ha.addEventListener('click', openAansPrim);
   document.getElementById('hkGed').addEventListener('click', openGedHK);
   document.getElementById('hkVers').addEventListener('click', ()=>{ if(!unlocked){ openPinModalThen(openVersModal); } else { openVersModal(); } });
@@ -2012,6 +2014,7 @@ document.addEventListener('click', async (ev)=>{
     case 'gedstat': gedStat(t.dataset.id, t.dataset.s); break;
     case 'geddel': gedDel(t.dataset.id); break;
     case 'rstopen': openRstModal(); break;
+    case 'kamerkaart': location.href = 'kamers.html'; break;
     case 'rstadd': addRst(); break;
     case 'rstdel': delRst(t.dataset.id); break;
     case 'evopen': openEv(t.dataset.id); break;
@@ -2301,7 +2304,7 @@ function attachAuth(){
   onAuthStateChanged(auth, (user)=>{
     stopListeners(_memberUnsubs); stopListeners(_authUnsubs);
     me = user || null; myRole = {}; myProfile = null; profLoaded = false; roleLoaded = false;
-    rsvp = {}; bord = {}; verjaar = {}; mvdw = null; myOpk = {}; myAans = {}; myGed = {}; myRooster = {}; allAans = {}; allGed = {}; _staff.hk = false; _staff.prim = false;
+    rsvp = {}; bord = {}; verjaar = {}; mvdw = null; myOpk = {}; myAans = {}; myGed = {}; myRooster = {}; allAans = {}; allGed = {}; kam = { men: {}, beds: {} }; _staff.hk = false; _staff.prim = false;
     recalcRoles();
     const first = !authReady; authReady = true;
     if(!me){
@@ -2321,6 +2324,7 @@ function attachAuth(){
     _memberUnsubs.push(onValue(ref(db,'mvdw'), s=>{ mvdw = s.val() || null; live(); }, ()=>{}));
     _memberUnsubs.push(onValue(ref(db,'aansoeke/'+uid), s=>{ myAans = s.val() || {}; live(); }, ()=>{}));
     _memberUnsubs.push(onValue(ref(db,'mygedagtes/'+uid), s=>{ myGed = s.val() || {}; live(); }, ()=>{}));
+    _memberUnsubs.push(onValue(ref(db,'kamers'), s=>{ const v = s.val() || {}; kam = { men: v.men || {}, beds: v.beds || {} }; live(); }, ()=>{}));
     _memberUnsubs.push(onValue(ref(db,'rooster/'+uid), s=>{ myRooster = s.val() || {}; live(); }, ()=>{}));
     invitePending = false;
     if(!loading) render();
@@ -2471,13 +2475,13 @@ function renderOnb(){
     </div>
     <label class="port-opt" style="padding:10px 2px;white-space:normal;align-items:flex-start"><input type="checkbox" id="o-ok" ${W.consent?'checked':''} style="margin-top:2px"> <span>Ek verstaan en stem in dat Huis Hennops my nood- en mediese inligting stoor om my in 'n noodgeval te help. <button class="link-btn" data-onb="privaat" style="min-height:0;padding:0;display:inline">Lees hoe ons dit gebruik</button></span></label>`;
   } else {
-    title = 'Jou kamer'; sub = W.edit ? '' : 'Amper klaar.';
-    body = `<div class="card">${fld('o-kamer','Kamernommer (as jy weet)',d.kamer,'inputmode="numeric" placeholder="bv. 24"')}
-      <p class="hint">Die kamerkies-skerm kom binnekort hier. Los dit leeg as jy nog nie weet nie.</p></div>`;
+    title = 'Jou kamer'; sub = 'Amper klaar.';
+    body = `<div class="card"><p style="margin:0;line-height:1.5">Jy kies jou kamer op die <b>kamerkaart</b>. Seniors wat op die lys is, kan kies sodra die HK jou groep se fase oopmaak. Eerstejaars kry hul kamers van die HK.</p></div>`;
   }
-  const last = st === 3;
+  const LASTN = W.edit ? 2 : 3;
+  const last = st === LASTN;
   onbEl.innerHTML = `<div class="onb-in">
-    ${st > 0 ? `<div class="onb-prog"><i style="width:${Math.round(st/3*100)}%"></i></div><div class="hint">Stap ${st} van 3${W.edit ? ' · wysig profiel' : ''}</div>` : ''}
+    ${st > 0 ? `<div class="onb-prog"><i style="width:${Math.round(st/LASTN*100)}%"></i></div><div class="hint">Stap ${st} van ${LASTN}${W.edit ? ' · wysig profiel' : ''}</div>` : ''}
     <h2>${title}</h2>${sub ? `<p class="onb-sub">${sub}</p>` : ''}
     ${body}
     <div id="onbErr" class="error-msg">${escapeHtml(W.err||'')}</div>
@@ -2500,7 +2504,7 @@ function onbCollect(){
     if(W.showK2) W.n.k2 = { naam:onbVal('o-k2n'), verw:onbVal('o-k2v'), tel:onbVal('o-k2t') };
     W.m = { allergie:onbVal('o-m1'), toestande:onbVal('o-m2'), medikasie:onbVal('o-m3'), dokter:onbVal('o-m4'), fonds:onbVal('o-m5') };
     W.consent = document.getElementById('o-ok').checked;
-  } else if(st === 3){ d.kamer = onbVal('o-kamer'); }
+  }
 }
 function onbValidate(){
   const st = W.step, d = W.d;
@@ -2533,7 +2537,7 @@ async function onbNext(){
   const bad = onbValidate();
   if(bad){ W.err = bad; renderOnb(); return; }
   W.err = '';
-  if(W.step < 3){ W.step++; renderOnb(); return; }
+  if(W.step < (W.edit ? 2 : 3)){ W.step++; renderOnb(); return; }
   await saveProfile();
 }
 async function saveProfile(){
@@ -2553,6 +2557,7 @@ async function saveProfile(){
     myProfile = prof;
     closeOnb(); render();
     showToast(wasEdit ? 'Profiel bygewerk' : 'Welkom by Hennops, ' + prof.naam + '!');
+    if(!wasEdit){ try{ const ks = await get(ref(db, 'kamers/men')); const n = nrm(fullName(prof)); if(Object.values(ks.val() || {}).some(m=>m && nrm(m.name) === n)) setTimeout(()=>{ location.href = 'kamers.html'; }, 1600); }catch(e2){} }
   }catch(e){
     if(W){ W.busy = false; W.err = 'Kon nie stoor nie: ' + e.message; renderOnb(); } else showToast('Kon nie stoor nie: ' + e.message);
   }
@@ -2583,7 +2588,7 @@ function openMeModal(){
   const p = myProfile;
   const badges = [isStelsel?'Stelsel':'', isPrim?'Prim':'', unlocked?'HK':''].filter(Boolean).map(b=>`<span class="meta-pill port">${b}</span>`).join(' ');
   modalBody.innerHTML = `<h3>${escapeHtml(fullName(p) || 'Ek')}</h3>
-    <p class="hint" style="margin:-8px 0 12px">${escapeHtml(me.email||'')}${p && p.kamer ? ' · kamer ' + escapeHtml(p.kamer) : ''}</p>
+    <p class="hint" style="margin:-8px 0 12px">${escapeHtml(me.email||'')}${p && kamerOf(p) ? ' · kamer ' + escapeHtml(kamerOf(p)) : ''}</p>
     ${badges ? `<div style="margin-bottom:12px">${badges}</div>` : ''}
     <div class="menu-list">
       ${p ? `<button class="btn btn-primary" data-act="meedit">✏️ Wysig my profiel</button>` : `<button class="btn btn-primary" data-act="meedit">Maak my profiel klaar</button>`}
@@ -2649,7 +2654,7 @@ async function openPeopleModal(){
       ${isPrim ? `<button class="mini-btn" data-act="pkode">🔑 Huiskode</button><button class="mini-btn" data-act="pnoodlog">🚨 Noodgeval-log</button>` : ''}
     </div>
     <div class="search" style="margin-bottom:8px"><span>🔍</span><input type="search" id="pSearch" placeholder="Soek naam of kamer..." autocomplete="off"></div>
-    <div id="pList">${list.length ? list.map(p=>`<div class="hrow" data-person="${p.uid}" data-q="${escapeHtml((fullName(p)+' '+(p.kamer||'')).toLowerCase())}" style="cursor:pointer"><div class="t"><b>${escapeHtml(fullName(p))}</b>${roleBadges(ppl.roles[p.uid])}<small>${p.kamer ? 'Kamer ' + escapeHtml(p.kamer) + ' · ' : ''}${escapeHtml(p.studie||'')}${p.status==='alumnus' ? ' · alumnus' : ''}</small></div><span style="color:var(--ink-soft)">›</span></div>`).join('') : '<p class="hint">Nog niemand nie. Stuur die nooi-skakel.</p>'}</div>
+    <div id="pList">${list.length ? list.map(p=>`<div class="hrow" data-person="${p.uid}" data-q="${escapeHtml((fullName(p)+' '+(kamerOf(p)||'')).toLowerCase())}" style="cursor:pointer"><div class="t"><b>${escapeHtml(fullName(p))}</b>${roleBadges(ppl.roles[p.uid])}<small>${kamerOf(p) ? 'Kamer ' + escapeHtml(kamerOf(p)) + ' · ' : ''}${escapeHtml(p.studie||'')}${p.status==='alumnus' ? ' · alumnus' : ''}${Object.keys(kam.men||{}).length && p.status!=='alumnus' && !kamManOf(p) ? ' · ⚠ nie op kamerlys' : ''}</small></div><span style="color:var(--ink-soft)">›</span></div>`).join('') : '<p class="hint">Nog niemand nie. Stuur die nooi-skakel.</p>'}</div>
     <div class="modal-actions"><button class="btn btn-secondary" data-act="mclose">Sluit</button></div>`;
   document.getElementById('pSearch').addEventListener('input', (e)=>{
     const q = e.target.value.trim().toLowerCase();
@@ -2687,7 +2692,7 @@ async function openPersonModal(uid){
   const canSetHK = (isPrim && !r.prim && !r.stelsel && uid !== me.uid) || isStelsel;
   const tg = (key,label,on,can)=> can ? `<div class="hrow"><div class="t"><b>${label}</b></div><button class="mini-btn ${on?'':'danger'}" data-act="prole" data-uid="${uid}" data-key="${key}" data-val="${on?'0':'1'}">${on?'Haal af':'Gee'}</button></div>` : '';
   modalBody.innerHTML = `<h3>${escapeHtml(fullName(p))}</h3>
-    <p class="hint" style="margin:-8px 0 8px">${p.kamer ? 'Kamer ' + escapeHtml(p.kamer) + ' · ' : ''}${escapeHtml(p.studie||'')}${p.jaar ? ' · ' + escapeHtml(p.jaar) : ''}${p.status==='alumnus' ? ' · alumnus' : ''}</p>
+    <p class="hint" style="margin:-8px 0 8px">${kamerOf(p) ? 'Kamer ' + escapeHtml(kamerOf(p)) + ' · ' : ''}${escapeHtml(p.studie||'')}${p.jaar ? ' · ' + escapeHtml(p.jaar) : ''}${p.status==='alumnus' ? ' · alumnus' : ''}</p>
     <div class="hrow"><div class="t"><b>Selfoon</b></div>${tel(p.tel)}</div>
     <div class="sec-h">Nood-kontakte</div>${kont || '<p class="hint">Geen nie (alumnus of nog nie ingevul).</p>'}
     <div class="sec-h">Mediese lêer</div>
@@ -3134,6 +3139,11 @@ readOpkHash(); loadWx();
 const PING_URL = '';   // Google Apps Script-skakel (sien ping-skrip.gs). Los leeg as jy dit nog nie opgestel het nie.
 const PING_TOKEN = '';
 let myAans = {}, myGed = {}, myRooster = {}, allAans = {}, allGed = {};
+let kam = { men: {}, beds: {} };
+function nrm(s){ return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, ' ').trim(); }
+function kamManOf(p){ if(!p) return null; const n = nrm(fullName(p)); const men = kam.men || {}; const id = Object.keys(men).find(k=>men[k] && nrm(men[k].name) === n); return id ? { id, ...men[id] } : null; }
+function kamerNrFor(p){ const m = kamManOf(p); if(!m) return ''; const bk = Object.keys(kam.beds || {}).find(k=>kam.beds[k] && kam.beds[k].manId === m.id); return bk ? bk.split('_')[0] : ''; }
+function kamerOf(p){ return kamerNrFor(p) || (p && p.kamer) || ''; }
 const _staff = { hk: false, prim: false };
 const AANS_ST = { wag: '⏳ Wag vir die Prim', goedgekeur: '✅ Goedgekeur', afgekeur: '❌ Afgekeur' };
 const GED_ST = { ontvang: '📥 Ontvang', besig: '🛠 Besig', opgelos: '✅ Opgelos' };
@@ -3168,6 +3178,7 @@ function quickHtml(){
     <button data-act="aansopen"><span class="qe">🛏</span><b>Oorslaap of kuier</b>${wag ? `<small>${wag} wag</small>` : (dec ? '<small>Nuwe antwoord</small>' : '')}</button>
     <button data-act="gedopen"><span class="qe">💬</span><b>Stuur gedagte</b></button>
     <button data-act="rstopen"><span class="qe">📚</span><b>My rooster</b></button>
+    <button data-act="kamerkaart"><span class="qe">🏠</span><b>${kamerOf(myProfile) ? 'Kamer ' + escapeHtml(kamerOf(myProfile)) : 'Kies my kamer'}</b>${!kamerOf(myProfile) && kamManOf(myProfile) ? '<small>Kamerkaart</small>' : ''}</button>
   </div>${ex ? `<div class="quick-ex">📚 Volgende: <b>${escapeHtml(ex.vak)}</b> · ${n === 0 ? 'vandag' : n === 1 ? 'môre' : 'oor ' + n + ' dae'}</div>` : ''}`;
 }
 function staffBannerHtml(){
@@ -3187,7 +3198,7 @@ function openAansModal(){
     <div class="field"><label for="aType">Wat is dit?</label><select id="aType"><option value="oorslaap">Oorslaap (gas slaap oor)</option><option value="kuier">Kuier (gas kuier net)</option></select></div>
     <div class="field"><label for="aDate">Datum</label><input type="date" id="aDate" min="${t}" value="${t}"></div>
     <div class="field"><label for="aGast">Gas se naam</label><input id="aGast" maxlength="60" autocomplete="off"></div>
-    <div class="field"><label for="aKamer">In watter kamer?</label><input id="aKamer" maxlength="20" value="${escapeHtml((myProfile && myProfile.kamer) || '')}"></div>
+    <div class="field"><label for="aKamer">In watter kamer?</label><input id="aKamer" maxlength="20" value="${escapeHtml(kamerOf(myProfile))}"></div>
     <div class="field"><label for="aRede">Rede (opsioneel)</label><textarea id="aRede" maxlength="200" placeholder="bv. Haar ouers kuier in die dorp"></textarea></div>
     <div id="aErr" class="error-msg"></div>
     <div class="modal-actions"><button class="btn btn-secondary" data-act="mclose">Kanselleer</button><button class="btn btn-primary" data-act="anssend">Stuur aansoek</button></div>
