@@ -50,7 +50,7 @@ button{font-family:inherit;touch-action:manipulation;color:inherit;}
 .brand .sub{font-size:11.5px;color:var(--soft);margin-top:5px;display:flex;align-items:center;gap:6px;}
 .brand .sub::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--dim);flex-shrink:0;}
 .brand .sub.live::before{background:var(--ok);box-shadow:0 0 0 3px rgba(85,120,95,.2);}
-.demo-pill{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.14em;padding:2px 6px;border-radius:4px;background:var(--roes);color:#fff;margin-left:2px;}
+.demo-pill{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.14em;padding:2px 6px;border-radius:4px;background:var(--roes-d);color:#fff;margin-left:2px;}
 .top-act{display:flex;gap:8px;align-items:center;}
 .ibtn{width:42px;height:42px;border-radius:12px;border:1px solid var(--line2);background:var(--paper2);font-size:16px;cursor:pointer;display:grid;place-items:center;color:var(--ink);}
 .ibtn svg{width:19px;height:19px;}
@@ -203,7 +203,7 @@ main{padding-top:14px;padding-bottom:calc(20px + env(safe-area-inset-bottom));pa
 .gchip img{width:24px;height:30px;object-fit:contain;flex-shrink:0;}
 .gchip b{display:block;font-size:13.5px;font-weight:800;line-height:1.05;}
 .gchip small{display:block;font-size:11px;color:var(--soft);line-height:1.2;}
-.gchip.can small{color:var(--ok);font-weight:700;}
+.gchip.can small{color:#3F5A48;font-weight:700;}
 @media (hover:hover){.gchip:hover{border-color:var(--line2);background:#fff;}}
 
 /* plat plan en "moet nog kies" */
@@ -348,6 +348,11 @@ a{color:var(--roes-d);}
 .hkrow.pri .ic{background:rgba(255,255,255,.2);color:#fff;} .hkrow.pri small,.hkrow.pri .chev{color:rgba(255,255,255,.82);}
 .hkrow.bad{border-color:rgba(166,70,58,.55);} .hkrow.bad b{color:var(--bad);}
 .hkfoot{display:flex;gap:10px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line);} .hkfoot .btn{flex:1;}
+.chipt{min-height:44px;}
+.klaar{display:flex;width:100%;min-height:56px;margin-top:12px;font-size:17px;border-radius:14px;}
+#homeLink{display:inline-grid;place-items:center;text-decoration:none;color:inherit;}
+#homeLink svg{width:22px;height:22px;}.ibtn{min-width:44px;min-height:44px;}
+.skip{position:absolute;left:-999px;top:8px;background:#fff;color:#000;padding:10px 14px;border-radius:8px;z-index:300;}.skip:focus{left:8px;}
 @media (prefers-reduced-motion:reduce){.modal{animation:none;}.ph-steps li.cur i{animation:none;}.btn{transition:none;}}
 .done{text-align:center;padding:4px 0 2px;}
 .done .plate.big{display:grid;place-items:center;margin:2px auto 12px;min-width:88px;width:88px;height:88px;border:0;background:var(--ink);border-radius:16px;font-size:40px;font-weight:800;color:var(--paper2);font-variant-numeric:tabular-nums;}
@@ -382,7 +387,7 @@ details.nl .list{padding:0 8px 8px;margin-top:0;max-height:none;}
       <span class="mark" role="img" aria-label="Huis Hennops"></span>
       <div><div class="brand-k">Huis Hennops</div><h1>Kamerkies</h1><div class="sub" id="liveSub">Verbind...</div></div>
     </div>
-    <div class="top-act"><button class="ibtn" data-a="findman" aria-label="Soek waar 'n man bly"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg></button><button class="hk-btn" id="hkBtn">HK ⚙</button></div>
+    <div class="top-act">${''}<a class="ibtn" id="homeLink" href="index.html" aria-label="Terug na die kalender" title="Kalender"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg></a><button class="ibtn" data-a="findman" aria-label="Soek waar 'n man bly"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg></button><button class="hk-btn" id="hkBtn">HK ⚙</button></div>
   </header>
   <main>
     <div id="content"><div class="who"><p style="margin:0">Laai...</p></div></div>
@@ -1489,7 +1494,7 @@ function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
 function lsDel(k){try{localStorage.removeItem(k);}catch(e){}}
 // Elke toestel kry 'n kort merker. Een toestel kies net vir een persoon; die HK kan altyd help.
 const DEV=(()=>{const k=DEMO?'kamers-dev-demo':'kamers-dev';let d=lsGet(k);if(!d){d=Math.random().toString(36).slice(2,8)+Date.now().toString(36).slice(-3);lsSet(k,d);}return d;})();
-function esc(s){const d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML;}
+function esc(s){const d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function toast(m){toastEl.textContent=m;toastEl.classList.add('show');setTimeout(()=>toastEl.classList.remove('show'),2800);}
 function openModal(){ov.classList.add('open');}
 function closeModal(){ov.classList.remove('open','see');mb.innerHTML='';}
@@ -1560,7 +1565,7 @@ async function claimBed(nr,i,manId){
   const c=claimCheck(man,r,i,false);if(c!==true){toast(c);return;}
   const key=bedKey(nr,i);let why='';
   try{
-    const res=await runTransaction(ref(db,'kamers/beds'),cur=>{
+    const chk=cur=>{
       cur=cur||{};const vals=Object.values(cur);why='';
       if(vals.some(v=>v&&v.manId===man.id)){why='Jy het reeds gekies. Net die HK kan dit verander.';return;}
       const other=DEMO&&!unlocked&&vals.find(v=>v&&v.dev===DEV&&v.manId&&v.manId!==man.id);   // die HK mag vir ander kies
@@ -1569,7 +1574,21 @@ async function claimBed(nr,i,manId){
       if(v&&v.manId){why='Iemand was vinniger. Kies \'n ander bed.';return;}
       if(v&&v.reservedFor&&v.reservedFor!==man.id){why='Dié bed is intussen vir iemand anders gehou.';return;}
       cur[key]={manId:man.id,name:man.name,at:Date.now(),dev:DEV,uid:authUser?authUser.uid:null};return cur;
-    });
+    };
+    let res;
+    if(DEMO)res=await runTransaction(ref(db,'kamers/beds'),chk);
+    else{
+      if(!authUser){toast('Teken eers in.');return;}
+      const nw=chk(JSON.parse(JSON.stringify(K.beds||{})));
+      if(!nw){res={committed:false};}
+      else{
+        try{await update(ref(db,'kamers'),{['beds/'+key]:nw[key],['pick/'+authUser.uid]:key});res={committed:true};}
+        catch(err){
+          if(/permission|PERMISSION/.test(err.message||'')){why=locked()?'Die lys is gesluit.':'Iemand was vinniger, of jy het reeds gekies. Kyk of jou kamer reeds gewys word.';res={committed:false};}
+          else throw err;
+        }
+      }
+    }
     if(!res.committed){if(why.startsWith('Op hierdie foon'))infoBox('Kan nie kies nie',why);else toast(why||'Kon nie kies nie. Probeer weer.');return;}
     meId=man.id;lsSet(ME_KEY,man.id);
     logEv(`${man.name} kies kamer ${nr}, bed ${i}`,false,man.name);
@@ -1597,22 +1616,23 @@ async function reserveBed(nr,i,targetId){
   if(locked()){toast('Die lys is gesluit');return;}
   if(!canReserveFor(man,t)){toast('Jy kan nie vir hom \'n bed hou nie.');return;}
   try{
-    const res=await runTransaction(ref(db,'kamers/beds/'+bedKey(nr,i)),cur=>cur==null?{reservedFor:t.id,reservedName:t.name,byId:man.id}:undefined);
+    const res=await runTransaction(ref(db,'kamers/beds/'+bedKey(nr,i)),cur=>cur==null?{reservedFor:t.id,reservedName:t.name,byId:man.id,uid:authUser?authUser.uid:null}:undefined);
     if(!res.committed){toast('Dié bed is nie meer vry nie.');return;}
     logEv(`${man.name} hou bed ${i} in kamer ${nr} vir ${t.name}`);
     closeModal();toast('Bed gehou vir '+shortName(t.name)+'.');
   }catch(e){toast('Kon nie: '+e.message);}
 }
+function pickOf(v){return(v&&v.manId&&v.uid)?{['kamers/pick/'+v.uid]:null}:{};}
 async function clearBed(nr,i){
   const v=bedVal(nr,i);
-  try{await remove(ref(db,'kamers/beds/'+bedKey(nr,i)));logEv(`Bed ${i} in kamer ${nr} is vrygemaak${v&&(v.name||v.reservedName)?' ('+(v.name||v.reservedName)+')':''}`,unlocked);closeModal();toast('Bed is vry.');}catch(e){toast('Kon nie: '+e.message);}
+  try{await update(ref(db),Object.assign({['kamers/beds/'+bedKey(nr,i)]:null},pickOf(v)));logEv(`Bed ${i} in kamer ${nr} is vrygemaak${v&&(v.name||v.reservedName)?' ('+(v.name||v.reservedName)+')':''}`,unlocked);closeModal();toast('Bed is vry.');}catch(e){toast('Kon nie: '+e.message);}
 }
 async function adminAssign(nr,i,manId){
   const t=manById(manId);const old=bedOfMan()[manId];
   try{
     const dv=old&&K.beds[old]&&K.beds[old].dev;
     await set(ref(db,'kamers/beds/'+bedKey(nr,i)),Object.assign({manId:t.id,name:t.name,at:Date.now(),admin:true},dv?{dev:dv}:{}));
-    if(old&&old!==bedKey(nr,i))await remove(ref(db,'kamers/beds/'+old));
+    if(old&&old!==bedKey(nr,i))await update(ref(db),Object.assign({['kamers/beds/'+old]:null},pickOf(K.beds[old])));
     logEv(`HK plaas ${t.name} in kamer ${nr}, bed ${i}`,true);
     closeModal();toast(shortName(t.name)+' is in kamer '+nr+'.');
   }catch(e){toast('Kon nie: '+e.message);}
@@ -1620,7 +1640,7 @@ async function adminAssign(nr,i,manId){
 
 async function adminUndo(manId,after){
   const m=manById(manId);const bk=bedOfMan()[manId];if(!bk){toast('Hy het nog nie gekies nie.');return;}
-  const upd={};upd['kamers/beds/'+bk]=null;
+  const upd=Object.assign({},pickOf(K.beds[bk]));upd['kamers/beds/'+bk]=null;
   Object.entries(K.beds||{}).forEach(([k,v])=>{if(v&&v.reservedFor&&v.byId===manId)upd['kamers/beds/'+k]=null;});
   try{await update(ref(db),upd);logEv(`HK maak ${m?m.name:'iemand'} se keuse ongedaan (kamer ${bk.split('_')[0]})`,true);toast((m?shortName(m.name):'Hy')+' kan weer self kies.');if(after)setTimeout(after,150);else closeModal();}catch(e){toast('Kon nie: '+e.message);}
 }
@@ -1651,7 +1671,9 @@ function swapCheck(a,b){
 async function requestSwap(targetId){
   const a=me(),b=manById(targetId);const c=swapCheck(a,b);if(c!==true){toast(c);return;}
   const bo=bedOfMan();
-  try{await set(ref(db,'kamers/swaps/s_'+a.id),{fromId:a.id,fromName:a.name,toId:b.id,toName:b.name,fromBed:bo[a.id],toBed:bo[b.id],at:Date.now()});
+  const toUid=(K.beds[bo[b.id]]||{}).uid,frUid=(K.beds[bo[a.id]]||{}).uid;
+  if(!DEMO&&(!toUid||!frUid||!authUser||frUid!==authUser.uid)){toast('Dié ruil moet die HK vir julle doen.');return;}
+  try{await set(ref(db,'kamers/swaps/s_'+a.id),Object.assign({fromId:a.id,fromName:a.name,toId:b.id,toName:b.name,fromBed:bo[a.id],toBed:bo[b.id],at:Date.now()},DEMO?{}:{fromUid:frUid,toUid:toUid}));
     logEv(`${a.name} vra ${b.name} om te ruil (kamer ${bo[a.id].split('_')[0]} en ${bo[b.id].split('_')[0]})`);
     closeModal();toast('Ruil-versoek gestuur aan '+shortName(b.name)+'.');}catch(e){toast('Kon nie: '+e.message);}
 }
@@ -1664,10 +1686,10 @@ async function acceptSwap(key){
   const bo=bedOfMan();
   if(bo[a.id]!==s.fromBed||bo[b.id]!==s.toBed){toast('Een van julle het intussen verskuif. Die versoek is nie meer geldig nie.');await remove(ref(db,'kamers/swaps/'+key));return;}
   const upd={};
-  upd['kamers/beds/'+s.fromBed]={manId:b.id,name:b.name,at:Date.now()};
-  upd['kamers/beds/'+s.toBed]={manId:a.id,name:a.name,at:Date.now()};
+  upd['kamers/beds/'+s.fromBed]=Object.assign({manId:b.id,name:b.name,at:Date.now()},s.toUid?{uid:s.toUid}:{});
+  upd['kamers/beds/'+s.toBed]=Object.assign({manId:a.id,name:a.name,at:Date.now()},s.fromUid?{uid:s.fromUid}:{});
   [s.fromBed,s.toBed].forEach(k=>{const nr=+k.split('_')[0];const r=room(nr);for(let i=1;i<=r.beds;i++){const v=bedVal(nr,i);if(v&&v.reservedFor&&(v.byId===a.id||v.byId===b.id))upd['kamers/beds/'+bedKey(nr,i)]=null;}});
-  Object.entries(K.swaps||{}).forEach(([k,x])=>{if(x.fromId===a.id||x.fromId===b.id||x.toId===a.id||x.toId===b.id)upd['kamers/swaps/'+k]=null;});
+  Object.entries(K.swaps||{}).forEach(([k,x])=>{if((x.fromId===a.id||x.fromId===b.id||x.toId===a.id||x.toId===b.id)&&(unlocked||DEMO||(authUser&&(x.fromUid===authUser.uid||x.toUid===authUser.uid))))upd['kamers/swaps/'+k]=null;});
   try{await update(ref(db),upd);logEv(`${a.name} (kamer ${s.fromBed.split('_')[0]}) en ${b.name} (kamer ${s.toBed.split('_')[0]}) het geruil`);toast('Julle het geruil.');}catch(e){toast('Kon nie: '+e.message);}
 }
 
@@ -1685,13 +1707,13 @@ function meHtml(men,m){
   if(bk){
     const [nr,bi]=bk.split('_');const r=room(+nr);const fl=floorOf(+nr);let mate='';
     for(let i=1;i<=r.beds;i++){if(i===+bi)continue;const v=bedVal(r.nr,i);if(v&&v.manId)mate='Kamermaat: '+esc(v.name);else if(v&&v.reservedName)mate='Gehou vir '+esc(v.reservedName);}
-    mine=`<div class="good"><div class="plate">${nr}</div><div><b>Jou kamer${r.label?' · '+esc(r.label):''}</b><br>${gangOf(+nr).naam}, ${fl?FLOOR_NAME[fl.f].toLowerCase()+'verdieping':''}, bed ${bi}<br>${mate||'Nog geen kamermaat nie'}<div class="btns"><button class="btn btn-green sm" data-a="gomine">Wys my kamer in 3D</button></div></div></div>`;
+    mine=`<div class="good"><div class="plate">${nr}</div><div><b>Jou kamer${r.label?' · '+esc(r.label):''}</b><br>${gangOf(+nr).naam}, ${fl?FLOOR_NAME[fl.f].toLowerCase()+'verdieping':''}, bed ${bi}<br>${mate||'Nog geen kamermaat nie'}<div class="btns"><button class="btn btn-green sm" data-a="gomine">Wys my kamer in 3D</button></div></div></div>${DEMO?'':'<a class="btn btn-primary klaar" href="index.html">Klaar ✓ Terug na die kalender</a>'}`;
   }else mine=`<div class="warn">Jy het nog nie 'n kamer gekies nie. Jy kan net een keer kies.</div>`;
   const inv=[];Object.entries(K.beds||{}).forEach(([k,v])=>{if(v&&v.reservedFor===m.id&&!v.manId)inv.push(k);});
   const st=locked()?['lock','Die lys is gesluit. Net die HK kan nog verander.']:bk?['ok','Klaar gekies. Net die HK kan dit nou verander.']:(open?['ok','Jou fase is oop. Tik op jou gang op die kaart en kies \'n deur.']:['wait','Jou fase is nog nie oop nie. Die HK maak dit oop.']);
   return `<section class="who"><div class="me-line"><div><div class="me-name">${esc(m.name)}</div><div class="me-grp">${GROEPE[m.group]||m.group}</div></div>${DEMO?'<button class="btn sm" data-a="whoami">Nie ek nie</button>':''}</div>
     <div class="status ${st[0]}">${st[1]}</div>${mine}
-    ${bk?'':inv.map(k=>{const [n,b]=k.split('_');const by=manById(K.beds[k].byId);return `<div class="good"><div class="plate">${n}</div><div><b>${by?esc(shortName(by.name)):'Iemand'} het 'n bed vir jou gehou</b><div class="btns"><button class="btn btn-green sm" data-a="claim" data-r="${n}" data-b="${b}">Neem die bed</button></div></div></div>`;}).join('')}
+    ${bk?'':inv.map(k=>{const [n,b]=k.split('_');const by=manById(K.beds[k].byId);return `<div class="good"><div class="plate">${n}</div><div><b>${by?esc(shortName(by.name)):'Iemand'} het 'n bed vir jou gehou</b><div class="btns"><button class="btn btn-green sm" data-a="claim" data-r="${esc(n)}" data-b="${esc(b)}">Neem die bed</button></div></div></div>`;}).join('')}
     ${(m.currentRoom&&!bk&&open&&!locked()&&canAnyBed(m,room(+m.currentRoom)))?`<div class="row-btns"><button class="btn sm" data-a="room" data-r="${+m.currentRoom}">Bly in kamer ${+m.currentRoom}</button></div>`:''}
   </section>`;
 }
@@ -1763,7 +1785,7 @@ async function setOv(nr,field,val){try{await update(ref(db,'kamers/ov/'+nr),{[fi
 // ---------- NAAMKIESER ----------
 function pickMan(title,filter,onPick,hint){
   const all=menList().filter(filter).sort((a,b)=>a.name.localeCompare(b.name,'af'));
-  mb.innerHTML=`<h3>${esc(title)}</h3>${hint?`<p class="lead">${esc(hint)}</p>`:''}<div class="field" style="margin-bottom:0"><input type="search" id="pkq" placeholder="Soek 'n naam" autocomplete="off"></div><div class="list" id="pkl"></div><div class="row-btns"><button class="btn full" data-a="close">Kanselleer</button></div>`;
+  mb.innerHTML=`<h3>${esc(title)}</h3>${hint?`<p class="lead">${esc(hint)}</p>`:''}<div class="field" style="margin-bottom:0"><input type="search" id="pkq" aria-label="Soek 'n naam" placeholder="Soek 'n naam" autocomplete="off"></div><div class="list" id="pkl"></div><div class="row-btns"><button class="btn full" data-a="close">Kanselleer</button></div>`;
   openModal();
   const draw=()=>{const q=norm($('pkq').value);const l=all.filter(x=>!q||norm(x.name).includes(q)).slice(0,80);
     $('pkl').innerHTML=l.length?l.map(x=>`<button class="li" data-pk="${x.id}"><span>${esc(x.name)}</span><small>${GROEPE[x.group]||''}</small></button>`).join(''):`<p class="hint">Niemand gevind nie. Probeer 'n ander spelling.</p>`;};
@@ -1998,8 +2020,8 @@ async function handle(e){
     case 'phase':{const g=t.dataset.g,o=isOpen(g);try{await update(ref(db,'kamers'),{['phases/'+g]:!o,['phaseAt/'+g]:o?null:Date.now()});logEv(`Fase ${MEERVOUD[g]} is ${o?'toe':'oop'}gemaak`,true);setTimeout(hkFases,150);}catch(err){toast('Kon nie: '+err.message);}break;}
     case 'ovfy2':try{const r=room(nr);await update(ref(db,'kamers/ov/'+nr),{fy:!r.fy});logEv(`Kamer ${nr} is nou ${r.fy?'oop vir seniors':'net vir eerstejaars'}`,true);setTimeout(hkReels,150);}catch(err){toast('Kon nie: '+err.message);}break;
     case 'bulksave':bulkSave();break;
-    case 'remman':pickMan('Verwyder man',()=>true,id=>{const m=manById(id);askConfirm(`Verwyder ${m.name}?`,'Sy kamer-keuse word ook uitgevee.','Verwyder',async()=>{const bk=bedOfMan()[id];try{if(bk)await remove(ref(db,'kamers/beds/'+bk));await remove(ref(db,'kamers/men/'+id));logEv(`${m.name} is van die lys verwyder`,true);closeModal();toast('Verwyder.');}catch(err){toast('Kon nie: '+err.message);}});});break;
-    case 'clearbeds':askConfirm('Vee alle kamer-keuses uit?','Alle gekose en gehoue beddens word leeggemaak. Die manne-lys bly.','Vee alles uit',async()=>{try{await remove(ref(db,'kamers/beds'));await remove(ref(db,'kamers/swaps'));logEv('Alle kamer-keuses is uitgevee',true);closeModal();toast('Alles leeggemaak.');}catch(err){toast('Kon nie: '+err.message);}});break;
+    case 'remman':pickMan('Verwyder man',()=>true,id=>{const m=manById(id);askConfirm(`Verwyder ${m.name}?`,'Sy kamer-keuse word ook uitgevee.','Verwyder',async()=>{const bk=bedOfMan()[id];try{if(bk)await update(ref(db),Object.assign({['kamers/beds/'+bk]:null},pickOf(K.beds[bk])));await remove(ref(db,'kamers/men/'+id));logEv(`${m.name} is van die lys verwyder`,true);closeModal();toast('Verwyder.');}catch(err){toast('Kon nie: '+err.message);}});});break;
+    case 'clearbeds':askConfirm('Vee alle kamer-keuses uit?','Alle gekose en gehoue beddens word leeggemaak. Die manne-lys bly.','Vee alles uit',async()=>{try{await remove(ref(db,'kamers/beds'));await remove(ref(db,'kamers/pick'));await remove(ref(db,'kamers/swaps'));logEv('Alle kamer-keuses is uitgevee',true);closeModal();toast('Alles leeggemaak.');}catch(err){toast('Kon nie: '+err.message);}});break;
     case 'cfyes':{const cb=confirmCb;confirmCb=null;if(cb)cb();break;}
     case 'adminundo':{const id=t.dataset.id,m=manById(id),back=t.dataset.back,rn=+t.dataset.r;askConfirm(`Maak ${m?m.name:'hierdie'} se keuse ongedaan?`,'Sy bed word leeg en hy kan weer self kies.','Maak ongedaan',()=>adminUndo(id,back==='manne'?hkManne:rn?()=>openRoom(rn):null));break;}
     case 'hkswap':{const id=t.dataset.id,m=manById(id);pickMan(`Ruil ${m?shortName(m.name):''} met...`,x=>x.id!==id&&!!bedOfMan()[x.id],id2=>adminSwap(id,id2),'Kies iemand wat reeds \'n bed het. Hulle ruil beddens.');break;}
@@ -2087,7 +2109,7 @@ function confirmClaim(nr,i,id){const m=manById(id);if(!m)return;const fl=floorOf
   mb.innerHTML=`<h3>Is jy ${esc(m.name)}?</h3><p class="lead">Jy kies <b>kamer ${nr}${r.label?' ('+esc(r.label)+')':''}, bed ${i}</b> in ${gangOf(nr).naam}${fl?', '+FLOOR_NAME[fl.f].toLowerCase()+'verdieping':''}.${mate?` Jou kamermaat is ${esc(mate)}.`:''}</p><div class="warn" style="margin-top:0"><b>Jy kan net een keer kies.</b> Daarna kan net die HK dit verander.</div><div class="row-btns"><button class="btn" data-a="close" style="flex:1">Kanselleer</button><button class="btn btn-primary" data-a="claimyes" data-r="${nr}" data-b="${i}" data-id="${esc(m.id)}" style="flex:1">Ja, kies dit</button></div>`;
   openModal();}
 function showDone(nr,i){const fl=floorOf(nr);const r=room(nr);
-  mb.innerHTML=`<div class="done"><div class="plate big">${nr}</div><h3>Kamer ${nr} is joune</h3><p class="lead">${gangOf(nr).naam}${fl?', '+FLOOR_NAME[fl.f].toLowerCase()+'verdieping':''}, bed ${i}${r.label?' · '+esc(r.label):''}.</p><p class="hint">Jou naam is nou van die lys af. As iets verkeerd is, praat met die HK.</p></div><div class="row-btns"><button class="btn btn-primary full" data-a="close">Reg so</button></div>`;
+  mb.innerHTML=`<div class="done"><div class="plate big">${nr}</div><h3>Kamer ${nr} is joune</h3><p class="lead">${gangOf(nr).naam}${fl?', '+FLOOR_NAME[fl.f].toLowerCase()+'verdieping':''}, bed ${i}${r.label?' · '+esc(r.label):''}.</p><p class="hint">Jou naam is nou van die lys af. As iets verkeerd is, praat met die HK.</p></div><div class="row-btns">${DEMO?'':'<a class="btn btn-primary full klaar" href="index.html">Klaar ✓ Terug na die kalender</a>'}<button class="btn full" data-a="close">${DEMO?'Reg so':'Bly hier'}</button></div>`;
   openModal();}
 function infoBox(title,text){mb.innerHTML=`<h3>${esc(title)}</h3><p class="lead">${esc(text)}</p><div class="row-btns"><button class="btn btn-primary full" data-a="close">Reg so</button></div>`;openModal();}
 function celebrate(nr){World.claimed(nr);}
@@ -2229,6 +2251,31 @@ async function boot(){
 }
 render();
 boot();
+</script>
+<script>
+/* toeganklikheid: dialoog-rol, fokus-val, Escape en fokus terug */
+(function(){
+  var ov=document.getElementById('modalOverlay')||document.getElementById('ov');if(!ov)return;
+  var box=ov.querySelector('.modal');var prev=null;
+  box.setAttribute('role','dialog');box.setAttribute('aria-modal','true');box.setAttribute('tabindex','-1');
+  function foc(){return Array.prototype.slice.call(box.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]):not([type=hidden]),select,textarea,[tabindex]:not([tabindex="-1"])')).filter(function(e){return e.offsetParent!==null;});}
+  function labelIt(){var h=box.querySelector('h2,h3');if(h){if(!h.id)h.id='dlgTitle';box.setAttribute('aria-labelledby',h.id);}else box.removeAttribute('aria-labelledby');}
+  new MutationObserver(function(){
+    var open=ov.classList.contains('open');
+    if(open&&!box.__open){box.__open=true;prev=document.activeElement;labelIt();
+      if(!ov.classList.contains('see'))setTimeout(function(){var f=foc();(f[0]||box).focus({preventScroll:true});},60);}
+    else if(!open&&box.__open){box.__open=false;if(prev&&prev.focus&&document.contains(prev))try{prev.focus({preventScroll:true});}catch(e){}prev=null;}
+    else if(open)labelIt();
+  }).observe(ov,{attributes:true,attributeFilter:['class']});
+  document.addEventListener('keydown',function(e){
+    if(!ov.classList.contains('open')||ov.classList.contains('see'))return;
+    if(e.key==='Escape'){e.preventDefault();ov.dispatchEvent(new MouseEvent('click',{bubbles:true}));return;}
+    if(e.key!=='Tab')return;var f=foc();if(!f.length){e.preventDefault();box.focus();return;}
+    var a=document.activeElement,i=f.indexOf(a);
+    if(e.shiftKey&&(i<=0)){e.preventDefault();f[f.length-1].focus();}
+    else if(!e.shiftKey&&(i===-1||i===f.length-1)){e.preventDefault();f[0].focus();}
+  });
+})();
 </script>
 </body>
 </html>

@@ -227,6 +227,8 @@ main{padding:14px 14px calc(96px + env(safe-area-inset-bottom));}
 .error-msg{color:var(--danger); font-size:13px; margin-top:6px;}
 .hint{font-size:12.5px; color:var(--ink-soft); margin-top:5px;}
 .menu-list{display:flex; flex-direction:column; gap:10px;}
+.menu-grp{margin:10px 2px 0;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--accent-dark,#8A5640);}
+.menu-grp:first-child{margin-top:0;}
 
 .notice{
   background:var(--surface); border-radius:var(--radius); padding:24px 20px; margin-top:10px;
@@ -529,6 +531,27 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 .staffban button{display:block;width:100%;min-height:52px;padding:12px 18px;border:0;border-radius:var(--radius);background:var(--roes-diep);color:#F6F3EE;font:inherit;font-size:15px;text-align:left;cursor:pointer;box-shadow:var(--shadow);}
 .card-lite{padding:12px 14px;margin:0 0 10px;border-radius:14px;background:rgba(51,41,31,.05);}
 .st{display:block;font-weight:700;margin-top:3px;} .st-wag{color:#8a6a1f;} .st-goedgekeur{color:var(--groen-diep);} .st-afgekeur{color:#9B3B2F;}
+
+/* toeganklikheid: fokus, kontras, tikgrootte */
+:focus-visible{outline:3px solid var(--accent-dark,#8A5640);outline-offset:2px;}
+.live-badge{color:var(--ink);}
+.ics-btn{background:var(--surface);color:#4F5D54;}
+#shareWeekBtn{background:var(--surface);color:#8A5640;}
+.link-btn,.menu-btn,.vtab,.a2hs .x{min-height:44px;}
+.menu-btn,.a2hs .x{min-width:44px;}
+.skip{position:absolute;left:-999px;top:8px;background:#fff;color:#000;padding:10px 14px;border-radius:8px;z-index:300;}
+.skip:focus{left:8px;}
+
+/* r4a-merker */
+.auth-steps,.onb-steps{list-style:none;display:flex;gap:6px;margin:0 0 14px;padding:0;}
+.auth-steps li{flex:1;display:flex;gap:8px;align-items:flex-start;padding:8px;border:1px solid var(--line);border-radius:12px;font-size:13px;font-weight:700;line-height:1.2;color:var(--ink-soft);}
+.auth-steps li.on{border-color:var(--accent);background:rgba(168,110,83,.1);color:var(--ink);}
+.auth-steps b,.onb-steps b{flex:0 0 22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;background:var(--line);color:var(--ink);}
+.auth-steps li.on b,.onb-steps li.on b{background:var(--accent-dark,#8A5640);color:#fff;}
+.auth-steps small{display:block;font-weight:500;font-size:11.5px;margin-top:2px;color:var(--ink-soft);}
+.onb-steps li{flex:1;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:var(--ink-soft);}
+.onb-steps li.on{color:var(--ink);} .onb-steps li.done b{background:var(--sage,#758378);color:#fff;}
+.medfonds{border-top:1px solid var(--line);margin-top:6px;padding-top:12px;}
 </style>
 </head>
 <body>
@@ -558,7 +581,7 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 <div class="evfs" id="evfs" hidden></div>
 <div class="qrfs" id="qrfs" hidden></div>
 <div class="bdpop" id="bdpop" hidden></div>
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
 <!-- Gewone skrip (nie module nie): wys 'n duidelike boodskap as die kalender nie kon begin nie,
      bv. as die lêer in 'n voorskou-venster oopgemaak is wat kode blokkeer. -->
@@ -683,8 +706,8 @@ function showToast(msg){
 
 function escapeHtml(str){
   const div = document.createElement('div');
-  div.textContent = str || '';
-  return div.innerHTML;
+  div.textContent = str == null ? '' : String(str);
+  return div.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 
 function pad2(n){ return String(n).padStart(2,'0'); }
@@ -1146,7 +1169,7 @@ function filterBarHtml(){
   const defs = [['alle','Alle']].concat(view==='lys' ? [['week','Hierdie week']] : []).concat(Object.keys(CATEGORIES).map(k=>[k, CATEGORIES[k].label]));
   const chips = defs.map(([key,label])=>{
     const dot = CATEGORIES[key] ? `<span class="dot" style="background:${CATEGORIES[key].hex}"></span>` : '';
-    return `<button class="chip ${activeFilter===key?'active':''}" data-filter="${key}">${dot}${label}</button>`;
+    return `<button class="chip ${activeFilter===key?'active':''}" data-filter="${key}" aria-pressed="${activeFilter===key}">${dot}${label}</button>`;
   }).join('');
   const on = activePortfolio !== 'all' || activeAudience !== 'all';
   const lab = on ? [activePortfolio!=='all'?PORTFOLIOS[activePortfolio].label:'', activeAudience!=='all'?AUDIENCES[activeAudience]:''].filter(Boolean).join(' · ') : 'Portefeulje';
@@ -1165,7 +1188,7 @@ function footHtml(withPast){
 function vtabsHtml(){
   const pend = pendingPosts().length;
   const tabs = [['lys','Lys'],['maand','Maand'],['week','Week'],['bord','Bord']];
-  return `<div class="vtabs" role="tablist">${tabs.map(([k,l])=>`<button class="vtab ${view===k?'active':''}" data-act="view" data-v="${k}">${l}${(k==='bord'&&unlocked&&pend)?`<em>${pend}</em>`:''}</button>`).join('')}</div>`;
+  return `<div class="vtabs" role="tablist" aria-label="Kies 'n aansig">${tabs.map(([k,l])=>`<button class="vtab ${view===k?'active':''}" role="tab" aria-selected="${view===k}" data-act="view" data-v="${k}">${l}${(k==='bord'&&unlocked&&pend)?`<em>${pend}</em>`:''}</button>`).join('')}</div>`;
 }
 
 function bannerHtmlFn(){
@@ -1183,7 +1206,7 @@ function renderKalender(){
   html += vtabsHtml();
   if(view === 'lys'){
     html += bannerHtmlFn() + todayBoxHtml() + `
-      <div class="search"><span>🔍</span><input type="search" id="searchInput" placeholder="Soek events..." value="${escapeHtml(searchQuery)}" autocomplete="off"></div>
+      <div class="search"><span aria-hidden="true">🔍</span><input type="search" id="searchInput" aria-label="Soek events" placeholder="Soek events..." value="${escapeHtml(searchQuery)}" autocomplete="off"></div>
       ${filterBarHtml()}
       <div id="listArea">${buildListHtml()}</div>
       ${opDieDagHtml()}
@@ -1262,21 +1285,24 @@ function openHKMenu(){
     <h3>HK-opsies</h3>
     <p class="hint" style="margin:-8px 0 14px;">${unlocked ? 'Jy is ingeteken as HK.' : 'Teken in om events en die bord te bestuur.'}</p>
     <div class="menu-list">
+      <p class="menu-grp">Elke dag</p>
       <button class="btn btn-primary" id="hkAddEvent">+ Voeg event by</button>
-      <button class="btn btn-secondary" id="hkBulkAdd">📋 Voeg lys van datums by</button>
+      <button class="btn btn-secondary" id="hkBord">📌 Mededelings${pendingPosts().length ? ' ('+pendingPosts().length+' wag vir goedkeuring)' : ''}</button>
+      <button class="btn btn-secondary" id="hkOpkoms">📊 Opkoms</button>
+      <p class="menu-grp">Mense</p>
       <button class="btn btn-secondary" id="hkPeople">👥 Mense en rolle</button>
-      <button class="btn btn-secondary" id="hkMvdw">🐘 Man van die week</button>
       <button class="btn btn-secondary" id="hkKamer">🏠 Kamerkaart</button>
       ${isPrim ? `<button class="btn btn-secondary" id="hkAans">📨 Aansoeke</button>` : ''}
       <button class="btn btn-secondary" id="hkGed">💬 Gedagtes</button>
-      <button class="btn btn-secondary" id="hkVers">📖 Bybelvers</button>
       <button class="btn btn-secondary" id="hkBd">🎂 Verjaarsdae</button>
-      <button class="btn btn-secondary" id="hkBord">📌 Mededelings${pendingPosts().length ? ' ('+pendingPosts().length+' wag vir goedkeuring)' : ''}</button>
+      <p class="menu-grp">Meer</p>
+      <button class="btn btn-secondary" id="hkBulkAdd">📋 Voeg lys van datums by</button>
+      <button class="btn btn-secondary" id="hkMvdw">🐘 Man van die week</button>
+      <button class="btn btn-secondary" id="hkVers">📖 Bybelvers</button>
       <button class="btn btn-secondary" id="hkHist">🕘 Geskiedenis en ontdoen</button>
-      <button class="btn btn-secondary" id="hkOpkoms">📊 Opkoms</button>
       <button class="btn btn-secondary" id="hkBackup">💾 Rugsteun (JSON)</button>
       ${unlocked ? `<button class="btn btn-secondary" id="hkLogout">🔒 Teken uit</button>` : ''}
-      <button class="btn btn-secondary" id="hkClose">Sluit</button>
+      <button class="btn btn-primary" id="hkClose">Klaar</button>
     </div>
   `;
   openModal();
@@ -1356,6 +1382,7 @@ function openAddEventModal(existingEvent, asCopy){
       <div id="f-repwrap" style="display:none; margin-top:8px;"><label>Herhaal tot en met</label><input type="date" id="f-repuntil"></div>
     </div>` : ''}
     <div class="field"><label>Kategorie</label><select id="f-cat">${catOptions}</select></div>
+    <div class="field"><label for="f-opk">Hoe teken ons opkoms aan?</label><select id="f-opk"><option value="qr" ${(!src||src.opk!=='hand')?'selected':''}>QR-kode (vir huisvergaderings)</option><option value="hand" ${src&&src.opk==='hand'?'selected':''}>Die HK teken self aan (vir sport en buite-events)</option></select></div>
     <div class="field"><label>Portefeulje (kies een of meer, opsioneel)</label><div class="port-grid">${portHtml}</div></div>
     <div class="field"><label>Vir wie</label><select id="f-aud"><option value="">Almal</option><option value="eerstejaars" ${src && getAudience(src)==='eerstejaars'?'selected':''}>🌱 Eerstejaars</option><option value="seniors" ${src && getAudience(src)==='seniors'?'selected':''}>🎓 Seniors</option></select></div>
     <div class="field check-row"><input type="checkbox" id="f-big" ${src && src.big ? 'checked':''}><label for="f-big">Belangrik: wys 'n groot aftelling bo-aan die lys</label></div>
@@ -1428,6 +1455,7 @@ function openAddEventModal(existingEvent, asCopy){
       notes: document.getElementById('f-notes').value.trim(),
       isCancelled: isEdit ? !!src.isCancelled : false,
       big: document.getElementById('f-big').checked,
+      opk: document.getElementById('f-opk').value,
       hasImg: isEdit ? !!src.hasImg : false,
       movedFrom, movedAt,
       createdAt: isEdit ? (src.createdAt || Date.now()) : Date.now()
@@ -1924,9 +1952,9 @@ function postHtml(p, mode){
     <h3>${escapeHtml(p.title)}</h3><p>${escapeHtml(p.text)}</p>
     <div class="post-foot"><span>${p.name ? 'deur '+escapeHtml(p.name) : ''}</span>${(wa && mode!=='wag') ? `<a class="wa" href="${wa}" target="_blank" rel="noopener">💬 WhatsApp</a>` : ''}</div>
     <div class="row-btns" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
-      ${(unlocked && mode==='wag') ? `<button class="mini-btn" style="background:var(--sage);color:#fff;border-color:var(--sage)" data-act="bapprove" data-id="${p.id}">Keur goed</button><button class="mini-btn danger" data-act="breject" data-id="${p.id}">Wys af</button>` : ''}
-      ${(mode!=='wag' && unlocked) ? `<button class="mini-btn" data-act="brenew" data-id="${p.id}">Hernu 30 dae</button><button class="mini-btn danger" data-act="bdel" data-id="${p.id}">Verwyder</button>` : ''}
-      ${(mode==='wag' && mine && !unlocked) ? `<button class="mini-btn danger" data-act="bdel" data-id="${p.id}">Trek terug</button>` : ''}
+      ${(unlocked && mode==='wag') ? `<button class="mini-btn" style="background:var(--sage);color:#fff;border-color:var(--sage)" data-act="bapprove" data-id="${escapeHtml(p.id)}">Keur goed</button><button class="mini-btn danger" data-act="breject" data-id="${escapeHtml(p.id)}">Wys af</button>` : ''}
+      ${(mode!=='wag' && unlocked) ? `<button class="mini-btn" data-act="brenew" data-id="${escapeHtml(p.id)}">Hernu 30 dae</button><button class="mini-btn danger" data-act="bdel" data-id="${escapeHtml(p.id)}">Verwyder</button>` : ''}
+      ${(mode==='wag' && mine && !unlocked) ? `<button class="mini-btn danger" data-act="bdel" data-id="${escapeHtml(p.id)}">Trek terug</button>` : ''}
     </div>
   </article>`;
 }
@@ -2136,7 +2164,7 @@ function openBdModal(msg){
     <textarea id="bd-bulk" style="width:100%;min-height:90px;font-size:16px;border:1px solid rgba(51,41,31,.18);border-radius:10px;padding:10px;font-family:inherit"></textarea>
     <button class="btn btn-secondary" data-act="bdbulk" style="width:100%;margin-top:8px">Voeg lys by</button>
     <div class="sec-h">Almal (${list.length})</div>
-    ${list.length ? list.map(b=>`<div class="hrow"><div class="t"><b>${escapeHtml(b.name)}</b><small>${b.d} ${AF_MAANDE[b.m-1]} · ${b.type==='alumnus'?'Alumnus'+(b.yr?' '+b.yr:''):'Lid'}</small></div><button class="mini-btn danger" data-act="bddel" data-id="${b.id}">Verwyder</button></div>`).join('') : '<p class="hint">Nog niemand nie.</p>'}`;
+    ${list.length ? list.map(b=>`<div class="hrow"><div class="t"><b>${escapeHtml(b.name)}</b><small>${b.d} ${AF_MAANDE[b.m-1]} · ${b.type==='alumnus'?'Alumnus'+(b.yr?' '+b.yr:''):'Lid'}</small></div><button class="mini-btn danger" data-act="bddel" data-id="${escapeHtml(b.id)}">Verwyder</button></div>`).join('') : '<p class="hint">Nog niemand nie.</p>'}`;
   openModal();
 }
 async function bdAdd(){
@@ -2356,10 +2384,10 @@ function openAuthModal(mode, after){
   const up = mode === 'up';
   modalBody.innerHTML = `
     <h3>${up ? 'Skep jou profiel' : 'Teken in'}</h3>
-    <p class="hint" style="margin:-8px 0 14px; font-size:13.5px;">${up ? 'Jy doen dit net een keer. Daarna bly jy ingeteken op hierdie foon.' : 'Teken in met jou e-pos en wagwoord.'}</p>
+    ${up ? `<ol class="auth-steps"><li class="on"><b>1</b><span>Rekening<small>e-pos, wagwoord en huiskode</small></span></li><li><b>2</b><span>Wie is jy<small>naam, selfoon en studie</small></span></li><li><b>3</b><span>Noodinligting<small>kontak en mediese inligting</small></span></li></ol><p class="hint" style="margin:0 0 14px;font-size:13.5px;">Jy doen dit net een keer. Daarna bly jy ingeteken op hierdie foon.</p>` : `<p class="hint" style="margin:-8px 0 14px; font-size:13.5px;">Teken in met jou e-pos en wagwoord.</p>`}
     <div class="field"><label for="authEmail">E-pos</label><input type="email" id="authEmail" inputmode="email" autocomplete="username" autocapitalize="none" value="${escapeHtml(lsGet('hennops-email')||'')}"></div>
     <div class="field"><label for="authPass">Wagwoord${up ? ' (minstens 6 karakters)' : ''}</label><input type="password" id="authPass" autocomplete="${up ? 'new-password' : 'current-password'}"></div>
-    ${up ? `<div class="field"><label for="authKode">Huiskode</label><input type="text" id="authKode" autocapitalize="characters" autocomplete="off" value="${escapeHtml(lsGet('hennops-kode')||'')}"><p class="hint">Die HK het dit in die groep gestuur.</p></div>` : ''}
+    ${up ? `<div class="field"><label for="authKode">Huiskode (verpligtend)</label><input type="text" id="authKode" autocapitalize="characters" autocomplete="off" value="${escapeHtml(lsGet('hennops-kode')||'')}"><p class="hint">Sonder die regte kode kry jy nie 'n rekening nie. Die HK het dit in die groep gestuur.</p></div>` : ''}
     <div id="modalPinError" class="error-msg"></div>
     <div class="modal-actions">
       <button class="btn btn-secondary" id="pinCancel">Kanselleer</button>
@@ -2394,7 +2422,10 @@ function openAuthModal(mode, after){
       if(up){
         lsSet('hennops-kode', kode);
         const cred = await createUserWithEmailAndPassword(auth, email, pass);
-        try{ await set(ref(db,'kodetoets/'+cred.user.uid), { kode }); }catch(e2){ /* die wizard vra weer as dit nie gewerk het nie */ }
+        try{ await set(ref(db,'kodetoets/'+cred.user.uid), { kode }); }
+        catch(e2){
+          if(isPermissionError(e2.message)){ try{ await deleteUser(cred.user); }catch(e3){ try{ await signOut(auth); }catch(e4){} } lsSet('hennops-kode',''); errEl.textContent = 'Verkeerde huiskode. Vra die HK vir die regte een.'; btn.disabled = false; btn.textContent = 'Skep rekening'; return; }
+        }
       } else {
         await signInWithEmailAndPassword(auth, email, pass);
       }
@@ -2443,10 +2474,10 @@ function renderOnb(){
   const st = W.step, d = W.d, k1 = W.n.k1, k2 = W.n.k2, m = W.m;
   let title = '', sub = '', body = '';
   if(st === 0){
-    title = 'Welkom'; sub = 'Tik die huiskode wat die HK in die groep gestuur het.';
+    title = 'Huiskode'; sub = 'Sonder die huiskode kan jy nie aangaan nie. Die HK het dit in die groep gestuur. Vra hom as jy dit nie het nie.';
     body = `<div class="card">${fld('o-kode','Huiskode', lsGet('hennops-kode')||'', 'autocapitalize="characters" autocomplete="off"')}</div>`;
   } else if(st === 1){
-    title = 'Wie is jy?'; sub = 'Net die basiese goed.';
+    title = 'Wie is jy?'; sub = 'Stap 1: net die basiese goed. Net jou verjaarsdag is opsioneel.';
     body = `<div class="card">
       <div class="row2">${fld('o-naam','Voornaam',d.naam,'autocomplete="given-name"')}${fld('o-van','Van',d.van,'autocomplete="family-name"')}</div>
       ${fld('o-tel','Selfoonnommer',d.tel,'type="tel" inputmode="tel" autocomplete="tel" placeholder="082 123 4567"')}
@@ -2457,7 +2488,7 @@ function renderOnb(){
       <label class="port-opt" style="padding:4px 0"><input type="checkbox" id="o-wys" ${d.wys!==false?'checked':''}> Wys my verjaarsdag vir die huis</label>
     </div>`;
   } else if(st === 2){
-    title = 'In \'n noodgeval'; sub = 'Dit is die belangrikste deel. Net 1 kontak is verpligtend.';
+    title = 'In \'n noodgeval'; sub = 'Stap 2: die belangrikste deel. Net een nood-kontak moet ingevul wees. Die res is opsioneel.';
     body = `<div class="card"><b>Nood-kontak</b>
       ${fld('o-k1n','Naam',k1.naam,'autocomplete="off"')}
       <div class="field"><label for="o-k1v">Verwantskap</label><select id="o-k1v">${VERW.map(v=>`<option ${k1.verw===v?'selected':''}>${v}</option>`).join('')}</select></div>
@@ -2471,8 +2502,11 @@ function renderOnb(){
       <div class="field"><label for="o-m1">Allergieë</label><input id="o-m1" value="${escapeHtml(m.allergie||'')}" placeholder="bv. pynappel, penisillien"></div>
       <div class="field"><label for="o-m2">Mediese toestande</label><input id="o-m2" value="${escapeHtml(m.toestande||'')}" placeholder="bv. asma, diabetes"></div>
       <div class="field"><label for="o-m3">Medikasie</label><input id="o-m3" value="${escapeHtml(m.medikasie||'')}"></div>
-      <div class="field"><label for="o-m4">Dokter (naam en nommer)</label><input id="o-m4" value="${escapeHtml(m.dokter||'')}"></div>
-      <div class="field"><label for="o-m5">Mediese fonds en lidnommer</label><input id="o-m5" value="${escapeHtml(m.fonds||'')}"></div>
+      <div class="field"><label for="o-m4">Dokter <span class="hint">(opsioneel)</span></label><input id="o-m4" value="${escapeHtml(m.dokter||'')}" placeholder="Naam en nommer, as jy een het"></div>
+      <div class="medfonds"><b>Mediese fonds</b> <span class="hint">(as jy een het)</span>
+        <div class="field"><label for="o-m5">Fonds</label><input id="o-m5" value="${escapeHtml(m.fonds||'')}" placeholder="bv. Discovery, Bonitas"></div>
+        <div class="row2"><div class="field"><label for="o-m6">Plan</label><input id="o-m6" value="${escapeHtml(m.plan||'')}" placeholder="bv. Classic Smart"></div>
+        <div class="field"><label for="o-m7">Lidnommer</label><input id="o-m7" value="${escapeHtml(m.fondsnr||'')}" inputmode="text" autocomplete="off"></div></div></div>
       <p class="hint">Net jy, die Prim en die stelsel sien dit altyd. Ander HK-lede kan dit net in 'n noodgeval oopmaak, en die Prim sien wie dit gedoen het.</p>
     </div>
     <label class="port-opt" style="padding:10px 2px;white-space:normal;align-items:flex-start"><input type="checkbox" id="o-ok" ${W.consent?'checked':''} style="margin-top:2px"> <span>Ek verstaan en stem in dat Huis Hennops my nood- en mediese inligting stoor om my in 'n noodgeval te help. <button class="link-btn" data-onb="privaat" style="min-height:0;padding:0;display:inline">Lees hoe ons dit gebruik</button></span></label>`;
@@ -2483,7 +2517,8 @@ function renderOnb(){
   const LASTN = W.edit ? 2 : 3;
   const last = st === LASTN;
   onbEl.innerHTML = `<div class="onb-in">
-    ${st > 0 ? `<div class="onb-prog"><i style="width:${Math.round(st/LASTN*100)}%"></i></div><div class="hint">Stap ${st} van ${LASTN}${W.edit ? ' · wysig profiel' : ''}</div>` : ''}
+    ${st > 0 ? `<div class="onb-prog"><i style="width:${Math.round(st/LASTN*100)}%"></i></div>
+    <ol class="onb-steps">${(W.edit?['Jy','Nood']:['Jy','Nood','Kamer']).map((n,i)=>`<li class="${i+1===st?'on':i+1<st?'done':''}"><b>${i+1<st?'✓':i+1}</b>${n}</li>`).join('')}</ol>` : ''}
     <h2>${title}</h2>${sub ? `<p class="onb-sub">${sub}</p>` : ''}
     ${body}
     <div id="onbErr" class="error-msg">${escapeHtml(W.err||'')}</div>
@@ -2504,7 +2539,7 @@ function onbCollect(){
   } else if(st === 2){
     W.n.k1 = { naam:onbVal('o-k1n'), verw:onbVal('o-k1v'), tel:onbVal('o-k1t') };
     if(W.showK2) W.n.k2 = { naam:onbVal('o-k2n'), verw:onbVal('o-k2v'), tel:onbVal('o-k2t') };
-    W.m = { allergie:onbVal('o-m1'), toestande:onbVal('o-m2'), medikasie:onbVal('o-m3'), dokter:onbVal('o-m4'), fonds:onbVal('o-m5') };
+    W.m = { allergie:onbVal('o-m1'), toestande:onbVal('o-m2'), medikasie:onbVal('o-m3'), dokter:onbVal('o-m4'), fonds:onbVal('o-m5'), plan:onbVal('o-m6'), fondsnr:onbVal('o-m7') };
     W.consent = document.getElementById('o-ok').checked;
   }
 }
@@ -2712,7 +2747,7 @@ async function openMedies(uid){
   }catch(e){ box.innerHTML = `<p class="error-msg">Kon nie toegang kry nie: ${escapeHtml(e.message)}</p>`; return; }
   try{
     const s = await get(ref(db,'medies/'+uid)); const m = s.val() || {};
-    const rows = [['Allergieë',m.allergie],['Toestande',m.toestande],['Medikasie',m.medikasie],['Dokter',m.dokter],['Mediese fonds',m.fonds]];
+    const rows = [['Allergieë',m.allergie],['Toestande',m.toestande],['Medikasie',m.medikasie],['Dokter',m.dokter],['Mediese fonds',m.fonds],['Plan',m.plan],['Lidnommer',m.fondsnr]];
     box.innerHTML = rows.map(([k,v])=>`<div class="hrow"><div class="t"><small style="margin:0">${k}</small><b>${v ? escapeHtml(v) : '–'}</b></div></div>`).join('') + `<p class="hint">Toegang gelog (${escapeHtml(myName())}).</p>`;
   }catch(e){ box.innerHTML = `<p class="error-msg">Kon nie lees nie: ${escapeHtml(e.message)}</p>`; }
 }
@@ -2830,8 +2865,8 @@ function renderEv(){
       <button class="mini-btn" data-act="evshare" data-id="${e.id}">↗ Deel</button>
       <button class="mini-btn" data-act="evimg" data-id="${e.id}">🖼 ${e.hasImg ? 'Verander grafika' : 'Voeg grafika by'}</button>
       ${e.hasImg ? `<button class="mini-btn danger" data-act="evimgdel" data-id="${e.id}">Verwyder grafika</button>` : ''}
-      <button class="mini-btn" data-act="evopkstart" data-id="${e.id}">📱 Begin opkoms (QR)</button>
-      <button class="mini-btn" data-act="evopkman" data-id="${e.id}">✍ Teken manne handmatig aan</button></div>
+      ${e.opk==='hand' ? '' : `<button class="mini-btn" data-act="evopkstart" data-id="${e.id}">📱 Begin opkoms (QR)</button>`}
+      <button class="mini-btn" data-act="evopkman" data-id="${e.id}">✍ ${e.opk==='hand' ? 'Teken opkoms aan' : 'Teken manne handmatig aan'}</button></div>
       ${rsN ? `<p class="hint" style="margin-top:10px">Het gesê hulle gaan: ${Object.values(rs).map(x=>escapeHtml(x.name||'?')).join(', ')}</p>` : ''}`;
   }
   const here = (me && myProfile && isToday && !e.isCancelled)
@@ -3016,7 +3051,7 @@ async function openOpkomsModal(){
   const t = todayStr();
   const live = events.filter(e=>!e.isCancelled && e.date <= t && t <= (e.isPeriod && e.endDate ? e.endDate : e.date) && !e.isPeriod);
   const rows = events.filter(e=>(rsvp[e.id] && Object.keys(rsvp[e.id]).length) || all[e.id]).sort((a,b)=>b.date.localeCompare(a.date)).slice(0, 30);
-  const liveHtml = live.length ? `<div class="sec-h" style="margin-top:0">Vandag</div>` + live.map(e=>`<div class="hrow"><div class="t"><b>${escapeHtml(e.title)}</b><small>${e.time || ''}</small></div><button class="mini-btn" data-act="evopkstart" data-id="${e.id}">📱 Begin opkoms</button></div>`).join('') : '';
+  const liveHtml = live.length ? `<div class="sec-h" style="margin-top:0">Vandag</div>` + live.map(e=>`<div class="hrow"><div class="t"><b>${escapeHtml(e.title)}</b><small>${e.time || ''}</small></div>${e.opk==='hand' ? `<button class="mini-btn" data-act="evopkman" data-id="${e.id}">✍ Teken opkoms aan</button>` : `<button class="mini-btn" data-act="evopkstart" data-id="${e.id}">📱 Begin opkoms</button>`}</div>`).join('') : '';
   modalBody.innerHTML = `<h3>Opkoms</h3>${liveHtml}<div class="sec-h" ${live.length ? '' : 'style="margin-top:0"'}>Verslag</div>` +
     (rows.length ? rows.map(e=>{
       const rs = rsvp[e.id] || {}, at = all[e.id] || {};
@@ -3233,7 +3268,7 @@ function openAansPrim(){
       <div class="hint" style="margin:4px 0">${formatDateLabel(a.date)} · gas: <b>${escapeHtml(a.gast)}</b>${a.kamer ? ' · kamer ' + escapeHtml(a.kamer) : ''}</div>
       ${a.rede ? `<div style="font-size:14px;margin-bottom:6px">${escapeHtml(a.rede)}</div>` : ''}
       ${k ? `<div class="hint" style="color:var(--accent-dark)">Daardie aand het ${k} oorslaap-aansoek${k === 1 ? '' : 'e'} reeds goedgekeur.</div>` : ''}
-      <input id="an-${a.id}" maxlength="200" placeholder="Opmerking (opsioneel)" style="width:100%;margin:6px 0">
+      <input id="an-${escapeHtml(a.id)}" maxlength="200" placeholder="Opmerking (opsioneel)" style="width:100%;margin:6px 0">
       <div style="display:flex;gap:8px"><button class="btn btn-primary" style="flex:1" data-act="ansdec" data-uid="${a.uid}" data-id="${a.id}" data-s="goedgekeur">Goedkeur</button><button class="btn btn-secondary" style="flex:1" data-act="ansdec" data-uid="${a.uid}" data-id="${a.id}" data-s="afgekeur">Keur af</button></div></div>`; }).join('') : `<p class="hint">Geen aansoeke wag nie. 🎉</p>`) +
     (done.length ? `<div class="sec-h">Onlangs besluit</div>` + done.map(a=>`<div class="hrow"><div class="t"><b>${escapeHtml(a.naam || '?')} · ${escapeHtml(a.gast)}</b><small>${formatShortDate(a.date)} · ${a.type === 'kuier' ? 'kuier' : 'oorslaap'}</small></div><small class="st st-${a.status}">${a.status === 'goedgekeur' ? '✅' : '❌'}</small></div>`).join('') : '') +
     `<div class="modal-actions"><button class="btn btn-secondary" data-act="mclose">Sluit</button></div>`;
@@ -3279,7 +3314,7 @@ function openGedHK(){
       <div style="display:flex;justify-content:space-between;gap:8px"><b>${escapeHtml(g.soort || 'Gedagte')}</b><small class="st">${GED_ST[g.status] || ''}</small></div>
       <div class="hint" style="margin:2px 0 6px">${g.name ? escapeHtml(g.name) : 'Anoniem'} · ${d.getDate()} ${AF_MAANDE_KORT[d.getMonth()]}</div>
       <div style="font-size:14.5px;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere">${escapeHtml(g.teks || '')}</div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">${Object.keys(GED_ST).filter(s=>s !== g.status).map(s=>`<button class="mini-btn" data-act="gedstat" data-id="${g.id}" data-s="${s}">${GED_ST[s]}</button>`).join('')}${g.status === 'opgelos' ? `<button class="mini-btn danger" data-act="geddel" data-id="${g.id}">Verwyder</button>` : ''}</div></div>`; }).join('') : `<p class="hint">Nog niks nie.</p>`) +
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">${Object.keys(GED_ST).filter(s=>s !== g.status).map(s=>`<button class="mini-btn" data-act="gedstat" data-id="${escapeHtml(g.id)}" data-s="${s}">${GED_ST[s]}</button>`).join('')}${g.status === 'opgelos' ? `<button class="mini-btn danger" data-act="geddel" data-id="${escapeHtml(g.id)}">Verwyder</button>` : ''}</div></div>`; }).join('') : `<p class="hint">Nog niks nie.</p>`) +
     `<div class="modal-actions"><button class="btn btn-secondary" data-act="mclose">Sluit</button></div>`;
   openModal();
 }
@@ -3325,6 +3360,31 @@ async function delRst(id){
 
 // ---------- START ----------
 initApp();
+</script>
+<script>
+/* toeganklikheid: dialoog-rol, fokus-val, Escape en fokus terug */
+(function(){
+  var ov=document.getElementById('modalOverlay')||document.getElementById('ov');if(!ov)return;
+  var box=ov.querySelector('.modal');var prev=null;
+  box.setAttribute('role','dialog');box.setAttribute('aria-modal','true');box.setAttribute('tabindex','-1');
+  function foc(){return Array.prototype.slice.call(box.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]):not([type=hidden]),select,textarea,[tabindex]:not([tabindex="-1"])')).filter(function(e){return e.offsetParent!==null;});}
+  function labelIt(){var h=box.querySelector('h2,h3');if(h){if(!h.id)h.id='dlgTitle';box.setAttribute('aria-labelledby',h.id);}else box.removeAttribute('aria-labelledby');}
+  new MutationObserver(function(){
+    var open=ov.classList.contains('open');
+    if(open&&!box.__open){box.__open=true;prev=document.activeElement;labelIt();
+      if(!ov.classList.contains('see'))setTimeout(function(){var f=foc();(f[0]||box).focus({preventScroll:true});},60);}
+    else if(!open&&box.__open){box.__open=false;if(prev&&prev.focus&&document.contains(prev))try{prev.focus({preventScroll:true});}catch(e){}prev=null;}
+    else if(open)labelIt();
+  }).observe(ov,{attributes:true,attributeFilter:['class']});
+  document.addEventListener('keydown',function(e){
+    if(!ov.classList.contains('open')||ov.classList.contains('see'))return;
+    if(e.key==='Escape'){e.preventDefault();ov.dispatchEvent(new MouseEvent('click',{bubbles:true}));return;}
+    if(e.key!=='Tab')return;var f=foc();if(!f.length){e.preventDefault();box.focus();return;}
+    var a=document.activeElement,i=f.indexOf(a);
+    if(e.shiftKey&&(i<=0)){e.preventDefault();f[f.length-1].focus();}
+    else if(!e.shiftKey&&(i===-1||i===f.length-1)){e.preventDefault();f[0].focus();}
+  });
+})();
 </script>
 </body>
 </html>
