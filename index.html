@@ -593,6 +593,29 @@ details.trad{background:var(--surface);border:1px solid var(--line);border-radiu
 details.trad summary{min-height:48px;display:flex;align-items:center;font-weight:700;cursor:pointer;list-style:none;}
 details.trad summary::-webkit-details-marker{display:none;} details.trad summary::after{content:'+';margin-left:auto;font-size:22px;color:var(--ink-soft);}
 details.trad[open] summary::after{content:'–';} details.trad p{margin:0 0 14px;line-height:1.55;font-size:14.5px;}
+
+/* r7-merker: navigasiebalk en tuisblad */
+body{padding-bottom:calc(96px + env(safe-area-inset-bottom));}
+.bnav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom));z-index:60;display:flex;gap:4px;padding:6px;background:#2B231B;border-radius:999px;box-shadow:0 10px 30px -8px rgba(0,0,0,.55);max-width:calc(100vw - 24px);}
+.bn{display:flex;align-items:center;justify-content:center;gap:6px;height:52px;min-width:52px;padding:0 14px;border:0;border-radius:999px;background:transparent;color:#F6F3EE;font:inherit;font-weight:700;font-size:13.5px;cursor:pointer;transition:background .18s,color .18s;}
+.bn svg{width:24px;height:24px;flex:0 0 24px;}
+.bn span{display:none;}
+.bn.on{background:#F6F3EE;color:#2B231B;} .bn.on span{display:inline;}
+.bn:focus-visible{outline:3px solid #fff;outline-offset:-3px;}
+.back-today-btn{bottom:calc(92px + env(safe-area-inset-bottom));}
+.greet{font-family:'Fraunces',Georgia,serif;font-size:28px;line-height:1.15;margin:18px 2px 14px;color:var(--ink);}
+.next-card{display:block;width:100%;text-align:left;border:0;cursor:pointer;font:inherit;color:#fff;background:var(--accent-dark,#8A5640);border-radius:20px;padding:20px 20px 18px;box-shadow:var(--shadow);position:relative;}
+.next-card small{display:block;font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.85;font-weight:700;}
+.next-card b{display:block;font-family:'Archivo',system-ui,sans-serif;font-variation-settings:'wdth' 62;font-stretch:62%;font-weight:900;font-size:34px;line-height:1;text-transform:uppercase;margin:8px 0 6px;}
+.next-card span{display:block;font-size:15px;opacity:.95;}
+.next-card .cd{display:inline-block;margin-top:12px;font-style:normal;font-weight:800;font-size:14px;background:rgba(255,255,255,.2);padding:6px 12px;border-radius:999px;}
+.next-card.empty{background:var(--surface);color:var(--ink);} .next-card.empty b{font-size:22px;}
+.week-list{display:flex;flex-direction:column;gap:8px;}
+.wk-row{display:flex;align-items:center;gap:14px;width:100%;text-align:left;min-height:60px;padding:10px 14px;border:1px solid var(--line);border-radius:14px;background:var(--surface);cursor:pointer;font:inherit;color:var(--ink);}
+.wk-row .wd{flex:0 0 44px;text-align:center;} .wk-row .wd b{font-family:'Archivo',system-ui,sans-serif;font-weight:900;font-size:28px;line-height:1;}
+.wk-row .wt b{display:block;font-size:15px;} .wk-row .wt small{color:var(--ink-soft);font-size:13px;}
+.tuis-acts .btn-secondary{background:var(--surface);color:var(--ink);border:1.5px solid var(--ink-soft,#6b5f55);opacity:1;}
+.tuis-acts{display:flex;flex-direction:column;gap:10px;margin-top:18px;} .tuis-acts .btn{min-height:54px;font-size:16px;}
 </style>
 </head>
 <body>
@@ -1242,11 +1265,99 @@ function bannerHtmlFn(){
   return `<div class="countdown-banner">⏳ ${next.days} dae tot "${t}"<span class="sub">${formatDateLabel(next.event.date)}</span></div>`;
 }
 
+// ---------- NAVIGASIEBALK EN BLADSYE (Rondte 7) ----------
+let page = window.__startPage || 'tuis';
+function navIcon(k){
+  const P = {
+    tuis:'<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>',
+    kal:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+    huis:'<path d="M12 21s-7-4.6-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.4-7 10-7 10z"/>',
+    ek:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/>',
+    hk:'<rect x="5" y="11" width="14" height="10" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>'
+  };
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[k]}</svg>`;
+}
+function renderNav(){
+  let nav = document.getElementById('bnav');
+  if(!nav){ nav = document.createElement('nav'); nav.id = 'bnav'; nav.className = 'bnav'; nav.setAttribute('aria-label', 'Hoofkieslys'); document.body.appendChild(nav); }
+  const items = [['tuis','Tuis','tuis'],['kalender','Kalender','kal'],['huis','Huis','huis'],['ek','Ek','ek']];
+  if(unlocked) items.push(['hk','HK','hk']);
+  nav.innerHTML = items.map(([k,l,ic])=>`<button class="bn ${page===k?'on':''}" data-act="nav" data-p="${k}" aria-label="${l}" ${page===k?'aria-current="page"':''}>${navIcon(ic)}<span>${l}</span></button>`).join('');
+}
+function setPage(p){ page = p; render(); window.scrollTo({top:0}); }
+function greetHtml(){
+  const hr = new Date().getHours();
+  const g = hr < 12 ? 'Goeiemôre' : hr < 18 ? 'Goeiemiddag' : 'Goeienaand';
+  return `<h2 class="greet">${g}${myProfile && myProfile.naam ? ', ' + escapeHtml(myProfile.naam) : ''}</h2>`;
+}
+function whenText(e){ return evDateText(e) + (!e.isPeriod && e.time ? ' · ' + e.time : ''); }
+function tuisHtml(){
+  const t = todayStr();
+  const upcoming = events.filter(e=>!e.isCancelled && (e.isPeriod && e.endDate ? e.endDate : e.date) >= t).sort((a,b)=>sortKey(a).localeCompare(sortKey(b)));
+  const main = upcoming[0];
+  let h = greetHtml();
+  if(main){
+    const n = Math.max(0, daysBetween(t, main.date)), isP = !!(main.isPeriod && main.endDate);
+    const ongoing = isP && main.date <= t;
+    const cd = ongoing ? 'Nou aan die gang' : n === 0 ? 'Vandag' : n === 1 ? 'Môre' : 'Oor ' + n + ' dae';
+    h += `<button class="next-card" data-act="evopen" data-id="${main.id}"><small>Volgende</small><b>${escapeHtml(main.title)}</b><span>${escapeHtml(whenText(main))}</span><i class="cd">${cd}</i></button>`;
+  } else {
+    h += `<div class="next-card empty"><b>Geen events nie</b><span>Kyk later weer.</span></div>`;
+  }
+  const rest = upcoming.slice(1).filter(e=>daysBetween(t, e.date) <= 7).slice(0,3);
+  if(rest.length){
+    h += `<div class="sec-h">Hierdie week</div><div class="week-list">${rest.map(e=>`<button class="wk-row" data-act="evopen" data-id="${e.id}"><span class="wd"><b>${parseDate(e.date).d}</b></span><span class="wt"><b>${escapeHtml(e.title)}</b><small>${escapeHtml(whenText(e))}</small></span></button>`).join('')}</div>`;
+  }
+  if(me && myProfile){
+    const hasRoom = !!kamerOf(myProfile);
+    h += `<div class="tuis-acts"><button class="btn btn-primary" data-act="kamerkaart">${hasRoom ? '🏠 Kamer ' + escapeHtml(kamerOf(myProfile)) : '🏠 Kies my kamer'}</button><button class="btn btn-secondary" data-act="instopen">🔧 Meld iets stukkend</button></div>`;
+    h += staffBannerHtml() + bevestigHtml();
+  } else {
+    h += `<div class="tuis-acts"><button class="btn btn-primary" data-act="signin">Teken in of skep 'n profiel</button></div>`;
+  }
+  h += a2hsHtml();
+  return h;
+}
+function huisHtml(){
+  if(!me || !myProfile) return `<h2 class="greet">Die huis</h2><div class="notice"><p>Teken in om die huis se inligting te sien.</p><button class="btn btn-primary" data-act="signin" style="width:100%">Teken in</button></div>`;
+  const row = (act, ic, t, sub, k) => infRow(act, ic, t, sub, k);
+  return `<h2 class="greet">Die huis</h2>${bdCardHtml()}${mvdwHtml()}
+    ${quickHtml()}
+    <div class="sec-h">Inligting</div><div class="inf-list">
+      ${row('infpage','📶','WiFi','Naam en kode','wifi')}
+      ${row('infpage','📍','Kampus en klasse','Waar alles is, met kaart','plekke')}
+      ${row('infpage','🚨','Nood-nommers','Wie om te bel','nood')}
+      ${row('infpage','🌱','Hulp vir eerstejaars','Alles wat \'n nuwe man moet weet','fontie')}
+      ${row('infpage','🐘','Oor ons','Bestaansrede en wie ons is','oor')}
+      ${row('infpage','🌿','Ons kultuur en waardes','V.I.E.R., gange en titels','kultuur')}
+      ${row('infpage','🎶','Koshuislied','Die woorde van ons lied','lied')}
+      ${row('infpage','👥','Ons leiers','Prim, HK, Koshuispa en gang-leiers','mense')}
+      ${row('infopen','ℹ️','Alle inligting','Instandhouding, gangpunte en meer','')}
+    </div>`;
+}
+function ekHtml(){
+  if(!me) return `<h2 class="greet">Ek</h2><div class="notice"><p>Teken in of skep 'n profiel.</p><button class="btn btn-primary" data-act="signin" style="width:100%">Teken in</button></div>`;
+  const p = myProfile || {};
+  return `<h2 class="greet">${escapeHtml(fullName(p) || 'Ek')}</h2>
+    <div class="inf-card"><small>Studie</small><b>${escapeHtml(p.studie || '–')}${p.jaar ? ' · ' + escapeHtml(p.jaar) : ''}</b><small style="margin-top:8px">Kamer</small><b>${kamerOf(p) ? escapeHtml(kamerOf(p)) : 'Nog nie gekies nie'}</b></div>
+    <div class="inf-list">
+      ${infRow('rstopen','📚','My rooster','Toetse en eksamens','')}
+      ${infRow('aansopen','🛏','Oorslaap of kuier','My aansoeke','')}
+      ${infRow('meopen','⚙️','My profiel en rekening','Wysig, wagwoord, uitteken','')}
+    </div>`;
+}
+
 function renderKalender(){
-  let html = view === 'lys' ? verseHtml() + bigHtml() + staffBannerHtml() + bevestigHtml() + bdCardHtml() + mvdwHtml() + quickHtml() + a2hsHtml() : '';
+  renderNav();
+  if(page !== 'kalender'){
+    content.innerHTML = page === 'tuis' ? tuisHtml() : page === 'huis' ? huisHtml() : page === 'ek' ? ekHtml() : '';
+    afterRender();
+    return;
+  }
+  let html = '';
   html += vtabsHtml();
   if(view === 'lys'){
-    html += bannerHtmlFn() + todayBoxHtml() + `
+    html += bigHtml() + todayBoxHtml() + `
       <div class="search"><span aria-hidden="true">🔍</span><input type="search" id="searchInput" aria-label="Soek events" placeholder="Soek events..." value="${escapeHtml(searchQuery)}" autocomplete="off"></div>
       ${filterBarHtml()}
       <div id="listArea">${buildListHtml()}</div>
@@ -1330,6 +1441,7 @@ function openHKMenu(){
       <button class="btn btn-primary" id="hkAddEvent">+ Voeg event by</button>
       <button class="btn btn-secondary" id="hkBord">📌 Mededelings${pendingPosts().length ? ' ('+pendingPosts().length+' wag vir goedkeuring)' : ''}</button>
       <button class="btn btn-secondary" id="hkOpkoms">📊 Opkoms</button>
+      <button class="btn btn-secondary" id="hkTrad">🔒 Tradisiedokument</button>
       <p class="menu-grp">Mense</p>
       <button class="btn btn-secondary" id="hkPeople">👥 Mense en rolle</button>
       <button class="btn btn-secondary" id="hkKamer">🏠 Kamerkaart</button>
@@ -1350,6 +1462,7 @@ function openHKMenu(){
   document.getElementById('hkAddEvent').addEventListener('click', ()=>{ closeModal(); handleAddEventClick(); });
   document.getElementById('hkBulkAdd').addEventListener('click', ()=>{ closeModal(); handleBulkAddClick(); });
   document.getElementById('hkBackup').addEventListener('click', ()=>{ closeModal(); handleBackupClick(); });
+  document.getElementById('hkTrad').addEventListener('click', ()=>{ openInfoPage('trad'); });
   document.getElementById('hkHist').addEventListener('click', ()=>{ if(!unlocked){ openPinModalThen(openHistoryModal); } else { openHistoryModal(); } });
   document.getElementById('hkOpkoms').addEventListener('click', openOpkomsModal);
   document.getElementById('hkBd').addEventListener('click', ()=>{ if(!unlocked){ openPinModalThen(()=>openBdModal()); } else { openBdModal(); } });
@@ -2086,6 +2199,9 @@ document.addEventListener('click', async (ev)=>{
     case 'geddel': gedDel(t.dataset.id); break;
     case 'rstopen': openRstModal(); break;
     case 'kamerkaart': location.href = 'kamers.html'; break;
+    case 'nav': if(t.dataset.p === 'hk') openHKMenu(); else setPage(t.dataset.p); break;
+    case 'signin': openAuthModal('up'); break;
+    case 'meopen': openMeModal(); break;
     case 'infopen': openInfoHome(); break;
     case 'infhome': openInfoHome(); break;
     case 'infpage': openInfoPage(t.dataset.k); break;
@@ -3271,7 +3387,7 @@ function quickHtml(){
     <button data-act="gedopen"><span class="qe">💬</span><b>Stuur gedagte</b></button>
     <button data-act="rstopen"><span class="qe">📚</span><b>My rooster</b></button>
     <button data-act="kamerkaart"><span class="qe">🏠</span><b>${kamerOf(myProfile) ? 'Kamer ' + escapeHtml(kamerOf(myProfile)) : 'Kies my kamer'}</b>${!kamerOf(myProfile) && kamManOf(myProfile) ? '<small>Kamerkaart</small>' : ''}</button>
-    <button data-act="infopen"><span class="qe">ℹ️</span><b>Inligting</b><small>WiFi, kaart, nood</small></button>
+    <button data-act="instopen"><span class="qe">🔧</span><b>Instandhouding</b></button>
     <button data-act="ptopen"><span class="qe">🏆</span><b>Gangpunte</b></button>
   </div>${ex ? `<div class="quick-ex">📚 Volgende: <b>${escapeHtml(ex.vak)}</b> · ${n === 0 ? 'vandag' : n === 1 ? 'môre' : 'oor ' + n + ' dae'}</div>` : ''}`;
 }
@@ -3307,7 +3423,7 @@ function openInfoHome(){
     ${infRow('infpage','📍','Kampus en klasse','Waar alles is, met kaart','plekke')}
     ${infRow('infpage','🚨','Nood-nommers','Wie om te bel','nood')}
     ${infRow('instopen','🔧','Instandhouding','Meld iets wat stukkend is','')}
-    ${unlocked ? infRow('infpage','🔒','Tradisiedokument','Vertroulik. Net vir HK en Prim','trad') : ''}
+
     <button class="btn btn-primary" data-act="mclose" style="margin-top:10px">Klaar</button></div>`;
   openModal();
 }
