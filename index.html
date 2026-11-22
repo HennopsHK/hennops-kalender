@@ -582,6 +582,17 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 .hkb.danger{color:#A6463A;border-color:rgba(166,70,58,.5);}
 .evfs-meta,.evfs-pills{gap:8px;}
 .hkgrid .hkb:last-child:nth-child(odd){grid-column:1/-1;}
+
+/* r6-merker */
+.vier{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;}
+.vier span{display:flex;align-items:center;gap:10px;font-weight:700;font-size:14px;}
+.vier i{flex:0 0 34px;height:34px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-family:'Archivo',system-ui,sans-serif;font-weight:900;font-size:18px;background:var(--accent-dark,#8A5640);color:#fff;}
+.kleure{display:flex;gap:8px;margin:6px 0;} .kleure i{width:44px;height:44px;border-radius:12px;border:1px solid rgba(0,0,0,.12);}
+.inf-card.lied p{font-family:'Fraunces',Georgia,serif;font-size:16px;line-height:1.7;}
+details.trad{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:0 14px;margin:0 0 8px;}
+details.trad summary{min-height:48px;display:flex;align-items:center;font-weight:700;cursor:pointer;list-style:none;}
+details.trad summary::-webkit-details-marker{display:none;} details.trad summary::after{content:'+';margin-left:auto;font-size:22px;color:var(--ink-soft);}
+details.trad[open] summary::after{content:'–';} details.trad p{margin:0 0 14px;line-height:1.55;font-size:14.5px;}
 </style>
 </head>
 <body>
@@ -3288,13 +3299,15 @@ async function infGet(path){ try{ const s = await get(ref(db, path)); return s.v
 function openInfoHome(){
   modalBody.innerHTML = `<h3>Inligting</h3><p class="hint" style="margin:-8px 0 12px">Alles op een plek.</p><div class="inf-list">
     ${infRow('infpage','🐘','Oor ons','Bestaansrede en wie ons is','oor')}
+    ${infRow('infpage','🌿','Ons kultuur en waardes','V.I.E.R., gange en titels','kultuur')}
+    ${infRow('infpage','🎶','Koshuislied','Die woorde van ons lied','lied')}
     ${infRow('infpage','👥','Ons leiers','Prim, HK, Koshuispa en gang-leiers','mense')}
     ${infRow('infpage','🌱','Hulp vir eerstejaars','Alles wat \'n nuwe man moet weet','fontie')}
     ${infRow('infpage','📶','WiFi','Naam en kode','wifi')}
     ${infRow('infpage','📍','Kampus en klasse','Waar alles is, met kaart','plekke')}
     ${infRow('infpage','🚨','Nood-nommers','Wie om te bel','nood')}
     ${infRow('instopen','🔧','Instandhouding','Meld iets wat stukkend is','')}
-    ${unlocked ? '' : ''}
+    ${unlocked ? infRow('infpage','🔒','Tradisiedokument','Vertroulik. Net vir HK en Prim','trad') : ''}
     <button class="btn btn-primary" data-act="mclose" style="margin-top:10px">Klaar</button></div>`;
   openModal();
 }
@@ -3311,6 +3324,26 @@ async function openInfoPage(k){
       <div class="inf-card"><b>Waardes</b><ul><li>Waarheid, goedheid en skoonheid</li><li>Geloof, hoop en liefde</li><li>Rentmeesterskap</li><li>Pionierskap</li><li>Verbondenheid</li></ul></div>
       <div class="inf-card"><b>Tydlyn</b><ul><li>2011: Akademia word gestig</li><li>2017: Ten volle geakkrediteer</li><li>2021: Centurion-kampus</li><li>2022: Eerste inwoners trek in op Leriba</li></ul></div>
       <div class="inf-card"><b>Geloofsbelydenis</b><p class="hint">Kom binnekort.</p></div>${ed}`;
+  } else if(k === 'kultuur'){
+    h = `<h3>Ons kultuur en waardes</h3>
+      <div class="inf-card"><b>Bestaansrede</b><p>Huis Hennops is 'n aktiewe en samehorige manskoshuis; die oudste binne Akademia.</p></div>
+      <div class="inf-card"><b>Visie</b><p>By Huis Hennops streef ons om saam die pad te stap na gevormde manwees wat blywende spore agterlaat.</p></div>
+      <div class="inf-card"><b>Ons waardes: V.I.E.R.</b><div class="vier"><span><i>V</i>Verantwoordelikheid</span><span><i>I</i>Integriteit</span><span><i>E</i>Eerlikheid</span><span><i>R</i>Respek</span></div></div>
+      <div class="inf-card"><b>Ons kultuur</b><ul><li>Geloofsgeanker</li><li>Samehorig</li><li>Aktief en betrokke</li><li>Diensbaar</li><li>Respekvol en "gentlemans"</li><li>Verantwoordelik en eienaarskapgedrewe</li><li>Gedissiplineerd en gebalanseerd</li><li>Trots en nalatenskapbewus</li></ul></div>
+      <div class="inf-card"><b>Ons gange</b><ul><li><b style="display:inline">Sesmyl</b>: die spruit wat in die Hennopsrivier invloei</li><li><b style="display:inline">Tetra</b>: vier, vir die vier V.I.E.R.-waardes</li><li><b style="display:inline">Forte</b>: sterk, krag met gesofistikeerdheid</li><li><b style="display:inline">Leriba</b>: ons oorspronklike ligging</li></ul></div>
+      <div class="inf-card"><b>Ons simbole</b><ul><li>Die olifant: krag, eenheid en beskerming</li><li>Die rivier: waar ons waardes vandaan vloei</li><li>Spore en steppingstones: harde werk en nalatenskap</li><li>Die getal vier: V.I.E.R.</li></ul></div>
+      <div class="inf-card"><b>Titels volgens jaar</b><ul><li>Klein Poot: eerste jaar</li><li>Groot Poot: tweede jaar</li><li>Ou Poot: derde jaar of langer</li></ul></div>
+      <div class="inf-card"><b>Geelbekke</b><p>Twee op elke gang. Hulle is die "oë en ore" van die gang en help om kultuur, deelname en trots te bewaar. Die naam kom van die geel bek van ons maskot, Albert die Hoender I.</p></div>
+      <div class="inf-card"><b>Huiskomitee-titels</b><ul><li>Hoofpatriarg: die Primarius</li><li>Onderhoofpatriarg: die Onderprimarius</li><li>Quantumpatriarg: ander HK-lede</li></ul></div>
+      <div class="inf-card"><b>Ons kleure</b><div class="kleure"><i style="background:#CBC3BA"></i><i style="background:#A86E53"></i><i style="background:#758378"></i></div><small>Sand, Roes en Groen</small></div>`;
+  } else if(k === 'lied'){
+    const l = await infGet('info/lied');
+    h = `<h3>Koshuislied</h3>` + (l ? `<div class="inf-card lied"><p style="white-space:pre-wrap;text-align:center">${escapeHtml(l)}</p></div>` : `<p class="hint">Die HK het nog nie die koshuislied ingesit nie.</p>`) + ed;
+  } else if(k === 'trad'){
+    if(!unlocked){ modalBody.innerHTML = infBack() + '<p class="hint">Net vir die HK en Prim.</p>'; return; }
+    const t = await infGet('tradisie');
+    const arr = t ? Object.values(t).sort((a,b)=>(a.volg||0)-(b.volg||0)) : [];
+    h = `<h3>Tradisiedokument</h3><p class="hint" style="margin:-8px 0 10px">🔒 Vertroulik: net Koshuisraad, HK en Koshuisouers. Moenie met fonties deel nie.</p>` + (arr.length ? arr.map(x=>`<details class="trad"><summary>${escapeHtml(x.titel||'')}</summary><p style="white-space:pre-wrap">${escapeHtml(x.teks||'')}</p></details>`).join('') : `<p class="hint">Nog leeg. ${isPrim ? 'Tik hieronder op "Voer in" en plak die tradisie-inhoud.' : 'Die Prim moet dit eers invoer.'}</p>`) + (isPrim ? `<button class="btn btn-secondary" data-act="infedit" data-k="trad" style="margin-top:12px">⬆ Voer in of verander (Prim)</button>` : '');
   } else if(k === 'mense'){
     const m = await infGet('info/mense') || {};
     const arr = Object.entries(m).map(([id,x])=>Object.assign({id},x)).sort((a,b)=>(a.volg||0)-(b.volg||0));
@@ -3338,6 +3371,8 @@ async function openInfoEdit(k){
   let h = '';
   if(k === 'oor'){ const o = await infGet('info/oor'); h = `<h3>Oor ons (Huis Hennops)</h3><div class="field"><textarea id="ie-t" rows="6">${escapeHtml((o&&o.huis)||INFO_DEF_OOR)}</textarea></div>`; }
   else if(k === 'fontie'){ const f = await infGet('info/fontie'); h = `<h3>Hulp vir eerstejaars</h3><div class="field"><textarea id="ie-t" rows="9" placeholder="Een punt per reël">${escapeHtml(f||'')}</textarea></div>`; }
+  else if(k === 'lied'){ const l = await infGet('info/lied'); h = `<h3>Koshuislied</h3><p class="hint" style="margin:-8px 0 10px">Plak die woorde hier. Elke reël kom op sy eie reël.</p><div class="field"><textarea id="ie-t" rows="12">${escapeHtml(l||'')}</textarea></div>`; }
+  else if(k === 'trad'){ if(!isPrim) return; const t = await infGet('tradisie'); const arr = t ? Object.values(t).sort((a,b)=>(a.volg||0)-(b.volg||0)) : []; h = `<h3>Tradisiedokument</h3><p class="hint" style="margin:-8px 0 10px">Een afdeling per kop. Begin elke afdeling met <b># Titel</b> op 'n eie reël, gevolg deur die teks.</p><div class="field"><textarea id="ie-t" rows="14">${escapeHtml(arr.map(x=>'# '+x.titel+'\n'+x.teks).join('\n\n'))}</textarea></div>`; }
   else if(k === 'wifi'){ const w = await infGet('info/wifi') || {}; h = `<h3>WiFi</h3><div class="field"><label for="ie-a">Netwerk</label><input id="ie-a" value="${escapeHtml(w.naam||'')}"></div><div class="field"><label for="ie-b">Kode</label><input id="ie-b" value="${escapeHtml(w.kode||'')}" autocomplete="off"></div>`; }
   else if(k === 'mense'){ const m = await infGet('info/mense') || {}; const arr = Object.entries(m); h = `<h3>Ons leiers</h3><p class="hint" style="margin:-8px 0 10px">Een per reël: <b>Naam | Rol | Selfoon</b> (selfoon is opsioneel). Bv. Pieter Smit | Prim | 082 123 4567</p><div class="field"><textarea id="ie-t" rows="8">${escapeHtml(arr.sort((a,b)=>(a[1].volg||0)-(b[1].volg||0)).map(([i,x])=>[x.naam,x.rol,x.tel||''].join(' | ')).join('\n'))}</textarea></div>`; }
   else if(k === 'plekke'){ const p = await infGet('info/plekke'); const arr = p ? Object.values(p) : PLEKKE_DEF; h = `<h3>Kampus en klasse</h3><p class="hint" style="margin:-8px 0 10px">Een per reël: <b>Naam | Wat om in Maps te soek | Nota</b></p><div class="field"><textarea id="ie-t" rows="8">${escapeHtml(arr.map(x=>[x.naam,x.soek||'',x.nota||''].join(' | ')).join('\n'))}</textarea></div>`; }
@@ -3352,6 +3387,8 @@ async function saveInfoEdit(k){
   try{
     if(k === 'oor') await set(ref(db,'info/oor'), { huis: v('ie-t').slice(0,1200) });
     else if(k === 'fontie') await set(ref(db,'info/fontie'), v('ie-t').slice(0,3000) || null);
+    else if(k === 'lied') await set(ref(db,'info/lied'), v('ie-t').slice(0,3000) || null);
+    else if(k === 'trad'){ const o = {}; let cur = null, n = 0; v('ie-t').split('\n').forEach(l=>{ const m = l.match(/^#\s+(.+)$/); if(m){ cur = { titel:m[1].trim().slice(0,100), teks:'', volg:n }; o['t'+(n++)] = cur; } else if(cur) cur.teks += (cur.teks ? '\n' : '') + l; }); Object.values(o).forEach(x=>{ x.teks = x.teks.trim().slice(0,6000); }); await set(ref(db,'tradisie'), Object.keys(o).length ? o : null); }
     else if(k === 'wifi') await set(ref(db,'info/wifi'), (v('ie-a') || v('ie-b')) ? { naam: v('ie-a').slice(0,60), kode: v('ie-b').slice(0,80) } : null);
     else if(k === 'mense'){ const o = {}; lines().forEach((p,i)=>{ if(p[0]) o['m'+i] = { naam:p[0].slice(0,60), rol:(p[1]||'').slice(0,60), tel:(p[2]||'').slice(0,20), volg:i }; }); await set(ref(db,'info/mense'), Object.keys(o).length ? o : null); }
     else if(k === 'plekke'){ const o = {}; lines().forEach((p,i)=>{ if(p[0]) o['p'+i] = { naam:p[0].slice(0,80), soek:(p[1]||p[0]).slice(0,120), nota:(p[2]||'').slice(0,80) }; }); await set(ref(db,'info/plekke'), Object.keys(o).length ? o : null); }
