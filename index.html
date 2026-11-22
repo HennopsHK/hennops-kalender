@@ -552,6 +552,36 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 .onb-steps li{flex:1;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:var(--ink-soft);}
 .onb-steps li.on{color:var(--ink);} .onb-steps li.done b{background:var(--sage,#758378);color:#fff;}
 .medfonds{border-top:1px solid var(--line);margin-top:6px;padding-top:12px;}
+
+/* Inligting, Instandhouding, Gangpunte */
+.inf-list{display:flex;flex-direction:column;gap:8px;}
+.inf-row{display:flex;align-items:center;gap:14px;width:100%;min-height:62px;padding:10px 14px;text-align:left;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:14px;cursor:pointer;text-decoration:none;}
+.inf-row .ic{flex:0 0 38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:18px;background:rgba(117,131,120,.2);}
+.inf-row .tx{flex:1;min-width:0;} .inf-row b{display:block;font-size:15px;line-height:1.25;} .inf-row small{display:block;margin-top:2px;font-size:12.5px;color:var(--ink-soft);}
+.inf-row .chev{font-size:22px;color:var(--ink-soft);}
+.inf-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;margin:0 0 10px;}
+.inf-card b{display:block;margin-bottom:4px;} .inf-card p{margin:0;line-height:1.5;font-size:14.5px;} .inf-card ul{margin:4px 0 0;padding-left:18px;line-height:1.55;font-size:14.5px;} .inf-card small{display:block;color:var(--ink-soft);}
+.inf-people{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.inf-person{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 10px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.inf-person .av{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:20px;background:rgba(168,110,83,.2);color:var(--accent-dark,#8A5640);margin-bottom:6px;}
+.inf-person small{color:var(--ink-soft);} .inf-person a{margin-top:6px;font-weight:700;color:var(--accent-dark,#8A5640);}
+.pt-list{display:flex;flex-direction:column;gap:10px;margin:6px 0 12px;}
+.pt-row{display:flex;align-items:center;gap:10px;} .pt-pos{width:24px;font-weight:800;font-size:20px;color:var(--ink-soft);}
+.pt-bar{position:relative;flex:1;height:38px;background:var(--line);border-radius:10px;overflow:hidden;}
+.pt-bar i{position:absolute;left:0;top:0;bottom:0;border-radius:10px;opacity:.85;}
+.pt-bar b{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.5);font-size:15px;}
+.pt-n{min-width:42px;text-align:right;font-weight:800;font-size:20px;}
+.quick{grid-template-columns:1fr 1fr;}
+
+.evfs-hkcard{margin-top:20px;padding:14px;background:var(--surface);border-radius:16px;box-shadow:var(--shadow);}
+.evfs-hkcard h4{margin:0 0 10px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-dark,#8A5640);}
+.hkgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.hkb{min-height:56px;display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:12px;border:1px solid var(--line);background:#fff;color:var(--ink);font:inherit;font-weight:700;font-size:14px;text-align:left;cursor:pointer;}
+.hkb .i{flex:0 0 26px;font-size:20px;text-align:center;}
+.hkb.pri{grid-column:1/-1;background:var(--accent-dark,#8A5640);border-color:transparent;color:#fff;}
+.hkb.danger{color:#A6463A;border-color:rgba(166,70,58,.5);}
+.evfs-meta,.evfs-pills{gap:8px;}
+.hkgrid .hkb:last-child:nth-child(odd){grid-column:1/-1;}
 </style>
 </head>
 <body>
@@ -2045,6 +2075,20 @@ document.addEventListener('click', async (ev)=>{
     case 'geddel': gedDel(t.dataset.id); break;
     case 'rstopen': openRstModal(); break;
     case 'kamerkaart': location.href = 'kamers.html'; break;
+    case 'infopen': openInfoHome(); break;
+    case 'infhome': openInfoHome(); break;
+    case 'infpage': openInfoPage(t.dataset.k); break;
+    case 'infedit': openInfoEdit(t.dataset.k); break;
+    case 'infsave': saveInfoEdit(t.dataset.k); break;
+    case 'wificopy': { const w = window.__wifi; if(w){ try{ await navigator.clipboard.writeText(w.kode); showToast('Kode gekopieer'); }catch(e){ showToast('Hou die kode vas en kies Kopieer'); } } break; }
+    case 'wifiwa': { const w = window.__wifi; if(w) window.open('https://wa.me/?text=' + encodeURIComponent('Huis Hennops WiFi\nNetwerk: ' + (w.naam||'') + '\nKode: ' + w.kode), '_blank'); break; }
+    case 'instopen': openInstand(); break;
+    case 'instsend': sendInstand(); break;
+    case 'insthk': openInstandHK(); break;
+    case 'inststat': { try{ await update(ref(db,'instand/'+t.dataset.u+'/'+t.dataset.i), { status:t.dataset.s }); openInstandHK(); }catch(e){ showToast('Kon nie: ' + e.message); } break; }
+    case 'ptopen': openPunte(); break;
+    case 'ptadd': addPunte(); break;
+    case 'ptdel': { try{ await remove(ref(db,'punte/'+t.dataset.i)); openPunte(); }catch(e){ showToast('Kon nie: ' + e.message); } break; }
     case 'rstadd': addRst(); break;
     case 'rstdel': delRst(t.dataset.id); break;
     case 'evopen': openEv(t.dataset.id); break;
@@ -2648,7 +2692,7 @@ async function meAlumnus(){
 async function meDelete(){
   if(!confirm('Verwyder jou rekening en AL jou inligting vir goed? Dit kan nie ontdoen word nie.')) return;
   const uid = me.uid, upd = {};
-  ['profiles','nood','medies','verjaar','kodetoets'].forEach(k=>{ upd[k+'/'+uid] = null; });
+  ['profiles','nood','medies','verjaar','kodetoets','instand'].forEach(k=>{ upd[k+'/'+uid] = null; });
   Object.keys(rsvp || {}).forEach(eid=>{ if(rsvp[eid] && rsvp[eid][uid]) upd['rsvp/'+eid+'/'+uid] = null; });
   events.forEach(e=>{ upd['opkoms/'+e.id+'/'+uid] = null; });
   upd['aansoeke/'+uid] = null; upd['mygedagtes/'+uid] = null; upd['rooster/'+uid] = null;
@@ -2860,14 +2904,14 @@ function renderEv(){
   const cd = (!isP && n > 0) ? `<div class="evfs-cd"><b>${n}</b> ${n === 1 ? 'dag' : 'dae'} oor</div>` : (isToday && !e.isCancelled ? `<div class="evfs-cd"><b>Vandag!</b></div>` : '');
   let hk = '';
   if(unlocked){
-    hk = `<div class="sec-h">Net vir die HK</div><div class="evfs-hk">
-      <button class="mini-btn" data-act="evedit" data-id="${e.id}">✏️ Wysig</button>
-      <button class="mini-btn" data-act="evshare" data-id="${e.id}">↗ Deel</button>
-      <button class="mini-btn" data-act="evimg" data-id="${e.id}">🖼 ${e.hasImg ? 'Verander grafika' : 'Voeg grafika by'}</button>
-      ${e.hasImg ? `<button class="mini-btn danger" data-act="evimgdel" data-id="${e.id}">Verwyder grafika</button>` : ''}
-      ${e.opk==='hand' ? '' : `<button class="mini-btn" data-act="evopkstart" data-id="${e.id}">📱 Begin opkoms (QR)</button>`}
-      <button class="mini-btn" data-act="evopkman" data-id="${e.id}">✍ ${e.opk==='hand' ? 'Teken opkoms aan' : 'Teken manne handmatig aan'}</button></div>
-      ${rsN ? `<p class="hint" style="margin-top:10px">Het gesê hulle gaan: ${Object.values(rs).map(x=>escapeHtml(x.name||'?')).join(', ')}</p>` : ''}`;
+    hk = `<div class="evfs-hkcard"><h4>Net vir die HK</h4><div class="hkgrid">
+      <button class="hkb pri" data-act="evopkman" data-id="${e.id}"><span class="i" aria-hidden="true">📋</span>${e.opk==='hand' ? 'Teken opkoms aan' : 'Teken manne handmatig aan'}</button>
+      ${e.opk==='hand' ? '' : `<button class="hkb pri" data-act="evopkstart" data-id="${e.id}"><span class="i" aria-hidden="true">📱</span>Begin opkoms met QR</button>`}
+      <button class="hkb" data-act="evedit" data-id="${e.id}"><span class="i" aria-hidden="true">✏️</span>Wysig</button>
+      <button class="hkb" data-act="evshare" data-id="${e.id}"><span class="i" aria-hidden="true">↗</span>Deel</button>
+      <button class="hkb" data-act="evimg" data-id="${e.id}"><span class="i" aria-hidden="true">🖼</span>${e.hasImg ? 'Verander grafika' : 'Voeg grafika by'}</button>
+      ${e.hasImg ? `<button class="hkb danger" data-act="evimgdel" data-id="${e.id}"><span class="i" aria-hidden="true">🗑</span>Verwyder grafika</button>` : ''}
+      </div>${rsN ? `<p class="hint" style="margin:12px 2px 0">Het gesê hulle gaan (${rsN}): ${Object.values(rs).map(x=>escapeHtml(x.name||'?')).join(', ')}</p>` : ''}</div>`;
   }
   const here = (me && myProfile && isToday && !e.isCancelled)
     ? (myOpk[e.id] ? `<div class="evfs-ok">✅ Jy is aangemeld</div>` : `<button class="btn btn-secondary" data-act="evhere" data-id="${e.id}" style="width:100%;margin-top:10px">📍 Ek is hier (tik die kode op die skerm)</button>`) : '';
@@ -3216,6 +3260,8 @@ function quickHtml(){
     <button data-act="gedopen"><span class="qe">💬</span><b>Stuur gedagte</b></button>
     <button data-act="rstopen"><span class="qe">📚</span><b>My rooster</b></button>
     <button data-act="kamerkaart"><span class="qe">🏠</span><b>${kamerOf(myProfile) ? 'Kamer ' + escapeHtml(kamerOf(myProfile)) : 'Kies my kamer'}</b>${!kamerOf(myProfile) && kamManOf(myProfile) ? '<small>Kamerkaart</small>' : ''}</button>
+    <button data-act="infopen"><span class="qe">ℹ️</span><b>Inligting</b><small>WiFi, kaart, nood</small></button>
+    <button data-act="ptopen"><span class="qe">🏆</span><b>Gangpunte</b></button>
   </div>${ex ? `<div class="quick-ex">📚 Volgende: <b>${escapeHtml(ex.vak)}</b> · ${n === 0 ? 'vandag' : n === 1 ? 'môre' : 'oor ' + n + ' dae'}</div>` : ''}`;
 }
 function staffBannerHtml(){
@@ -3224,6 +3270,145 @@ function staffBannerHtml(){
   const ng = Object.values(allGed || {}).filter(g=>g.status === 'ontvang').length;
   if(!pa && !ng) return '';
   return `<div class="staffban">${pa ? `<button data-act="ansprim">📨 <b>${pa}</b> aansoek${pa === 1 ? '' : 'e'} wag vir jou</button>` : ''}${ng ? `<button data-act="gedhk">💬 <b>${ng}</b> nuwe gedagte${ng === 1 ? '' : 's'}</button>` : ''}</div>`;
+}
+
+// ---------- INLIGTING, INSTANDHOUDING EN GANGPUNTE (Rondte 5) ----------
+const GANGE = [['tetra','Tetra','#E0A100'],['forte','Forte','#B5333B'],['sesmyl','Sesmyl','#3F7F55']];
+const INFO_DEF_OOR = 'Huis Hennops is \'n mans-koshuis van Akademia, sedert 2022. Ons leuse is "Ek sal vuurvas staan". Die HK kan hierdie teks in die app verander.';
+const NOOD_VAST = [['Polisie (SAPS)','10111'],['Ambulans','10177'],['Noodnommer (selfoon)','112']];
+const PLEKKE_DEF = [
+  {naam:'Huis Hennops (Leriba)', soek:'Leriba 245 End Avenue Clubview', nota:'Ons huis'},
+  {naam:'Akademia Centurion-kampus', soek:'Akademia Centurion campus', nota:'Klasse en kantore'},
+  {naam:'NP van Wyk Louw-sentrum', soek:'Akademia NP van Wyk Louw Sentrum Centurion', nota:'Sentrum by Akademia'}
+];
+function mapsUrl(q){ return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q); }
+function infRow(act, ic, t, sub, arg){ return `<button class="inf-row" data-act="${act}"${arg?` data-k="${escapeHtml(arg)}"`:''}><span class="ic" aria-hidden="true">${ic}</span><span class="tx"><b>${t}</b><small>${sub}</small></span><span class="chev" aria-hidden="true">›</span></button>`; }
+function infBack(to){ return `<button class="link-btn" data-act="infhome" style="margin:0 0 6px">← Inligting</button>`; }
+async function infGet(path){ try{ const s = await get(ref(db, path)); return s.val(); }catch(e){ return null; } }
+function openInfoHome(){
+  modalBody.innerHTML = `<h3>Inligting</h3><p class="hint" style="margin:-8px 0 12px">Alles op een plek.</p><div class="inf-list">
+    ${infRow('infpage','🐘','Oor ons','Bestaansrede en wie ons is','oor')}
+    ${infRow('infpage','👥','Ons leiers','Prim, HK, Koshuispa en gang-leiers','mense')}
+    ${infRow('infpage','🌱','Hulp vir eerstejaars','Alles wat \'n nuwe man moet weet','fontie')}
+    ${infRow('infpage','📶','WiFi','Naam en kode','wifi')}
+    ${infRow('infpage','📍','Kampus en klasse','Waar alles is, met kaart','plekke')}
+    ${infRow('infpage','🚨','Nood-nommers','Wie om te bel','nood')}
+    ${infRow('instopen','🔧','Instandhouding','Meld iets wat stukkend is','')}
+    ${unlocked ? '' : ''}
+    <button class="btn btn-primary" data-act="mclose" style="margin-top:10px">Klaar</button></div>`;
+  openModal();
+}
+async function openInfoPage(k){
+  modalBody.innerHTML = `${infBack()}<p class="hint">Laai...</p>`; openModal();
+  const ed = unlocked ? `<button class="btn btn-secondary" data-act="infedit" data-k="${k}" style="margin-top:12px">✏️ Verander (HK)</button>` : '';
+  let h = '';
+  if(k === 'oor'){
+    const o = await infGet('info/oor');
+    h = `<h3>Oor ons</h3>
+      <div class="inf-card"><b>Huis Hennops</b><p>${escapeHtml((o && o.huis) || INFO_DEF_OOR)}</p></div>
+      <div class="inf-card"><b>Akademia se bestaansrede</b><p>Akademia is 'n Christelike, klassieke en onafhanklike hoëronderwysinstelling vanuit en vir Afrikaanse taal- en kultuurgemeenskappe.</p></div>
+      <div class="inf-card"><b>Visie</b><p>'n Akademiese tuiste waar denke én hart gevorm word met die oog op 'n vrye toekoms.</p></div>
+      <div class="inf-card"><b>Waardes</b><ul><li>Waarheid, goedheid en skoonheid</li><li>Geloof, hoop en liefde</li><li>Rentmeesterskap</li><li>Pionierskap</li><li>Verbondenheid</li></ul></div>
+      <div class="inf-card"><b>Tydlyn</b><ul><li>2011: Akademia word gestig</li><li>2017: Ten volle geakkrediteer</li><li>2021: Centurion-kampus</li><li>2022: Eerste inwoners trek in op Leriba</li></ul></div>
+      <div class="inf-card"><b>Geloofsbelydenis</b><p class="hint">Kom binnekort.</p></div>${ed}`;
+  } else if(k === 'mense'){
+    const m = await infGet('info/mense') || {};
+    const arr = Object.entries(m).map(([id,x])=>Object.assign({id},x)).sort((a,b)=>(a.volg||0)-(b.volg||0));
+    h = `<h3>Ons leiers</h3>` + (arr.length ? `<div class="inf-people">${arr.map(x=>`<div class="inf-person"><div class="av">${escapeHtml((x.naam||'?').trim().split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase())}</div><b>${escapeHtml(x.naam||'')}</b><small>${escapeHtml(x.rol||'')}</small>${x.tel?`<a href="tel:+${escapeHtml(String(x.tel).replace(/\D/g,''))}">Bel</a>`:''}</div>`).join('')}</div>` : `<p class="hint">Die HK het nog nie die leiers bygevoeg nie.</p>`) + `<p class="hint" style="margin-top:12px">Foto's kom ná die huis se foto-sessie.</p>` + ed;
+  } else if(k === 'fontie'){
+    const f = await infGet('info/fontie');
+    h = `<h3>Hulp vir eerstejaars</h3><div class="inf-card"><p style="white-space:pre-wrap">${escapeHtml(f || 'Die HK sit hier wat \'n nuwe man moet weet: waar om te eet, wie om te vra, hoe die week lyk, en watter reëls geld.')}</p></div>${ed}`;
+  } else if(k === 'wifi'){
+    const w = await infGet('info/wifi');
+    h = `<h3>WiFi</h3>` + (w && w.kode ? `<div class="inf-card"><small>Netwerk</small><b>${escapeHtml(w.naam||'')}</b><small style="margin-top:10px">Kode</small><b style="font-size:22px;letter-spacing:.04em">${escapeHtml(w.kode)}</b><div class="row-btns"><button class="btn btn-secondary" data-act="wificopy">Kopieer kode</button>${unlocked?'<button class="btn btn-secondary" data-act="wifiwa">Stuur via WhatsApp</button>':''}</div></div>` : `<p class="hint">Die HK het nog nie die WiFi-kode ingesit nie.</p>`) + ed;
+    window.__wifi = w;
+  } else if(k === 'plekke'){
+    const p = await infGet('info/plekke'); const arr = p ? Object.values(p) : PLEKKE_DEF;
+    h = `<h3>Kampus en klasse</h3><p class="hint" style="margin:-8px 0 10px">Tik op 'n plek om dit in Google Maps oop te maak.</p><div class="inf-list">${arr.map(x=>`<a class="inf-row" href="${mapsUrl(x.soek||x.naam)}" target="_blank" rel="noopener"><span class="ic" aria-hidden="true">📍</span><span class="tx"><b>${escapeHtml(x.naam||'')}</b><small>${escapeHtml(x.nota||'Maak oop in Maps')}</small></span><span class="chev" aria-hidden="true">›</span></a>`).join('')}</div>${ed}`;
+  } else if(k === 'nood'){
+    const n = await infGet('info/nood'); const arr = n ? Object.values(n) : [];
+    const rows = NOOD_VAST.concat(arr.map(x=>[x.naam,x.tel]));
+    h = `<h3>Nood-nommers</h3><div class="inf-list">${rows.map(([nm,tl])=>`<a class="inf-row" href="tel:${escapeHtml(String(tl).replace(/[^\d+]/g,''))}"><span class="ic" aria-hidden="true">📞</span><span class="tx"><b>${escapeHtml(nm)}</b><small>${escapeHtml(tl)}</small></span><span class="chev" aria-hidden="true">›</span></a>`).join('')}</div><p class="hint" style="margin-top:10px">In 'n lewensgevaarlike noodgeval bel eers 10177 of 112.</p>${ed}`;
+  }
+  modalBody.innerHTML = infBack() + h;
+}
+async function openInfoEdit(k){
+  if(!unlocked) return;
+  const back = `<button class="link-btn" data-act="infpage" data-k="${k}" style="margin:0 0 6px">← Terug</button>`;
+  let h = '';
+  if(k === 'oor'){ const o = await infGet('info/oor'); h = `<h3>Oor ons (Huis Hennops)</h3><div class="field"><textarea id="ie-t" rows="6">${escapeHtml((o&&o.huis)||INFO_DEF_OOR)}</textarea></div>`; }
+  else if(k === 'fontie'){ const f = await infGet('info/fontie'); h = `<h3>Hulp vir eerstejaars</h3><div class="field"><textarea id="ie-t" rows="9" placeholder="Een punt per reël">${escapeHtml(f||'')}</textarea></div>`; }
+  else if(k === 'wifi'){ const w = await infGet('info/wifi') || {}; h = `<h3>WiFi</h3><div class="field"><label for="ie-a">Netwerk</label><input id="ie-a" value="${escapeHtml(w.naam||'')}"></div><div class="field"><label for="ie-b">Kode</label><input id="ie-b" value="${escapeHtml(w.kode||'')}" autocomplete="off"></div>`; }
+  else if(k === 'mense'){ const m = await infGet('info/mense') || {}; const arr = Object.entries(m); h = `<h3>Ons leiers</h3><p class="hint" style="margin:-8px 0 10px">Een per reël: <b>Naam | Rol | Selfoon</b> (selfoon is opsioneel). Bv. Pieter Smit | Prim | 082 123 4567</p><div class="field"><textarea id="ie-t" rows="8">${escapeHtml(arr.sort((a,b)=>(a[1].volg||0)-(b[1].volg||0)).map(([i,x])=>[x.naam,x.rol,x.tel||''].join(' | ')).join('\n'))}</textarea></div>`; }
+  else if(k === 'plekke'){ const p = await infGet('info/plekke'); const arr = p ? Object.values(p) : PLEKKE_DEF; h = `<h3>Kampus en klasse</h3><p class="hint" style="margin:-8px 0 10px">Een per reël: <b>Naam | Wat om in Maps te soek | Nota</b></p><div class="field"><textarea id="ie-t" rows="8">${escapeHtml(arr.map(x=>[x.naam,x.soek||'',x.nota||''].join(' | ')).join('\n'))}</textarea></div>`; }
+  else if(k === 'nood'){ const n = await infGet('info/nood'); const arr = n ? Object.values(n) : []; h = `<h3>Nood-nommers</h3><p class="hint" style="margin:-8px 0 10px">Een per reël: <b>Naam | Nommer</b>. SAPS, ambulans en 112 is reeds daar.</p><div class="field"><textarea id="ie-t" rows="7">${escapeHtml(arr.map(x=>[x.naam,x.tel].join(' | ')).join('\n'))}</textarea></div>`; }
+  modalBody.innerHTML = back + h + `<div id="ie-err" class="error-msg"></div><div class="modal-actions"><button class="btn btn-primary" data-act="infsave" data-k="${k}">Stoor</button></div>`;
+  openModal();
+}
+async function saveInfoEdit(k){
+  const v = id => { const e = document.getElementById(id); return e ? e.value.trim() : ''; };
+  const err = document.getElementById('ie-err');
+  const lines = () => v('ie-t').split('\n').map(l=>l.trim()).filter(Boolean).slice(0,40).map(l=>l.split('|').map(x=>x.trim()));
+  try{
+    if(k === 'oor') await set(ref(db,'info/oor'), { huis: v('ie-t').slice(0,1200) });
+    else if(k === 'fontie') await set(ref(db,'info/fontie'), v('ie-t').slice(0,3000) || null);
+    else if(k === 'wifi') await set(ref(db,'info/wifi'), (v('ie-a') || v('ie-b')) ? { naam: v('ie-a').slice(0,60), kode: v('ie-b').slice(0,80) } : null);
+    else if(k === 'mense'){ const o = {}; lines().forEach((p,i)=>{ if(p[0]) o['m'+i] = { naam:p[0].slice(0,60), rol:(p[1]||'').slice(0,60), tel:(p[2]||'').slice(0,20), volg:i }; }); await set(ref(db,'info/mense'), Object.keys(o).length ? o : null); }
+    else if(k === 'plekke'){ const o = {}; lines().forEach((p,i)=>{ if(p[0]) o['p'+i] = { naam:p[0].slice(0,80), soek:(p[1]||p[0]).slice(0,120), nota:(p[2]||'').slice(0,80) }; }); await set(ref(db,'info/plekke'), Object.keys(o).length ? o : null); }
+    else if(k === 'nood'){ const o = {}; lines().forEach((p,i)=>{ if(p[0] && p[1]) o['n'+i] = { naam:p[0].slice(0,60), tel:p[1].slice(0,20) }; }); await set(ref(db,'info/nood'), Object.keys(o).length ? o : null); }
+    showToast('Gestoor'); openInfoPage(k);
+  }catch(e){ if(err) err.textContent = 'Kon nie stoor nie: ' + e.message; }
+}
+// Instandhouding
+async function openInstand(){
+  if(!me){ openAuthModal('in'); return; }
+  const mine = await infGet('instand/' + me.uid) || {};
+  const arr = Object.entries(mine).map(([id,x])=>Object.assign({id},x)).sort((a,b)=>(b.at||0)-(a.at||0));
+  const st = s => s==='klaar' ? '✅ Reggemaak' : s==='besig' ? '🔧 Besig' : '🕘 Ontvang';
+  modalBody.innerHTML = `${infBack()}<h3>Instandhouding</h3><p class="hint" style="margin:-8px 0 12px">Iets stukkend in jou kamer of in die huis? Sê vir ons.</p>
+    <div class="field"><label for="in-k">Kamer of plek</label><input id="in-k" value="${escapeHtml(kamerOf(myProfile)||'')}" maxlength="30" placeholder="bv. Kamer 39 of badkamer onder"></div>
+    <div class="field"><label for="in-t">Wat is die probleem?</label><textarea id="in-t" rows="3" maxlength="300" placeholder="bv. Die kraan lek"></textarea></div>
+    <div id="in-err" class="error-msg"></div><button class="btn btn-primary" data-act="instsend" style="width:100%">Stuur</button>
+    ${arr.length ? `<div class="sec-h">My meldings</div>` + arr.map(x=>`<div class="hrow"><div class="t"><b>${escapeHtml(x.teks||'')}</b><small>${escapeHtml(x.kamer||'')} · ${st(x.status)}</small></div></div>`).join('') : ''}
+    ${unlocked ? `<button class="btn btn-secondary" data-act="insthk" style="margin-top:14px;width:100%">🔧 Alle meldings (HK)</button>` : ''}`;
+  openModal();
+}
+async function sendInstand(){
+  const kamer = (document.getElementById('in-k').value||'').trim(), teks = (document.getElementById('in-t').value||'').trim();
+  const err = document.getElementById('in-err');
+  if(!teks){ err.textContent = 'Sê wat die probleem is.'; return; }
+  const id = 'i' + Date.now();
+  try{ await set(ref(db,'instand/'+me.uid+'/'+id), { teks: teks.slice(0,300), kamer: kamer.slice(0,30), naam: myName().slice(0,80), status:'oop', at: Date.now() }); showToast('Gestuur. Die HK sien dit.'); openInstand(); }
+  catch(e){ err.textContent = 'Kon nie stuur nie: ' + e.message; }
+}
+async function openInstandHK(){
+  if(!unlocked) return;
+  const all = await infGet('instand') || {};
+  const arr = []; Object.entries(all).forEach(([uid,m])=>Object.entries(m||{}).forEach(([id,x])=>arr.push(Object.assign({uid,id},x))));
+  arr.sort((a,b)=>({oop:0,besig:1,klaar:2}[a.status]-({oop:0,besig:1,klaar:2}[b.status])) || (b.at||0)-(a.at||0));
+  modalBody.innerHTML = `<button class="link-btn" data-act="instopen" style="margin:0 0 6px">← Terug</button><h3>Meldings</h3>` + (arr.length ? arr.map(x=>`<div class="inf-card"><b>${escapeHtml(x.teks||'')}</b><small>${escapeHtml(x.naam||'')} · ${escapeHtml(x.kamer||'')} · ${new Date(x.at||0).toLocaleDateString('af-ZA')}</small><div class="row-btns">${[['oop','🕘 Ontvang'],['besig','🔧 Besig'],['klaar','✅ Reggemaak']].map(([s,l])=>`<button class="btn ${x.status===s?'btn-primary':'btn-secondary'} sm" data-act="inststat" data-u="${escapeHtml(x.uid)}" data-i="${escapeHtml(x.id)}" data-s="${s}">${l}</button>`).join('')}</div></div>`).join('') : '<p class="hint">Geen meldings nie.</p>');
+  openModal();
+}
+// Gangpunte
+async function openPunte(){
+  const lg = await infGet('punte') || {};
+  const arr = Object.entries(lg).map(([id,x])=>Object.assign({id},x));
+  const tot = {}; GANGE.forEach(g=>tot[g[0]]=0); arr.forEach(x=>{ if(tot[x.gang]!=null) tot[x.gang]+= +x.pt||0; });
+  const rank = GANGE.slice().sort((a,b)=>tot[b[0]]-tot[a[0]]);
+  const max = Math.max(1, ...rank.map(g=>Math.abs(tot[g[0]])));
+  const rec = arr.sort((a,b)=>(b.at||0)-(a.at||0)).slice(0,12);
+  modalBody.innerHTML = `<h3>Gangpunte</h3><div class="pt-list">${rank.map((g,i)=>`<div class="pt-row"><span class="pt-pos">${i+1}</span><div class="pt-bar"><i style="width:${Math.max(4,Math.round(Math.abs(tot[g[0]])/max*100))}%;background:${g[2]}"></i><b>${g[1]}</b></div><span class="pt-n">${tot[g[0]]}</span></div>`).join('')}</div>
+    ${rec.length ? `<div class="sec-h">Laaste punte</div>` + rec.map(x=>`<div class="hrow"><div class="t"><b>${(GANGE.find(g=>g[0]===x.gang)||[0,x.gang])[1]}: ${x.pt>0?'+':''}${x.pt}</b><small>${escapeHtml(x.rede||'')}</small></div>${unlocked?`<button class="mini-btn danger" data-act="ptdel" data-i="${escapeHtml(x.id)}">Verwyder</button>`:''}</div>`).join('') : '<p class="hint">Nog geen punte nie.</p>'}
+    ${unlocked ? `<div class="inf-card" style="margin-top:14px"><b>Gee punte (HK)</b><div class="row2"><div class="field"><label for="pt-g">Gang</label><select id="pt-g">${GANGE.map(g=>`<option value="${g[0]}">${g[1]}</option>`).join('')}</select></div><div class="field"><label for="pt-n">Punte</label><input id="pt-n" type="number" inputmode="numeric" placeholder="bv. 10 of -5"></div></div><div class="field"><label for="pt-r">Hoekom</label><input id="pt-r" maxlength="80" placeholder="bv. Wen sokker"></div><div id="pt-err" class="error-msg"></div><button class="btn btn-primary" data-act="ptadd" style="width:100%">Gee punte</button></div>` : ''}
+    <button class="btn btn-secondary" data-act="mclose" style="margin-top:12px;width:100%">Klaar</button>`;
+  openModal();
+}
+async function addPunte(){
+  const g = document.getElementById('pt-g').value, n = parseInt(document.getElementById('pt-n').value,10), r = document.getElementById('pt-r').value.trim();
+  const err = document.getElementById('pt-err');
+  if(!n || Math.abs(n) > 1000){ err.textContent = 'Tik \'n getal (bv. 10 of -5).'; return; }
+  try{ await set(ref(db,'punte/p'+Date.now()), { gang:g, pt:n, rede:r.slice(0,80), by:myName().slice(0,60), at:Date.now() }); showToast('Punte gegee'); openPunte(); }
+  catch(e){ err.textContent = 'Kon nie: ' + e.message; }
 }
 
 // ----- Aansoeke (lid) -----
