@@ -616,6 +616,28 @@ body{padding-bottom:calc(96px + env(safe-area-inset-bottom));}
 .wk-row .wt b{display:block;font-size:15px;} .wk-row .wt small{color:var(--ink-soft);font-size:13px;}
 .tuis-acts .btn-secondary{background:var(--surface);color:var(--ink);border:1.5px solid var(--ink-soft,#6b5f55);opacity:1;}
 .tuis-acts{display:flex;flex-direction:column;gap:10px;margin-top:18px;} .tuis-acts .btn{min-height:54px;font-size:16px;}
+
+/* r8-merker: pote, kontrole, ledegids */
+.poot{color:var(--accent-dark,#8A5640);display:block;}
+.ek-poot{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:0;cursor:pointer;font:inherit;color:#fff;background:var(--accent-dark,#8A5640);border-radius:20px;padding:16px 18px;margin-bottom:12px;box-shadow:var(--shadow);}
+.ek-poot .pt{flex:0 0 64px;height:64px;display:grid;place-items:center;background:rgba(255,255,255,.16);border-radius:50%;}
+.ek-poot .poot{color:#fff;}
+.ek-poot .tx b{display:block;font-family:'Fraunces',Georgia,serif;font-size:20px;} .ek-poot .tx small{display:block;opacity:.9;font-size:13px;margin-top:2px;} .ek-poot .tx i{display:block;font-style:normal;font-weight:700;font-size:13px;margin-top:8px;}
+.kt-top{display:flex;align-items:center;gap:14px;margin:4px 0 14px;} .kt-top .pt{flex:0 0 64px;height:64px;display:grid;place-items:center;background:var(--surface-2,#EFE9E1);border-radius:50%;}
+.kt-top b{display:block;font-family:'Fraunces',Georgia,serif;font-size:20px;} .kt-top small{display:block;color:var(--ink-soft);}
+.kt-rows{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;}
+.kt-row{display:grid;grid-template-columns:14px 100px 1fr;align-items:center;gap:10px;padding:10px 12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;font-size:14px;} .kt-row span{color:var(--ink-soft);}
+.kd{width:12px;height:12px;border-radius:50%;display:block;background:#B9B0A5;} .kd.g{background:#3F7F55;} .kd.y{background:#E0A100;} .kd.r{background:#B5333B;}
+.kdet{border-top:1px solid var(--line);padding:8px 0;} .kdet summary{cursor:pointer;font-weight:700;padding:8px 0;min-height:36px;}
+.bet-add{display:flex;flex-direction:column;gap:8px;margin-top:10px;} .bet-add .fl2{display:flex;gap:8px;} .bet-add select,.bet-add input{min-height:44px;border:1px solid var(--line);border-radius:10px;padding:0 10px;font:inherit;background:#fff;} .bet-add .fl2 select{flex:1;}
+.chk{display:flex;align-items:center;gap:10px;min-height:44px;font-size:15px;} .chk input{width:20px;height:20px;}
+.gid{border:1px solid var(--line);border-radius:14px;background:var(--surface);margin-bottom:8px;} .gid summary{display:flex;align-items:center;gap:12px;padding:10px 12px;cursor:pointer;list-style:none;min-height:56px;} .gid summary::-webkit-details-marker{display:none;}
+.gid .gp{flex:0 0 38px;display:grid;place-items:center;} .gid .gt b{display:block;font-size:15px;} .gid .gt small{color:var(--ink-soft);font-size:13px;} .gid .gb{padding:0 14px 12px 62px;font-size:14px;} .gid .gb p{margin:6px 0;} .gid .gb small{color:var(--ink-soft);}
+
+/* r9-merker: werklys en oorsig */
+.bn{position:relative;} .bdg{position:absolute;top:2px;right:2px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#B5333B;color:#fff;font-size:11px;font-weight:800;display:grid;place-items:center;line-height:1;}
+.cnt{display:inline-block;min-width:22px;padding:1px 7px;border-radius:11px;background:#B5333B;color:#fff;font-size:12px;font-weight:800;text-align:center;margin-left:6px;}
+.seg{display:flex;gap:0;margin:0 0 12px;border:1.5px solid var(--ink,#33291F);border-radius:12px;overflow:hidden;} .seg button{flex:1;min-height:44px;border:0;background:transparent;font:inherit;font-weight:700;cursor:pointer;color:var(--ink,#33291F);} .seg button.on{background:var(--ink,#33291F);color:#fff;}
 </style>
 </head>
 <body>
@@ -1282,7 +1304,8 @@ function renderNav(){
   if(!nav){ nav = document.createElement('nav'); nav.id = 'bnav'; nav.className = 'bnav'; nav.setAttribute('aria-label', 'Hoofkieslys'); document.body.appendChild(nav); }
   const items = [['tuis','Tuis','tuis'],['kalender','Kalender','kal'],['huis','Huis','huis'],['ek','Ek','ek']];
   if(unlocked) items.push(['hk','HK','hk']);
-  nav.innerHTML = items.map(([k,l,ic])=>`<button class="bn ${page===k?'on':''}" data-act="nav" data-p="${k}" aria-label="${l}" ${page===k?'aria-current="page"':''}>${navIcon(ic)}<span>${l}</span></button>`).join('');
+  const wt = unlocked ? werkTelling().total : 0;
+  nav.innerHTML = items.map(([k,l,ic])=>`<button class="bn ${page===k?'on':''}" data-act="nav" data-p="${k}" aria-label="${l}${k==='hk'&&wt?' ('+wt+' wag)':''}" ${page===k?'aria-current="page"':''}>${navIcon(ic)}<span>${l}</span>${k==='hk'&&wt?`<b class="bdg">${wt>99?'99+':wt}</b>`:''}</button>`).join('');
 }
 function setPage(p){ page = p; render(); window.scrollTo({top:0}); }
 function greetHtml(){
@@ -1332,15 +1355,21 @@ function huisHtml(){
       ${row('infpage','🌿','Ons kultuur en waardes','V.I.E.R., gange en titels','kultuur')}
       ${row('infpage','🎶','Koshuislied','Die woorde van ons lied','lied')}
       ${row('infpage','👥','Ons leiers','Prim, HK, Koshuispa en gang-leiers','mense')}
+      ${row('gidsopen','🐾','Lede van die huis','Wie is wie, en waarvoor jy hulle kan vra','')}
       ${row('infopen','ℹ️','Alle inligting','Instandhouding, gangpunte en meer','')}
     </div>`;
 }
 function ekHtml(){
   if(!me) return `<h2 class="greet">Ek</h2><div class="notice"><p>Teken in of skep 'n profiel.</p><button class="btn btn-primary" data-act="signin" style="width:100%">Teken in</button></div>`;
   const p = myProfile || {};
+  const pt = betPunte(myBet), v = pootVlak(pt);
+  const nb = Object.values(myBet).filter(b=>b && b.st === 'bevestig').length, nw = Object.values(myBet).filter(b=>b && b.st !== 'bevestig').length;
+  const gl = myGids && myGids.gang ? (GANGE.find(x=>x[0]===myGids.gang) || [])[1] : '';
   return `<h2 class="greet">${escapeHtml(fullName(p) || 'Ek')}</h2>
-    <div class="inf-card"><small>Studie</small><b>${escapeHtml(p.studie || '–')}${p.jaar ? ' · ' + escapeHtml(p.jaar) : ''}</b><small style="margin-top:8px">Kamer</small><b>${kamerOf(p) ? escapeHtml(kamerOf(p)) : 'Nog nie gekies nie'}</b></div>
+    <button class="ek-poot" data-act="kontopen"><span class="pt">${pootSvg(v)}</span><span class="tx"><b>${POOT[v].n}</b><small>${pt} punt${pt === 1 ? '' : 'e'} · ${nb} bevestig${nw ? ', ' + nw + ' wag vir HK' : ''}</small><i>Kontrole en betrokkenheid ›</i></span></button>
+    <div class="inf-card"><small>Studie</small><b>${escapeHtml(p.studie || '–')}${p.jaar ? ' · ' + escapeHtml(p.jaar) : ''}</b><small style="margin-top:8px">Kamer</small><b>${kamerOf(p) ? escapeHtml(kamerOf(p)) : 'Nog nie gekies nie'}</b>${gl ? `<small style="margin-top:8px">Gang</small><b>${escapeHtml(gl)}</b>` : ''}</div>
     <div class="inf-list">
+      ${infRow('oormy','🐘','Oor my','Wat ander lede in die ledegids sien','')}
       ${infRow('rstopen','📚','My rooster','Toetse en eksamens','')}
       ${infRow('aansopen','🛏','Oorslaap of kuier','My aansoeke','')}
       ${infRow('meopen','⚙️','My profiel en rekening','Wysig, wagwoord, uitteken','')}
@@ -1438,9 +1467,11 @@ function openHKMenu(){
     <p class="hint" style="margin:-8px 0 14px;">${unlocked ? 'Jy is ingeteken as HK.' : 'Teken in om events en die bord te bestuur.'}</p>
     <div class="menu-list">
       <p class="menu-grp">Elke dag</p>
-      <button class="btn btn-primary" id="hkAddEvent">+ Voeg event by</button>
+      ${unlocked ? `<button class="btn btn-primary" id="hkWerk">📥 Wat wag vir my${werkTelling().total ? ' (' + werkTelling().total + ')' : ''}</button>` : ''}
+      <button class="btn btn-secondary" id="hkAddEvent">+ Voeg event by</button>
       <button class="btn btn-secondary" id="hkBord">📌 Mededelings${pendingPosts().length ? ' ('+pendingPosts().length+' wag vir goedkeuring)' : ''}</button>
       <button class="btn btn-secondary" id="hkOpkoms">📊 Opkoms</button>
+      ${unlocked ? `<button class="btn btn-secondary" id="hkOorsig">📈 Opkoms-oorsig</button>` : ''}
       <button class="btn btn-secondary" id="hkTrad">🔒 Tradisiedokument</button>
       <p class="menu-grp">Mense</p>
       <button class="btn btn-secondary" id="hkPeople">👥 Mense en rolle</button>
@@ -1463,6 +1494,8 @@ function openHKMenu(){
   document.getElementById('hkBulkAdd').addEventListener('click', ()=>{ closeModal(); handleBulkAddClick(); });
   document.getElementById('hkBackup').addEventListener('click', ()=>{ closeModal(); handleBackupClick(); });
   document.getElementById('hkTrad').addEventListener('click', ()=>{ openInfoPage('trad'); });
+  const hw = document.getElementById('hkWerk'); if(hw) hw.addEventListener('click', openWerk);
+  const ho = document.getElementById('hkOorsig'); if(ho) ho.addEventListener('click', ()=>openOorsig('jaar'));
   document.getElementById('hkHist').addEventListener('click', ()=>{ if(!unlocked){ openPinModalThen(openHistoryModal); } else { openHistoryModal(); } });
   document.getElementById('hkOpkoms').addEventListener('click', openOpkomsModal);
   document.getElementById('hkBd').addEventListener('click', ()=>{ if(!unlocked){ openPinModalThen(()=>openBdModal()); } else { openBdModal(); } });
@@ -1473,7 +1506,7 @@ function openHKMenu(){
   document.getElementById('hkGed').addEventListener('click', openGedHK);
   document.getElementById('hkVers').addEventListener('click', ()=>{ if(!unlocked){ openPinModalThen(openVersModal); } else { openVersModal(); } });
   document.getElementById('hkBord').addEventListener('click', ()=>{
-    const go = ()=>{ closeModal(); view = 'bord'; render(); window.scrollTo({top:0}); };
+    const go = ()=>{ closeModal(); page = 'kalender'; view = 'bord'; render(); window.scrollTo({top:0}); };
     if(!unlocked){ openPinModalThen(go); } else { go(); }
   });
   document.getElementById('hkClose').addEventListener('click', closeModal);
@@ -2201,6 +2234,21 @@ document.addEventListener('click', async (ev)=>{
     case 'kamerkaart': location.href = 'kamers.html'; break;
     case 'nav': if(t.dataset.p === 'hk') openHKMenu(); else setPage(t.dataset.p); break;
     case 'signin': openAuthModal('up'); break;
+    case 'oormy': openOorMy(); break;
+    case 'werkopen': openWerk(); break;
+    case 'werkbord': closeModal(); page = 'kalender'; view = 'bord'; render(); window.scrollTo({top:0}); break;
+    case 'betlys': openBetLys(); break;
+    case 'betq': await betQueue(t.dataset.uid, t.dataset.id, t.dataset.v === '1'); openBetLys(); break;
+    case 'oorsig': openOorsig(t.dataset.m); break;
+    case 'oorsave': await saveOorMy(); break;
+    case 'gidsopen': openGids(); break;
+    case 'kontopen': openKontrole(me.uid, ''); break;
+    case 'kontuid': openKontrole(t.dataset.uid, 'person'); break;
+    case 'kontoor': openKontrole(t.dataset.uid, 'oorsig'); break;
+    case 'kontback': if(K && K.back === 'person') openPersonModal(K.uid); else if(K && K.back === 'oorsig') openOorsig('jaar'); else closeModal(); break;
+    case 'betadd': await betAdd(); break;
+    case 'betbev': await betBev(t.dataset.id); break;
+    case 'betdel': await betDel(t.dataset.id); break;
     case 'meopen': openMeModal(); break;
     case 'infopen': openInfoHome(); break;
     case 'infhome': openInfoHome(); break;
@@ -2505,7 +2553,7 @@ function attachAuth(){
   onAuthStateChanged(auth, (user)=>{
     stopListeners(_memberUnsubs); stopListeners(_authUnsubs);
     me = user || null; myRole = {}; myProfile = null; profLoaded = false; roleLoaded = false;
-    rsvp = {}; bord = {}; verjaar = {}; mvdw = null; myOpk = {}; myAans = {}; myGed = {}; myRooster = {}; allAans = {}; allGed = {}; kam = { men: {}, beds: {} }; _staff.hk = false; _staff.prim = false;
+    rsvp = {}; bord = {}; verjaar = {}; mvdw = null; myOpk = {}; myBet = {}; pootAll = {}; myGids = null; myAans = {}; myGed = {}; myRooster = {}; allAans = {}; allGed = {}; allInst = {}; allBet = {}; kam = { men: {}, beds: {} }; _staff.hk = false; _staff.hk2 = false; _staff.prim = false;
     recalcRoles();
     const first = !authReady; authReady = true;
     if(!me){
@@ -2527,6 +2575,9 @@ function attachAuth(){
     _memberUnsubs.push(onValue(ref(db,'mygedagtes/'+uid), s=>{ myGed = s.val() || {}; live(); }, ()=>{}));
     _memberUnsubs.push(onValue(ref(db,'kamers'), s=>{ const v = s.val() || {}; kam = { men: v.men || {}, beds: v.beds || {} }; live(); }, ()=>{}));
     _memberUnsubs.push(onValue(ref(db,'rooster/'+uid), s=>{ myRooster = s.val() || {}; live(); }, ()=>{}));
+    _memberUnsubs.push(onValue(ref(db,'betrokke/'+uid), s=>{ myBet = s.val() || {}; live(); }, ()=>{}));
+    _memberUnsubs.push(onValue(ref(db,'ledegids/'+uid), s=>{ myGids = s.val() || null; live(); }, ()=>{}));
+    _memberUnsubs.push(onValue(ref(db,'poot'), s=>{ pootAll = s.val() || {}; }, ()=>{}));
     invitePending = false;
     if(!loading) render();
   });
@@ -2819,7 +2870,7 @@ async function meAlumnus(){
 async function meDelete(){
   if(!confirm('Verwyder jou rekening en AL jou inligting vir goed? Dit kan nie ontdoen word nie.')) return;
   const uid = me.uid, upd = {};
-  ['profiles','nood','medies','verjaar','kodetoets','instand'].forEach(k=>{ upd[k+'/'+uid] = null; });
+  ['profiles','nood','medies','verjaar','kodetoets','instand','ledegids','betrokke','poot'].forEach(k=>{ upd[k+'/'+uid] = null; });
   Object.keys(rsvp || {}).forEach(eid=>{ if(rsvp[eid] && rsvp[eid][uid]) upd['rsvp/'+eid+'/'+uid] = null; });
   events.forEach(e=>{ upd['opkoms/'+e.id+'/'+uid] = null; });
   upd['aansoeke/'+uid] = null; upd['mygedagtes/'+uid] = null; upd['rooster/'+uid] = null;
@@ -2841,6 +2892,255 @@ function bevestigHtml(){
 async function bevestigOk(){
   try{ await update(ref(db), { ['profiles/'+me.uid+'/bevestig']: new Date().getFullYear(), ['medies/'+me.uid+'/at']: Date.now() }); showToast('Dankie!'); }
   catch(e){ showToast('Kon nie: ' + e.message); }
+}
+
+// ---------- PROFIEL VERDIEP (Rondte 8): pote, Oor my, ledegids, kontrole ----------
+const POOT = [{n:'Klein poot',s:26},{n:'Middelpoot',s:34},{n:'Groot poot',s:44},{n:'Reuse-poot',s:56}];
+const POOT_DREMPEL = [3, 7, 13];
+const BTIPE = { rol:['Rol of pos',3], komitee:['Komitee',2], sport:['Sport',1], kultuur:['Kultuur',1], kamp:['Kamp of projek',1], erkenning:['Erkenning',3], ander:['Ander',1] };
+function pootSvg(v, sz){
+  v = Math.max(0, Math.min(3, v || 0)); const s = sz || POOT[v].s;
+  return `<svg class="poot" width="${s}" height="${s}" viewBox="0 0 48 48" role="img" aria-label="${POOT[v].n}"><ellipse cx="24" cy="31" rx="15" ry="13" fill="currentColor"/><ellipse cx="8" cy="19" rx="3.6" ry="5" transform="rotate(-28 8 19)" fill="currentColor"/><ellipse cx="18" cy="11" rx="3.6" ry="5" transform="rotate(-8 18 11)" fill="currentColor"/><ellipse cx="30" cy="11" rx="3.6" ry="5" transform="rotate(8 30 11)" fill="currentColor"/><ellipse cx="40" cy="19" rx="3.6" ry="5" transform="rotate(28 40 19)" fill="currentColor"/></svg>`;
+}
+function betPunte(bet){ return Object.values(bet || {}).filter(b=>b && b.st === 'bevestig').reduce((a,b)=>a + ((BTIPE[b.tipe] || [0,1])[1]), 0); }
+function pootVlak(p){ return p >= POOT_DREMPEL[2] ? 3 : p >= POOT_DREMPEL[1] ? 2 : p >= POOT_DREMPEL[0] ? 1 : 0; }
+function pootHint(pt, v){ if(v >= 3) return 'Hoogste vlak bereik'; const nx = POOT_DREMPEL[v]; return 'Nog ' + (nx - pt) + ' punt' + (nx - pt === 1 ? '' : 'e') + ' tot ' + POOT[v+1].n; }
+function nuweId(){ return 'b' + Date.now().toString(36) + Math.random().toString(36).slice(2,5); }
+
+// ----- Oor my (wat ander lede sien) -----
+function openOorMy(){
+  const p = myProfile || {}, g = myGids || {};
+  modalBody.innerHTML = `<h3>Oor my</h3>
+    <p class="hint" style="margin:-8px 0 12px">Dit sien ander lede in die ledegids. Jou selfoon en nood-kontakte wys nooit.</p>
+    <label class="chk"><input type="checkbox" id="om-lys" ${(!myGids || myGids.naam) ? 'checked' : ''}> Wys my in die ledegids</label>
+    <div class="field"><label for="om-gang">Gang</label><select id="om-gang"><option value="">Nog nie seker</option>${GANGE.map(([k,n])=>`<option value="${k}" ${g.gang===k?'selected':''}>${n}</option>`).join('')}</select></div>
+    <div class="field"><label for="om-oor">Oor my <small style="color:var(--ink-soft)">(max 140 karakters)</small></label><textarea id="om-oor" maxlength="140" style="min-height:70px">${escapeHtml(g.oor || '')}</textarea></div>
+    <div class="field"><label for="om-hulp">Waarvoor kan jy gevra word?</label><input id="om-hulp" maxlength="100" value="${escapeHtml(g.hulp || '')}" placeholder="bv. Rekeningkunde, kar-hulp, kos"></div>
+    <div class="field"><label for="om-stok">Stokperdjies</label><input id="om-stok" maxlength="100" value="${escapeHtml(g.stok || '')}" placeholder="bv. hardloop, kitaar, braai"></div>
+    <label class="chk"><input type="checkbox" id="om-st" ${g.studie ? 'checked' : ''}> Wys my studierigting${p.studie ? ' (' + escapeHtml(p.studie) + ')' : ''}</label>
+    <label class="chk"><input type="checkbox" id="om-km" ${g.kamer ? 'checked' : ''}> Wys my kamer</label>
+    <div id="omErr" class="error-msg"></div>
+    <div class="modal-actions"><button class="btn btn-secondary" data-act="mclose">Kanselleer</button><button class="btn btn-primary" data-act="oorsave">Stoor</button></div>`;
+  openModal();
+}
+async function saveOorMy(){
+  const p = myProfile; if(!p){ return; }
+  const v = id => document.getElementById(id).value.trim();
+  const upd = {};
+  if(!document.getElementById('om-lys').checked) upd['ledegids/'+me.uid] = null;
+  else {
+    const rec = { naam:p.naam, van:p.van, at:Date.now() };
+    if(p.jaar) rec.jaar = p.jaar;
+    if(v('om-gang')) rec.gang = v('om-gang');
+    if(v('om-oor')) rec.oor = v('om-oor').slice(0,140);
+    if(v('om-hulp')) rec.hulp = v('om-hulp').slice(0,100);
+    if(v('om-stok')) rec.stok = v('om-stok').slice(0,100);
+    if(document.getElementById('om-st').checked && p.studie) rec.studie = String(p.studie).slice(0,80);
+    if(document.getElementById('om-km').checked && kamerOf(p)) rec.kamer = String(kamerOf(p)).slice(0,30);
+    upd['ledegids/'+me.uid] = rec;
+  }
+  try{ await update(ref(db), upd); closeModal(); showToast('Gestoor'); }
+  catch(e){ document.getElementById('omErr').textContent = 'Kon nie stoor nie: ' + e.message; }
+}
+
+// ----- Ledegids -----
+async function openGids(){
+  modalBody.innerHTML = `<h3>Lede van die huis</h3><p class="hint">Laai...</p>`; openModal();
+  let all = {};
+  try{ const s = await get(ref(db, 'ledegids')); all = s.val() || {}; }
+  catch(e){ modalBody.innerHTML = `<h3>Lede van die huis</h3><p class="error-msg">Kon nie laai nie: ${escapeHtml(e.message)}</p><div class="modal-actions"><button class="btn btn-secondary" data-act="mclose">Sluit</button></div>`; return; }
+  const list = Object.entries(all).map(([uid,g])=>({uid, ...g})).sort((a,b)=>(a.van||'').localeCompare(b.van||'') || (a.naam||'').localeCompare(b.naam||''));
+  const gl = k => { const x = GANGE.find(y=>y[0]===k); return x ? x[1] : ''; };
+  const row = g => {
+    const v = g.uid === (me && me.uid) ? pootVlak(betPunte(myBet)) : ((pootAll[g.uid] || {}).v || 0);
+    const meta = [gl(g.gang), g.jaar, g.studie, g.kamer ? 'Kamer ' + g.kamer : ''].filter(Boolean).join(' · ');
+    const q = (g.naam + ' ' + g.van + ' ' + (g.hulp||'') + ' ' + (g.stok||'') + ' ' + gl(g.gang)).toLowerCase();
+    return `<details class="gid" data-q="${escapeHtml(q)}"><summary><span class="gp">${pootSvg(v, 34)}</span><span class="gt"><b>${escapeHtml(g.naam + ' ' + g.van)}</b><small>${escapeHtml(meta || POOT[v].n)}</small></span></summary>
+      <div class="gb">${g.oor ? `<p>${escapeHtml(g.oor)}</p>` : ''}${g.hulp ? `<p><small>Vra my oor</small><br>${escapeHtml(g.hulp)}</p>` : ''}${g.stok ? `<p><small>Stokperdjies</small><br>${escapeHtml(g.stok)}</p>` : ''}<p><small>${POOT[v].n}</small></p></div></details>`;
+  };
+  modalBody.innerHTML = `<h3>Lede van die huis</h3>
+    <p class="hint" style="margin:-8px 0 10px">${list.length} ${list.length === 1 ? 'lid het' : 'lede het'} 'n storie ingevul.</p>
+    <div class="search" style="margin-bottom:8px"><span>🔍</span><input type="search" id="gSearch" placeholder="Soek naam, hulp of stokperdjie..." autocomplete="off"></div>
+    <div id="gList">${list.length ? list.map(row).join('') : `<p class="hint">Niemand nog nie. Vul jou eie in by <b>Ek</b> en <b>Oor my</b>.</p>`}</div>
+    <div class="modal-actions"><button class="btn btn-secondary" data-act="oormy">✏️ My eie storie</button><button class="btn btn-primary" data-act="mclose">Sluit</button></div>`;
+  document.getElementById('gSearch').addEventListener('input', e=>{
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll('#gList [data-q]').forEach(r=>{ r.style.display = (!q || r.dataset.q.includes(q)) ? '' : 'none'; });
+  });
+}
+
+// ----- Kontrole en betrokkenheid -----
+let K = null;
+async function openKontrole(uid, back){
+  K = { uid, self: !!me && uid === me.uid, back: back || '' };
+  modalBody.innerHTML = `<h3>Kontrole</h3><p class="hint">Laai...</p>`; openModal();
+  try{
+    const [ps, bs, gs] = await Promise.all([get(ref(db,'profiles/'+uid)), get(ref(db,'betrokke/'+uid)), get(ref(db,'ledegids/'+uid))]);
+    let nood = null; try{ nood = (await get(ref(db,'nood/'+uid))).val(); }catch(e){}
+    K.p = ps.val() || {}; K.bet = bs.val() || {}; K.g = gs.val() || null; K.nood = nood;
+    const t = todayStr(); const past = events.filter(e=>!e.isCancelled && e.date <= t).sort((a,b)=>a.date.localeCompare(b.date));
+    if(unlocked && !K.self){
+      const os = await get(ref(db,'opkoms')); const all = os.val() || {};
+      const held = past.filter(e=>all[e.id] && Object.keys(all[e.id]).length);
+      K.held = held.length; K.att = held.filter(e=>all[e.id][uid]);
+      K.list = held.slice(-8).reverse().map(e=>({ t:e.title, d:e.date, ok:!!all[e.id][uid] }));
+    } else {
+      const cand = past.slice(-60);
+      const rs = await Promise.all(cand.map(e=>get(ref(db,'opkoms/'+e.id+'/'+uid)).then(s=>s.exists()).catch(()=>false)));
+      K.held = null; K.att = cand.filter((e,i)=>rs[i]);
+      K.list = K.att.slice(-8).reverse().map(e=>({ t:e.title, d:e.date, ok:true }));
+    }
+  }catch(e){
+    modalBody.innerHTML = `<h3>Kontrole</h3><p class="error-msg">Kon nie laai nie: ${escapeHtml(e.message)}</p><div class="modal-actions"><button class="btn btn-secondary" data-act="kontback">Terug</button></div>`; return;
+  }
+  renderKontrole();
+}
+function kProfItems(){
+  const p = K.p || {}, g = K.g || {};
+  return [['Studierigting', !!p.studie], ['Kamer', !!(p.kamer || (K.self ? kamerOf(p) : ''))], ['Nood-kontak', !!(K.nood && K.nood.k1)], ['Gang', !!g.gang], ['Oor my', !!g.oor], ['Waarvoor jy gevra kan word', !!g.hulp], ['Stokperdjies', !!g.stok]];
+}
+function renderKontrole(){
+  const yr = new Date().getFullYear(), p = K.p || {};
+  const items = kProfItems(), done = items.filter(i=>i[1]).length;
+  const betL = Object.entries(K.bet).map(([id,b])=>({id, ...b})).sort((a,b)=>(b.jaar||0)-(a.jaar||0) || (b.at||0)-(a.at||0));
+  const bev = betL.filter(b=>b.st === 'bevestig'), vo = betL.filter(b=>b.st !== 'bevestig');
+  const pt = betPunte(K.bet), v = pootVlak(pt), attN = K.att.length;
+  const attPct = K.held ? Math.round(attN / K.held * 100) : null;
+  const bevOk = (p.bevestig || 0) >= yr;
+  const dot = c => `<i class="kd ${c}" aria-hidden="true"></i>`;
+  const rows = [
+    [attPct === null ? (attN ? 'g' : 'n') : attPct >= 70 ? 'g' : attPct >= 40 ? 'y' : 'r', 'Opkoms', attPct === null ? attN + ' aangeteken' : attN + ' van ' + K.held + ' (' + attPct + '%)'],
+    [bev.length ? 'g' : vo.length ? 'y' : 'n', 'Betrokkenheid', bev.length + ' bevestig' + (vo.length ? ', ' + vo.length + ' wag vir HK' : '')],
+    [done >= 6 ? 'g' : done >= 4 ? 'y' : 'r', 'Profiel', done + ' van ' + items.length + ' ingevul'],
+    [bevOk ? 'g' : 'y', 'Inligting', bevOk ? 'Bevestig vir ' + yr : 'Nog nie bevestig vir ' + yr]
+  ];
+  const tipeLbl = b => (BTIPE[b.tipe] || ['Ander'])[0];
+  const betRow = b => {
+    const hk = unlocked && !K.self;
+    const btns = hk ? (b.st !== 'bevestig' ? `<button class="mini-btn" data-act="betbev" data-id="${b.id}">✓ Bevestig</button>` : '') + `<button class="mini-btn danger" data-act="betdel" data-id="${b.id}" aria-label="Verwyder">✕</button>`
+      : (b.st !== 'bevestig' ? `<button class="mini-btn danger" data-act="betdel" data-id="${b.id}">Haal af</button>` : '');
+    return `<div class="hrow"><div class="t"><b>${escapeHtml(b.titel)}</b><small>${tipeLbl(b)} · ${b.jaar}${b.st === 'bevestig' ? ' · ✓ bevestig' : ' · wag vir HK'}</small></div>${btns}</div>`;
+  };
+  const yrs = [yr, yr - 1, yr - 2, yr + 1];
+  modalBody.innerHTML = `<h3>${escapeHtml(fullName(p) || 'Kontrole')}</h3>
+    <div class="kt-top"><span class="pt">${pootSvg(v)}</span><div><b>${POOT[v].n}</b><small>${pt} punt${pt === 1 ? '' : 'e'} · ${pootHint(pt, v)}</small></div></div>
+    <div class="kt-rows">${rows.map(r=>`<div class="kt-row">${dot(r[0])}<b>${r[1]}</b><span>${escapeHtml(r[2])}</span></div>`).join('')}</div>
+    <details class="kdet"><summary>Opkoms</summary>${K.list.length ? K.list.map(x=>`<div class="hrow"><div class="t"><b>${escapeHtml(x.t)}</b><small>${escapeHtml(x.d)}</small></div><span>${x.ok ? '✓' : '✕'}</span></div>`).join('') : '<p class="hint">Nog geen opkoms aangeteken nie.</p>'}</details>
+    <details class="kdet" open><summary>Betrokkenheid</summary>${betL.length ? betL.map(betRow).join('') : '<p class="hint">Nog niks nie. Voeg hieronder by waarby jy betrokke was.</p>'}
+      <div class="bet-add"><div class="fl2"><select id="bt-tipe" aria-label="Soort">${Object.entries(BTIPE).map(([k,x])=>`<option value="${k}">${x[0]}</option>`).join('')}</select><select id="bt-jaar" aria-label="Jaar">${yrs.map(y=>`<option value="${y}" ${y===yr?'selected':''}>${y}</option>`).join('')}</select></div>
+      <input id="bt-titel" maxlength="60" placeholder="bv. Sportkomitee, Eerstejaarskamp, Gang-leier" aria-label="Waarby">
+      <div id="btErr" class="error-msg"></div>
+      <button class="btn btn-secondary" data-act="betadd" style="width:100%">+ Voeg by${unlocked && !K.self ? ' (bevestig dadelik)' : ' (HK bevestig)'}</button></div></details>
+    <details class="kdet"><summary>Profiel (${done}/${items.length})</summary>${items.map(i=>`<div class="hrow"><div class="t"><b>${i[0]}</b></div><span>${i[1] ? '✓' : '–'}</span></div>`).join('')}</details>
+    <div class="modal-actions"><button class="btn btn-secondary" data-act="kontback">${K.back ? 'Terug' : 'Sluit'}</button></div>`;
+}
+async function betWrite(id, rec){
+  // rec === null: verwyder. Herbereken poot net wanneer HK dit doen.
+  const hk = unlocked && !K.self, upd = {};
+  upd['betrokke/'+K.uid+'/'+id] = rec;
+  const nb = Object.assign({}, K.bet); if(rec) nb[id] = rec; else delete nb[id];
+  if(hk){ const pt = betPunte(nb); upd['poot/'+K.uid] = { p:pt, v:pootVlak(pt), at:Date.now() }; }
+  await update(ref(db), upd);
+  K.bet = nb;
+  if(hk) pootAll[K.uid] = { p:betPunte(nb), v:pootVlak(betPunte(nb)) };
+  renderKontrole();
+}
+async function betAdd(){
+  const titel = document.getElementById('bt-titel').value.trim(), err = document.getElementById('btErr');
+  if(titel.length < 2){ err.textContent = 'Skryf waarby jy betrokke was.'; return; }
+  const rec = { titel, tipe:document.getElementById('bt-tipe').value, jaar:Number(document.getElementById('bt-jaar').value), st:(unlocked && !K.self) ? 'bevestig' : 'voorgestel', at:Date.now() };
+  if(rec.st === 'bevestig') rec.by = myName();
+  try{ await betWrite(nuweId(), rec); showToast(rec.st === 'bevestig' ? 'Bygevoeg' : 'Gestuur. Die HK bevestig dit.'); }
+  catch(e){ err.textContent = 'Kon nie stoor nie: ' + e.message; }
+}
+async function betBev(id){
+  const b = K.bet[id]; if(!b) return;
+  try{ await betWrite(id, Object.assign({}, b, { st:'bevestig', by:myName() })); }catch(e){ showToast('Kon nie: ' + e.message); }
+}
+async function betDel(id){
+  if(!confirm('Haal dit af?')) return;
+  try{ await betWrite(id, null); }catch(e){ showToast('Kon nie: ' + e.message); }
+}
+
+// ---------- HK-WERKLYS EN OPKOMS-OORSIG (Rondte 9) ----------
+let allInst = {}, allBet = {};
+function werkTelling(){
+  const aans = isPrim ? flatAans().filter(a=>a.status === 'wag').length : 0;
+  const ged = Object.values(allGed || {}).filter(g=>g && g.status === 'ontvang').length;
+  let inst = 0; Object.values(allInst || {}).forEach(m=>Object.values(m || {}).forEach(x=>{ if(x && x.status === 'oop') inst++; }));
+  let bet = 0; Object.values(allBet || {}).forEach(m=>Object.values(m || {}).forEach(x=>{ if(x && x.st !== 'bevestig') bet++; }));
+  const bord = pendingPosts().length;
+  return { aans, ged, inst, bet, bord, total: aans + ged + inst + bet + bord };
+}
+function openWerk(){
+  if(!unlocked) return;
+  const w = werkTelling();
+  const row = (n, ic, t, sub, act) => `<button class="inf-row" data-act="${act}"><span class="ic" aria-hidden="true">${ic}</span><span class="tx"><b>${t}${n ? ' <span class="cnt">' + n + '</span>' : ''}</b><small>${sub}</small></span><span class="chev" aria-hidden="true">›</span></button>`;
+  modalBody.innerHTML = `<h3>Wat wag vir my</h3>
+    <p class="hint" style="margin:-8px 0 12px">${w.total ? w.total + (w.total === 1 ? ' ding wag' : ' dinge wag') + ' vir die HK.' : 'Niks wag nie. Mooi so.'}</p>
+    <div class="inf-list">
+      ${row(w.bord, '📌', 'Mededelings', 'Wag vir goedkeuring', 'werkbord')}
+      ${row(w.ged, '💬', 'Gedagtes', 'Nuut van lede', 'gedhk')}
+      ${row(w.inst, '🔧', 'Instandhouding', 'Oop meldings van stukkende goed', 'insthk')}
+      ${row(w.bet, '🐾', 'Betrokkenheid', 'Inskrywings wat jy moet bevestig', 'betlys')}
+      ${isPrim ? row(w.aans, '📨', 'Aansoeke', 'Oorslaap en kuier', 'ansprim') : ''}
+    </div>
+    <div class="modal-actions"><button class="btn btn-secondary" data-act="mclose">Sluit</button></div>`;
+  openModal();
+}
+async function openBetLys(){
+  if(!unlocked) return;
+  try{ const ps = (await get(ref(db,'profiles'))).val() || {}; Object.entries(ps).forEach(([u,pp])=>{ pootNames[u] = fullName(pp); }); }catch(e){}
+  const arr = [];
+  Object.entries(allBet || {}).forEach(([uid,m])=>Object.entries(m || {}).forEach(([id,x])=>{ if(x && x.st !== 'bevestig') arr.push(Object.assign({uid,id}, x)); }));
+  arr.sort((a,b)=>(a.at||0)-(b.at||0));
+  const nm = uid => { const g = pootNames[uid]; return g || 'Lid'; };
+  modalBody.innerHTML = `<button class="link-btn" data-act="werkopen" style="margin:0 0 6px">← Terug</button><h3>Betrokkenheid</h3>` +
+    (arr.length ? arr.map(x=>`<div class="hrow" style="align-items:flex-start"><div class="t"><b>${escapeHtml(x.titel)}</b><small>${escapeHtml(nm(x.uid))} · ${(BTIPE[x.tipe]||['Ander'])[0]} · ${x.jaar}</small></div><div style="display:flex;gap:6px"><button class="mini-btn" data-act="betq" data-uid="${x.uid}" data-id="${x.id}" data-v="1">✓</button><button class="mini-btn danger" data-act="betq" data-uid="${x.uid}" data-id="${x.id}" data-v="0">✕</button></div></div>`).join('') : '<p class="hint">Niks wag nie.</p>') +
+    `<div class="modal-actions"><button class="btn btn-secondary" data-act="mclose">Sluit</button></div>`;
+  openModal();
+}
+let pootNames = {};
+async function betQueue(uid, id, ok){
+  const cur = (allBet[uid] || {})[id]; if(!cur) return;
+  const upd = {}; const nb = Object.assign({}, allBet[uid] || {});
+  if(ok){ nb[id] = Object.assign({}, cur, { st:'bevestig', by:myName() }); upd['betrokke/'+uid+'/'+id] = nb[id]; } else { delete nb[id]; upd['betrokke/'+uid+'/'+id] = null; }
+  const pt = betPunte(nb); upd['poot/'+uid] = { p:pt, v:pootVlak(pt), at:Date.now() };
+  try{ await update(ref(db), upd); showToast(ok ? 'Bevestig' : 'Verwyder'); }catch(e){ showToast('Kon nie: ' + e.message); }
+}
+
+// ----- Opkoms-oorsig per jaargroep en per gang -----
+async function openOorsig(mode){
+  mode = mode || 'jaar';
+  modalBody.innerHTML = `<h3>Opkoms-oorsig</h3><p class="hint">Laai...</p>`; openModal();
+  let ps = {}, os = {}, gs = {};
+  try{
+    const [a, b, c] = await Promise.all([get(ref(db,'profiles')), get(ref(db,'opkoms')), get(ref(db,'ledegids'))]);
+    ps = a.val() || {}; os = b.val() || {}; gs = c.val() || {};
+  }catch(e){ modalBody.innerHTML = `<h3>Opkoms-oorsig</h3><p class="error-msg">Kon nie laai nie: ${escapeHtml(e.message)}</p><div class="modal-actions"><button class="btn btn-secondary" data-act="mclose">Sluit</button></div>`; return; }
+  const t = todayStr();
+  const held = events.filter(e=>!e.isCancelled && e.date <= t && os[e.id] && Object.keys(os[e.id]).length).sort((a,b)=>a.date.localeCompare(b.date)).slice(-8);
+  const mems = Object.entries(ps).filter(([u,p])=>p && p.status !== 'alumnus').map(([uid,p])=>({ uid, p, naam: fullName(p) }));
+  const tab = `<div class="seg" role="tablist"><button class="${mode==='jaar'?'on':''}" data-act="oorsig" data-m="jaar">Jaargroep</button><button class="${mode==='gang'?'on':''}" data-act="oorsig" data-m="gang">Gang</button></div>`;
+  if(!held.length){ modalBody.innerHTML = `<h3>Opkoms-oorsig</h3>${tab}<p class="hint">Nog geen opkoms aangeteken nie. Maak 'n event oop en kies "Begin opkoms".</p><div class="modal-actions"><button class="btn btn-secondary" data-act="mclose">Sluit</button></div>`; return; }
+  const gk = m => mode === 'jaar' ? (m.p.jaar || 'Onbekend') : (((GANGE.find(x=>x[0]===(gs[m.uid]||{}).gang)||[])[1]) || 'Nog nie gekies');
+  const grp = {};
+  mems.forEach(m=>{
+    const k = gk(m); const n = held.filter(e=>os[e.id][m.uid]).length;
+    (grp[k] = grp[k] || { n:0, sum:0 }); grp[k].n++; grp[k].sum += n;
+  });
+  const rows = Object.entries(grp).map(([k,g])=>({ k, n:g.n, pct: Math.round(g.sum / (g.n * held.length) * 100) })).sort((a,b)=>b.pct - a.pct);
+  const miss = held.length >= 3 ? mems.filter(m=>!held.slice(-3).some(e=>os[e.id][m.uid])) : [];
+  miss.forEach(m=>{ pootNames[m.uid] = m.naam; });
+  mems.forEach(m=>{ pootNames[m.uid] = m.naam; });
+  const col = p => p >= 70 ? '#3F7F55' : p >= 40 ? '#E0A100' : '#B5333B';
+  modalBody.innerHTML = `<h3>Opkoms-oorsig</h3>
+    <p class="hint" style="margin:-8px 0 10px">Laaste ${held.length} byeenkoms${held.length === 1 ? '' : 'te'} met opkoms, ${mems.length} lede.</p>
+    ${tab}
+    <div class="pt-list">${rows.map(r=>`<div class="pt-row"><div class="pt-bar" style="flex:1"><i style="width:${Math.max(4,r.pct)}%;background:${col(r.pct)}"></i><span>${escapeHtml(r.k)} · ${r.n}</span></div><b style="min-width:42px;text-align:right">${r.pct}%</b></div>`).join('')}</div>
+    <div class="sec-h">Het die laaste 3 gemis${miss.length ? ' (' + miss.length + ')' : ''}</div>
+    ${held.length < 3 ? '<p class="hint">Eers na 3 byeenkomste met opkoms.</p>' : miss.length ? miss.slice(0,25).map(m=>`<button class="hrow" data-act="kontoor" data-uid="${m.uid}" style="cursor:pointer;width:100%;text-align:left;background:none;border:0;font:inherit"><div class="t"><b>${escapeHtml(m.naam)}</b><small>${escapeHtml(m.p.jaar||'')}${m.p.kamer ? ' · kamer ' + escapeHtml(m.p.kamer) : ''}</small></div><span>›</span></button>`).join('') + (miss.length > 25 ? `<p class="hint">En ${miss.length - 25} meer.</p>` : '') : '<p class="hint">Almal was ten minste een keer daar. Mooi so.</p>'}
+    <div class="modal-actions"><button class="btn btn-secondary" data-act="mclose">Sluit</button></div>`;
 }
 
 // ---------- HK: MENSE EN ROLLE ----------
@@ -2903,6 +3203,7 @@ async function openPersonModal(uid){
     <p class="hint" style="margin:-8px 0 8px">${kamerOf(p) ? 'Kamer ' + escapeHtml(kamerOf(p)) + ' · ' : ''}${escapeHtml(p.studie||'')}${p.jaar ? ' · ' + escapeHtml(p.jaar) : ''}${p.status==='alumnus' ? ' · alumnus' : ''}</p>
     <div class="hrow"><div class="t"><b>Selfoon</b></div>${tel(p.tel)}</div>
     <div class="sec-h">Nood-kontakte</div>${kont || '<p class="hint">Geen nie (alumnus of nog nie ingevul).</p>'}
+    <button class="btn btn-secondary" data-act="kontuid" data-uid="${uid}" style="width:100%;margin-top:10px">📊 Kontrole en betrokkenheid</button>
     <div class="sec-h">Mediese lêer</div>
     <div id="medBox"><button class="btn btn-secondary" data-act="pmed" data-uid="${uid}" style="width:100%">${isPrim ? '🩺 Maak mediese lêer oop' : '🚨 Noodgeval: maak mediese lêer oop'}</button>
     ${isPrim ? '' : '<p class="hint">Dit word gelog en die Prim sien dit.</p>'}</div>
@@ -3347,12 +3648,13 @@ readOpkHash(); loadWx();
 const PING_URL = '';   // Google Apps Script-skakel (sien ping-skrip.gs). Los leeg as jy dit nog nie opgestel het nie.
 const PING_TOKEN = '';
 let myAans = {}, myGed = {}, myRooster = {}, allAans = {}, allGed = {};
+let myBet = {}, pootAll = {}, myGids = null;
 let kam = { men: {}, beds: {} };
 function nrm(s){ return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, ' ').trim(); }
 function kamManOf(p){ if(!p) return null; const n = nrm(fullName(p)); const men = kam.men || {}; const id = Object.keys(men).find(k=>men[k] && nrm(men[k].name) === n); return id ? { id, ...men[id] } : null; }
 function kamerNrFor(p){ const m = kamManOf(p); if(!m) return ''; const bk = Object.keys(kam.beds || {}).find(k=>kam.beds[k] && kam.beds[k].manId === m.id); return bk ? bk.split('_')[0] : ''; }
 function kamerOf(p){ return kamerNrFor(p) || (p && p.kamer) || ''; }
-const _staff = { hk: false, prim: false };
+const _staff = { hk: false, hk2: false, prim: false };
 const AANS_ST = { wag: '⏳ Wag vir die Prim', goedgekeur: '✅ Goedgekeur', afgekeur: '❌ Afgekeur' };
 const GED_ST = { ontvang: '📥 Ontvang', besig: '🛠 Besig', opgelos: '✅ Opgelos' };
 const GED_SOORT = ['Gedagte', 'Klagte', 'Voorstel', 'Kompliment'];
@@ -3361,6 +3663,7 @@ function liveR(){ if(!loading) render(); }
 function syncStaff(){
   if(!me) return;
   if(unlocked && !_staff.hk){ _staff.hk = true; _memberUnsubs.push(onValue(ref(db, 'gedagtes'), s=>{ allGed = s.val() || {}; liveR(); }, ()=>{ _staff.hk = false; })); }
+  if(unlocked && !_staff.hk2){ _staff.hk2 = true; _memberUnsubs.push(onValue(ref(db, 'instand'), s=>{ allInst = s.val() || {}; liveR(); }, ()=>{ _staff.hk2 = false; })); _memberUnsubs.push(onValue(ref(db, 'betrokke'), s=>{ allBet = s.val() || {}; liveR(); }, ()=>{ _staff.hk2 = false; })); }
   if(isPrim && !_staff.prim){ _staff.prim = true; _memberUnsubs.push(onValue(ref(db, 'aansoeke'), s=>{ allAans = s.val() || {}; liveR(); }, ()=>{ _staff.prim = false; })); }
 }
 function ping(kind){
