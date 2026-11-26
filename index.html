@@ -20,11 +20,11 @@
   --bg:#CBC3BA;
   --surface:#FBF9F6;
   --ink:#33291F;
-  --ink-soft:#6E6459;
+  --ink-soft:#544A41;
   --line:#B7ACA0;
-  --accent:#A86E53;
-  --accent-dark:#8A5640;
-  --sage:#758378;
+  --accent:#9A5D42;
+  --accent-dark:#6F4331;
+  --sage:#566558;
   --danger:#B84A3E;
   --radius:14px;
   --radius-sm:10px;
@@ -227,7 +227,7 @@ main{padding:14px 14px calc(96px + env(safe-area-inset-bottom));}
 .error-msg{color:var(--danger); font-size:13px; margin-top:6px;}
 .hint{font-size:12.5px; color:var(--ink-soft); margin-top:5px;}
 .menu-list{display:flex; flex-direction:column; gap:10px;}
-.menu-grp{margin:10px 2px 0;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--accent-dark,#8A5640);}
+.menu-grp{margin:10px 2px 0;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--accent-dark,#6F4331);}
 .menu-grp:first-child{margin-top:0;}
 
 .notice{
@@ -264,7 +264,7 @@ main{padding:14px 14px calc(96px + env(safe-area-inset-bottom));}
 .verse blockquote{margin:0;font-family:'Fraunces',Georgia,serif;font-size:17px;line-height:1.5;font-weight:600;color:var(--ink);}
 .verse figcaption{margin-top:7px;font-size:12.5px;color:var(--ink-soft);font-weight:600;}
 .vtabs{display:flex;gap:4px;margin:0 0 12px;background:rgba(0,0,0,.08);padding:4px;border-radius:12px;}
-.vtab{flex:1;min-height:42px;border:0;border-radius:9px;background:transparent;font-family:inherit;font-weight:700;font-size:13.5px;color:var(--ink-soft);cursor:pointer;position:relative;}
+.vtab{flex:1;min-height:42px;border:0;border-radius:9px;background:transparent;font-family:inherit;font-weight:700;font-size:13.5px;color:var(--ink);cursor:pointer;position:relative;}
 .vtab.active{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.14);}
 .vtab em{font-style:normal;background:var(--accent);color:#fff;border-radius:99px;font-size:10.5px;padding:1px 6px;margin-left:4px;}
 .filterbar{display:flex;gap:8px;align-items:center;margin:0 -14px 10px;padding:0 14px;}
@@ -301,7 +301,7 @@ main{padding:14px 14px calc(96px + env(safe-area-inset-bottom));}
 .wk-top h2{font-family:'Archivo',system-ui,sans-serif;font-variation-settings:'wdth' 62;font-stretch:62%;font-weight:900;font-size:68px;line-height:.82;margin:0;text-transform:uppercase;}
 .wk-sub{font-size:13px;color:var(--ink-soft);font-weight:600;margin-top:4px;}
 .wband{display:flex;gap:12px;align-items:center;padding:11px 14px;border-radius:12px;margin-bottom:6px;color:#F6F3EE;min-height:76px;}
-.wband.b1{background:#A86E53;} .wband.b2{background:#8A5640;} .wband.bz{background:rgba(51,41,31,.12);color:var(--ink-soft);}
+.wband.b1{background:#9A5D42;} .wband.b2{background:#6F4331;} .wband.bz{background:rgba(51,41,31,.12);color:var(--ink-soft);}
 .wband .dc{width:56px;flex-shrink:0;text-align:center;}
 .wband .dn{font-family:'Archivo',system-ui,sans-serif;font-variation-settings:'wdth' 62;font-stretch:62%;font-weight:900;font-size:56px;line-height:.9;}
 .wband .dw{font-size:10.5px;font-weight:700;letter-spacing:.04em;opacity:.9;margin-top:2px;}
@@ -533,10 +533,10 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 .st{display:block;font-weight:700;margin-top:3px;} .st-wag{color:#8a6a1f;} .st-goedgekeur{color:var(--groen-diep);} .st-afgekeur{color:#9B3B2F;}
 
 /* toeganklikheid: fokus, kontras, tikgrootte */
-:focus-visible{outline:3px solid var(--accent-dark,#8A5640);outline-offset:2px;}
+:focus-visible{outline:3px solid var(--accent-dark,#6F4331);outline-offset:2px;}
 .live-badge{color:var(--ink);}
 .ics-btn{background:var(--surface);color:#4F5D54;}
-#shareWeekBtn{background:var(--surface);color:#8A5640;}
+#shareWeekBtn{background:var(--surface);color:#6F4331;}
 .link-btn,.menu-btn,.vtab,.a2hs .x{min-height:44px;}
 .menu-btn,.a2hs .x{min-width:44px;}
 .skip{position:absolute;left:-999px;top:8px;background:#fff;color:#000;padding:10px 14px;border-radius:8px;z-index:300;}
@@ -547,7 +547,7 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 .auth-steps li{flex:1;display:flex;gap:8px;align-items:flex-start;padding:8px;border:1px solid var(--line);border-radius:12px;font-size:13px;font-weight:700;line-height:1.2;color:var(--ink-soft);}
 .auth-steps li.on{border-color:var(--accent);background:rgba(168,110,83,.1);color:var(--ink);}
 .auth-steps b,.onb-steps b{flex:0 0 22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;background:var(--line);color:var(--ink);}
-.auth-steps li.on b,.onb-steps li.on b{background:var(--accent-dark,#8A5640);color:#fff;}
+.auth-steps li.on b,.onb-steps li.on b{background:var(--accent-dark,#6F4331);color:#fff;}
 .auth-steps small{display:block;font-weight:500;font-size:11.5px;margin-top:2px;color:var(--ink-soft);}
 .onb-steps li{flex:1;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:var(--ink-soft);}
 .onb-steps li.on{color:var(--ink);} .onb-steps li.done b{background:var(--sage,#758378);color:#fff;}
@@ -563,8 +563,8 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 .inf-card b{display:block;margin-bottom:4px;} .inf-card p{margin:0;line-height:1.5;font-size:14.5px;} .inf-card ul{margin:4px 0 0;padding-left:18px;line-height:1.55;font-size:14.5px;} .inf-card small{display:block;color:var(--ink-soft);}
 .inf-people{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .inf-person{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 10px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;}
-.inf-person .av{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:20px;background:rgba(168,110,83,.2);color:var(--accent-dark,#8A5640);margin-bottom:6px;}
-.inf-person small{color:var(--ink-soft);} .inf-person a{margin-top:6px;font-weight:700;color:var(--accent-dark,#8A5640);}
+.inf-person .av{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:20px;background:rgba(168,110,83,.2);color:var(--accent-dark,#6F4331);margin-bottom:6px;}
+.inf-person small{color:var(--ink-soft);} .inf-person a{margin-top:6px;font-weight:700;color:var(--accent-dark,#6F4331);}
 .pt-list{display:flex;flex-direction:column;gap:10px;margin:6px 0 12px;}
 .pt-row{display:flex;align-items:center;gap:10px;} .pt-pos{width:24px;font-weight:800;font-size:20px;color:var(--ink-soft);}
 .pt-bar{position:relative;flex:1;height:38px;background:var(--line);border-radius:10px;overflow:hidden;}
@@ -574,11 +574,11 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 .quick{grid-template-columns:1fr 1fr;}
 
 .evfs-hkcard{margin-top:20px;padding:14px;background:var(--surface);border-radius:16px;box-shadow:var(--shadow);}
-.evfs-hkcard h4{margin:0 0 10px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-dark,#8A5640);}
+.evfs-hkcard h4{margin:0 0 10px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-dark,#6F4331);}
 .hkgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
 .hkb{min-height:56px;display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:12px;border:1px solid var(--line);background:#fff;color:var(--ink);font:inherit;font-weight:700;font-size:14px;text-align:left;cursor:pointer;}
 .hkb .i{flex:0 0 26px;font-size:20px;text-align:center;}
-.hkb.pri{grid-column:1/-1;background:var(--accent-dark,#8A5640);border-color:transparent;color:#fff;}
+.hkb.pri{grid-column:1/-1;background:var(--accent-dark,#6F4331);border-color:transparent;color:#fff;}
 .hkb.danger{color:#A6463A;border-color:rgba(166,70,58,.5);}
 .evfs-meta,.evfs-pills{gap:8px;}
 .hkgrid .hkb:last-child:nth-child(odd){grid-column:1/-1;}
@@ -586,7 +586,7 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 /* r6-merker */
 .vier{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;}
 .vier span{display:flex;align-items:center;gap:10px;font-weight:700;font-size:14px;}
-.vier i{flex:0 0 34px;height:34px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-family:'Archivo',system-ui,sans-serif;font-weight:900;font-size:18px;background:var(--accent-dark,#8A5640);color:#fff;}
+.vier i{flex:0 0 34px;height:34px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-family:'Archivo',system-ui,sans-serif;font-weight:900;font-size:18px;background:var(--accent-dark,#6F4331);color:#fff;}
 .kleure{display:flex;gap:8px;margin:6px 0;} .kleure i{width:44px;height:44px;border-radius:12px;border:1px solid rgba(0,0,0,.12);}
 .inf-card.lied p{font-family:'Fraunces',Georgia,serif;font-size:16px;line-height:1.7;}
 details.trad{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:0 14px;margin:0 0 8px;}
@@ -596,6 +596,7 @@ details.trad[open] summary::after{content:'–';} details.trad p{margin:0 0 14px
 
 /* r7-merker: navigasiebalk en tuisblad */
 body{padding-bottom:calc(96px + env(safe-area-inset-bottom));}
+html,body{max-width:100%;overflow-x:clip;} .app{min-width:0;} .app *{overflow-wrap:break-word;}
 .bnav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom));z-index:60;display:flex;gap:4px;padding:6px;background:#2B231B;border-radius:999px;box-shadow:0 10px 30px -8px rgba(0,0,0,.55);max-width:calc(100vw - 24px);}
 .bn{display:flex;align-items:center;justify-content:center;gap:6px;height:52px;min-width:52px;padding:0 14px;border:0;border-radius:999px;background:transparent;color:#F6F3EE;font:inherit;font-weight:700;font-size:13.5px;cursor:pointer;transition:background .18s,color .18s;}
 .bn svg{width:24px;height:24px;flex:0 0 24px;}
@@ -604,9 +605,9 @@ body{padding-bottom:calc(96px + env(safe-area-inset-bottom));}
 .bn:focus-visible{outline:3px solid #fff;outline-offset:-3px;}
 .back-today-btn{bottom:calc(92px + env(safe-area-inset-bottom));}
 .greet{font-family:'Fraunces',Georgia,serif;font-size:28px;line-height:1.15;margin:18px 2px 14px;color:var(--ink);}
-.next-card{display:block;width:100%;text-align:left;border:0;cursor:pointer;font:inherit;color:#fff;background:var(--accent-dark,#8A5640);border-radius:20px;padding:20px 20px 18px;box-shadow:var(--shadow);position:relative;}
+.next-card{display:block;width:100%;text-align:left;border:0;cursor:pointer;font:inherit;color:#fff;background:var(--accent-dark,#6F4331);border-radius:20px;padding:20px 20px 18px;box-shadow:var(--shadow);position:relative;}
 .next-card small{display:block;font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.85;font-weight:700;}
-.next-card b{display:block;font-family:'Archivo',system-ui,sans-serif;font-variation-settings:'wdth' 62;font-stretch:62%;font-weight:900;font-size:34px;line-height:1;text-transform:uppercase;margin:8px 0 6px;}
+.next-card b{display:block;font-family:'Archivo',system-ui,sans-serif;font-variation-settings:'wdth' 62;font-stretch:62%;font-weight:900;font-size:clamp(24px,8.4vw,34px);line-height:1.05;overflow-wrap:anywhere;hyphens:auto;min-width:0;text-transform:uppercase;margin:8px 0 6px;}
 .next-card span{display:block;font-size:15px;opacity:.95;}
 .next-card .cd{display:inline-block;margin-top:12px;font-style:normal;font-weight:800;font-size:14px;background:rgba(255,255,255,.2);padding:6px 12px;border-radius:999px;}
 .next-card.empty{background:var(--surface);color:var(--ink);} .next-card.empty b{font-size:22px;}
@@ -618,8 +619,8 @@ body{padding-bottom:calc(96px + env(safe-area-inset-bottom));}
 .tuis-acts{display:flex;flex-direction:column;gap:10px;margin-top:18px;} .tuis-acts .btn{min-height:54px;font-size:16px;}
 
 /* r8-merker: pote, kontrole, ledegids */
-.poot{color:var(--accent-dark,#8A5640);display:block;}
-.ek-poot{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:0;cursor:pointer;font:inherit;color:#fff;background:var(--accent-dark,#8A5640);border-radius:20px;padding:16px 18px;margin-bottom:12px;box-shadow:var(--shadow);}
+.poot{color:var(--accent-dark,#6F4331);display:block;}
+.ek-poot{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:0;cursor:pointer;font:inherit;color:#fff;background:var(--accent-dark,#6F4331);border-radius:20px;padding:16px 18px;margin-bottom:12px;box-shadow:var(--shadow);}
 .ek-poot .pt{flex:0 0 64px;height:64px;display:grid;place-items:center;background:rgba(255,255,255,.16);border-radius:50%;}
 .ek-poot .poot{color:#fff;}
 .ek-poot .tx b{display:block;font-family:'Fraunces',Georgia,serif;font-size:20px;} .ek-poot .tx small{display:block;opacity:.9;font-size:13px;margin-top:2px;} .ek-poot .tx i{display:block;font-style:normal;font-weight:700;font-size:13px;margin-top:8px;}
@@ -638,6 +639,9 @@ body{padding-bottom:calc(96px + env(safe-area-inset-bottom));}
 .bn{position:relative;} .bdg{position:absolute;top:2px;right:2px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#B5333B;color:#fff;font-size:11px;font-weight:800;display:grid;place-items:center;line-height:1;}
 .cnt{display:inline-block;min-width:22px;padding:1px 7px;border-radius:11px;background:#B5333B;color:#fff;font-size:12px;font-weight:800;text-align:center;margin-left:6px;}
 .seg{display:flex;gap:0;margin:0 0 12px;border:1.5px solid var(--ink,#33291F);border-radius:12px;overflow:hidden;} .seg button{flex:1;min-height:44px;border:0;background:transparent;font:inherit;font-weight:700;cursor:pointer;color:var(--ink,#33291F);} .seg button.on{background:var(--ink,#33291F);color:#fff;}
+
+/* r10-merker */
+.mini-btn.on{background:var(--ink,#33291F);color:#fff;}
 </style>
 </head>
 <body>
@@ -733,9 +737,9 @@ let mCur = null, selDay = null, weekOffset = 0, deepHandled = false;
 
 const CATEGORIES = {
   akademies: { label:'Akademies', hex:'#33291F' },
-  hennops:   { label:'Huis Hennops', hex:'#A86E53' },
-  ander:     { label:'Mede Koshuise', hex:'#758378' },
-  kampus:    { label:'Akademia', hex:'#8C8073' }
+  hennops:   { label:'Huis Hennops', hex:'#9A5D42' },
+  ander:     { label:'Mede Koshuise', hex:'#566558' },
+  kampus:    { label:'Akademia', hex:'#6B6055' }
 };
 
 const PORTFOLIOS = {
@@ -1362,11 +1366,11 @@ function huisHtml(){
 function ekHtml(){
   if(!me) return `<h2 class="greet">Ek</h2><div class="notice"><p>Teken in of skep 'n profiel.</p><button class="btn btn-primary" data-act="signin" style="width:100%">Teken in</button></div>`;
   const p = myProfile || {};
-  const pt = betPunte(myBet), v = pootVlak(pt);
+  const pt = betPunte(myBet), pv = pootVan(me.uid, fullName(p));
   const nb = Object.values(myBet).filter(b=>b && b.st === 'bevestig').length, nw = Object.values(myBet).filter(b=>b && b.st !== 'bevestig').length;
   const gl = myGids && myGids.gang ? (GANGE.find(x=>x[0]===myGids.gang) || [])[1] : '';
   return `<h2 class="greet">${escapeHtml(fullName(p) || 'Ek')}</h2>
-    <button class="ek-poot" data-act="kontopen"><span class="pt">${pootSvg(v)}</span><span class="tx"><b>${POOT[v].n}</b><small>${pt} punt${pt === 1 ? '' : 'e'} · ${nb} bevestig${nw ? ', ' + nw + ' wag vir HK' : ''}</small><i>Kontrole en betrokkenheid ›</i></span></button>
+    <button class="ek-poot" data-act="kontopen"><span class="pt">${pootSvg(pv.t)}</span><span class="tx"><b>${POOT[pv.t].n}${pv.r ? ' · ' + ROL[pv.r] : ''}</b><small>${sporeTxt(pt)} gelaat · ${nb} bevestig${nw ? ', ' + nw + ' wag vir HK' : ''}</small><i>Kontrole en betrokkenheid ›</i></span></button>
     <div class="inf-card"><small>Studie</small><b>${escapeHtml(p.studie || '–')}${p.jaar ? ' · ' + escapeHtml(p.jaar) : ''}</b><small style="margin-top:8px">Kamer</small><b>${kamerOf(p) ? escapeHtml(kamerOf(p)) : 'Nog nie gekies nie'}</b>${gl ? `<small style="margin-top:8px">Gang</small><b>${escapeHtml(gl)}</b>` : ''}</div>
     <div class="inf-list">
       ${infRow('oormy','🐘','Oor my','Wat ander lede in die ledegids sien','')}
@@ -1475,8 +1479,9 @@ function openHKMenu(){
       <button class="btn btn-secondary" id="hkTrad">🔒 Tradisiedokument</button>
       <p class="menu-grp">Mense</p>
       <button class="btn btn-secondary" id="hkPeople">👥 Mense en rolle</button>
+      <button class="btn btn-secondary" id="hkNaamlys">🐾 Naamlys (poot-titels)</button>
       <button class="btn btn-secondary" id="hkKamer">🏠 Kamerkaart</button>
-      ${isPrim ? `<button class="btn btn-secondary" id="hkAans">📨 Aansoeke</button>` : ''}
+      ${isAans ? `<button class="btn btn-secondary" id="hkAans">📨 Aansoeke</button>` : ''}
       <button class="btn btn-secondary" id="hkGed">💬 Gedagtes</button>
       <button class="btn btn-secondary" id="hkBd">🎂 Verjaarsdae</button>
       <p class="menu-grp">Meer</p>
@@ -1494,6 +1499,7 @@ function openHKMenu(){
   document.getElementById('hkBulkAdd').addEventListener('click', ()=>{ closeModal(); handleBulkAddClick(); });
   document.getElementById('hkBackup').addEventListener('click', ()=>{ closeModal(); handleBackupClick(); });
   document.getElementById('hkTrad').addEventListener('click', ()=>{ openInfoPage('trad'); });
+  document.getElementById('hkNaamlys').addEventListener('click', openNaamlys);
   const hw = document.getElementById('hkWerk'); if(hw) hw.addEventListener('click', openWerk);
   const ho = document.getElementById('hkOorsig'); if(ho) ho.addEventListener('click', ()=>openOorsig('jaar'));
   document.getElementById('hkHist').addEventListener('click', ()=>{ if(!unlocked){ openPinModalThen(openHistoryModal); } else { openHistoryModal(); } });
@@ -2057,7 +2063,7 @@ async function makeWeekPoster(){
   w.days.forEach((day,i)=>{
     const y = top + i*bandH;
     const has = day.evs.length > 0 || day.bd.length > 0;
-    x.fillStyle = has ? (i%2 ? '#8A5640' : '#A86E53') : '#B7ACA0';
+    x.fillStyle = has ? (i%2 ? '#6F4331' : '#9A5D42') : '#B7ACA0';
     x.fillRect(0, y, W, bandH - gap);
     const fg = has ? '#F6F3EE' : '#4A4036';
     x.fillStyle = fg;
@@ -2235,6 +2241,9 @@ document.addEventListener('click', async (ev)=>{
     case 'nav': if(t.dataset.p === 'hk') openHKMenu(); else setPage(t.dataset.p); break;
     case 'signin': openAuthModal('up'); break;
     case 'oormy': openOorMy(); break;
+    case 'pootset': await pootSet(t.dataset.uid, t.dataset.t); break;
+    case 'nlprev': nlPreview(); break;
+    case 'nlsave': await nlSave(); break;
     case 'werkopen': openWerk(); break;
     case 'werkbord': closeModal(); page = 'kalender'; view = 'bord'; render(); window.scrollTo({top:0}); break;
     case 'betlys': openBetLys(); break;
@@ -2522,7 +2531,7 @@ function afterRender(){
 try{ const li = document.querySelector('.brand img'); if(li) document.documentElement.style.setProperty('--logo', `url("${li.src}")`); }catch(e){}
 // ---------- LEDE, PROFIEL EN ROLLE ----------
 let me = null, myRole = {}, myProfile = null, profLoaded = false, roleLoaded = false, authReady = false;
-let isPrim = false, isStelsel = false;
+let isPrim = false, isStelsel = false, isOnder = false, isAans = false;
 let _memberUnsubs = [], _authUnsubs = [];
 let W = null;
 const VERWAG = 113;
@@ -2536,9 +2545,9 @@ let invitePending = false;
 
 function recalcRoles(){
   const r = myRole || {};
-  isStelsel = !!r.stelsel; isPrim = !!(r.prim || r.stelsel);
+  isStelsel = !!r.stelsel; isPrim = !!(r.prim || r.stelsel); isOnder = !!r.onderprim; isAans = isPrim || isOnder;
   const was = unlocked;
-  unlocked = !!(r.hk || r.prim || r.stelsel);
+  unlocked = !!(r.hk || r.prim || r.stelsel || r.onderprim);
   if(was !== unlocked) confirmingId = null;
 }
 function fullName(p){ return p ? `${p.naam||''} ${p.van||''}`.trim() : ''; }
@@ -2553,7 +2562,7 @@ function attachAuth(){
   onAuthStateChanged(auth, (user)=>{
     stopListeners(_memberUnsubs); stopListeners(_authUnsubs);
     me = user || null; myRole = {}; myProfile = null; profLoaded = false; roleLoaded = false;
-    rsvp = {}; bord = {}; verjaar = {}; mvdw = null; myOpk = {}; myBet = {}; pootAll = {}; myGids = null; myAans = {}; myGed = {}; myRooster = {}; allAans = {}; allGed = {}; allInst = {}; allBet = {}; kam = { men: {}, beds: {} }; _staff.hk = false; _staff.hk2 = false; _staff.prim = false;
+    rsvp = {}; bord = {}; verjaar = {}; mvdw = null; myOpk = {}; myBet = {}; pootAll = {}; nl = {}; myGids = null; myAans = {}; myGed = {}; myRooster = {}; allAans = {}; allGed = {}; allInst = {}; allBet = {}; kam = { men: {}, beds: {} }; _staff.hk = false; _staff.hk2 = false; _staff.prim = false;
     recalcRoles();
     const first = !authReady; authReady = true;
     if(!me){
@@ -2577,7 +2586,8 @@ function attachAuth(){
     _memberUnsubs.push(onValue(ref(db,'rooster/'+uid), s=>{ myRooster = s.val() || {}; live(); }, ()=>{}));
     _memberUnsubs.push(onValue(ref(db,'betrokke/'+uid), s=>{ myBet = s.val() || {}; live(); }, ()=>{}));
     _memberUnsubs.push(onValue(ref(db,'ledegids/'+uid), s=>{ myGids = s.val() || null; live(); }, ()=>{}));
-    _memberUnsubs.push(onValue(ref(db,'poot'), s=>{ pootAll = s.val() || {}; }, ()=>{}));
+    _memberUnsubs.push(onValue(ref(db,'poot'), s=>{ pootAll = s.val() || {}; live(); }, ()=>{}));
+    _memberUnsubs.push(onValue(ref(db,'naamlys'), s=>{ nl = s.val() || {}; live(); }, ()=>{}));
     invitePending = false;
     if(!loading) render();
   });
@@ -2845,7 +2855,7 @@ onbEl.addEventListener('click', async (ev)=>{
 // ---------- "EK": EIE PROFIEL ----------
 function openMeModal(){
   const p = myProfile;
-  const badges = [isStelsel?'Stelsel':'', isPrim?'Prim':'', unlocked?'HK':''].filter(Boolean).map(b=>`<span class="meta-pill port">${b}</span>`).join(' ');
+  const badges = [isStelsel?'Stelsel':'', isPrim?'Prim':'', isOnder?'Onderprim':'', unlocked?'HK':''].filter(Boolean).map(b=>`<span class="meta-pill port">${b}</span>`).join(' ');
   modalBody.innerHTML = `<h3>${escapeHtml(fullName(p) || 'Ek')}</h3>
     <p class="hint" style="margin:-8px 0 12px">${escapeHtml(me.email||'')}${p && kamerOf(p) ? ' · kamer ' + escapeHtml(kamerOf(p)) : ''}</p>
     ${badges ? `<div style="margin-bottom:12px">${badges}</div>` : ''}
@@ -2895,16 +2905,26 @@ async function bevestigOk(){
 }
 
 // ---------- PROFIEL VERDIEP (Rondte 8): pote, Oor my, ledegids, kontrole ----------
-const POOT = [{n:'Klein poot',s:26},{n:'Middelpoot',s:34},{n:'Groot poot',s:44},{n:'Reuse-poot',s:56}];
-const POOT_DREMPEL = [3, 7, 13];
+// ---------- POOT-TITELS (Rondte 10): Klein / Groot / Ou Poot volgens inblywende jaar ----------
+const POOT = { klein:{n:'Klein Poot', s:30, i:0}, groot:{n:'Groot Poot', s:42, i:1}, ou:{n:'Ou Poot', s:56, i:2} };
+const ROL = { hk:'Huiskomitee', prim:'Prim', geelbek:'Geelbek' };
+const ROL_TXT = { hk:'HK', prim:'Prim', geelbek:'Geelbek' };
 const BTIPE = { rol:['Rol of pos',3], komitee:['Komitee',2], sport:['Sport',1], kultuur:['Kultuur',1], kamp:['Kamp of projek',1], erkenning:['Erkenning',3], ander:['Ander',1] };
-function pootSvg(v, sz){
-  v = Math.max(0, Math.min(3, v || 0)); const s = sz || POOT[v].s;
-  return `<svg class="poot" width="${s}" height="${s}" viewBox="0 0 48 48" role="img" aria-label="${POOT[v].n}"><ellipse cx="24" cy="31" rx="15" ry="13" fill="currentColor"/><ellipse cx="8" cy="19" rx="3.6" ry="5" transform="rotate(-28 8 19)" fill="currentColor"/><ellipse cx="18" cy="11" rx="3.6" ry="5" transform="rotate(-8 18 11)" fill="currentColor"/><ellipse cx="30" cy="11" rx="3.6" ry="5" transform="rotate(8 30 11)" fill="currentColor"/><ellipse cx="40" cy="19" rx="3.6" ry="5" transform="rotate(28 40 19)" fill="currentColor"/></svg>`;
+let nl = {};
+function nlKey(naam){ return nrm(naam).replace(/ /g, ''); }
+function pootSvg(t, sz){
+  const x = POOT[t] || POOT.klein, s = sz || x.s;
+  return `<svg class="poot" width="${s}" height="${s}" viewBox="0 0 48 48" role="img" aria-label="${x.n}"><ellipse cx="24" cy="31" rx="15" ry="13" fill="currentColor"/><ellipse cx="8" cy="19" rx="3.6" ry="5" transform="rotate(-28 8 19)" fill="currentColor"/><ellipse cx="18" cy="11" rx="3.6" ry="5" transform="rotate(-8 18 11)" fill="currentColor"/><ellipse cx="30" cy="11" rx="3.6" ry="5" transform="rotate(8 30 11)" fill="currentColor"/><ellipse cx="40" cy="19" rx="3.6" ry="5" transform="rotate(28 40 19)" fill="currentColor"/></svg>`;
 }
+// Voorkeur: HK se eie keuse, dan die naamlys, anders is 'n nuwe lid 'n Klein Poot.
+function pootVan(uid, naam){
+  const o = pootAll[uid]; if(o && o.t) return { t:o.t, r:o.r || ((nl[nlKey(naam)] || {}).r) || '', bron:'hk' };
+  const m = nl[nlKey(naam)]; if(m) return { t:m.t || 'klein', r:m.r || '', bron:'lys' };
+  return { t:'klein', r:'', bron:'nuut' };
+}
+function rolPill(r){ return r && ROL[r] ? `<span class="meta-pill port">${ROL[r]}</span>` : ''; }
 function betPunte(bet){ return Object.values(bet || {}).filter(b=>b && b.st === 'bevestig').reduce((a,b)=>a + ((BTIPE[b.tipe] || [0,1])[1]), 0); }
-function pootVlak(p){ return p >= POOT_DREMPEL[2] ? 3 : p >= POOT_DREMPEL[1] ? 2 : p >= POOT_DREMPEL[0] ? 1 : 0; }
-function pootHint(pt, v){ if(v >= 3) return 'Hoogste vlak bereik'; const nx = POOT_DREMPEL[v]; return 'Nog ' + (nx - pt) + ' punt' + (nx - pt === 1 ? '' : 'e') + ' tot ' + POOT[v+1].n; }
+function sporeTxt(n){ return n + (n === 1 ? ' spoor' : ' spore'); }
 function nuweId(){ return 'b' + Date.now().toString(36) + Math.random().toString(36).slice(2,5); }
 
 // ----- Oor my (wat ander lede sien) -----
@@ -2952,11 +2972,11 @@ async function openGids(){
   const list = Object.entries(all).map(([uid,g])=>({uid, ...g})).sort((a,b)=>(a.van||'').localeCompare(b.van||'') || (a.naam||'').localeCompare(b.naam||''));
   const gl = k => { const x = GANGE.find(y=>y[0]===k); return x ? x[1] : ''; };
   const row = g => {
-    const v = g.uid === (me && me.uid) ? pootVlak(betPunte(myBet)) : ((pootAll[g.uid] || {}).v || 0);
+    const pv = pootVan(g.uid, g.naam + ' ' + g.van);
     const meta = [gl(g.gang), g.jaar, g.studie, g.kamer ? 'Kamer ' + g.kamer : ''].filter(Boolean).join(' · ');
     const q = (g.naam + ' ' + g.van + ' ' + (g.hulp||'') + ' ' + (g.stok||'') + ' ' + gl(g.gang)).toLowerCase();
-    return `<details class="gid" data-q="${escapeHtml(q)}"><summary><span class="gp">${pootSvg(v, 34)}</span><span class="gt"><b>${escapeHtml(g.naam + ' ' + g.van)}</b><small>${escapeHtml(meta || POOT[v].n)}</small></span></summary>
-      <div class="gb">${g.oor ? `<p>${escapeHtml(g.oor)}</p>` : ''}${g.hulp ? `<p><small>Vra my oor</small><br>${escapeHtml(g.hulp)}</p>` : ''}${g.stok ? `<p><small>Stokperdjies</small><br>${escapeHtml(g.stok)}</p>` : ''}<p><small>${POOT[v].n}</small></p></div></details>`;
+    return `<details class="gid" data-q="${escapeHtml(q)}"><summary><span class="gp">${pootSvg(pv.t, 34)}</span><span class="gt"><b>${escapeHtml(g.naam + ' ' + g.van)}</b><small>${escapeHtml(POOT[pv.t].n + (pv.r ? ' · ' + ROL[pv.r] : '') + (meta ? ' · ' + meta : ''))}</small></span></summary>
+      <div class="gb">${g.oor ? `<p>${escapeHtml(g.oor)}</p>` : ''}${g.hulp ? `<p><small>Vra my oor</small><br>${escapeHtml(g.hulp)}</p>` : ''}${g.stok ? `<p><small>Stokperdjies</small><br>${escapeHtml(g.stok)}</p>` : ''}</div></details>`;
   };
   modalBody.innerHTML = `<h3>Lede van die huis</h3>
     <p class="hint" style="margin:-8px 0 10px">${list.length} ${list.length === 1 ? 'lid het' : 'lede het'} 'n storie ingevul.</p>
@@ -3004,7 +3024,7 @@ function renderKontrole(){
   const items = kProfItems(), done = items.filter(i=>i[1]).length;
   const betL = Object.entries(K.bet).map(([id,b])=>({id, ...b})).sort((a,b)=>(b.jaar||0)-(a.jaar||0) || (b.at||0)-(a.at||0));
   const bev = betL.filter(b=>b.st === 'bevestig'), vo = betL.filter(b=>b.st !== 'bevestig');
-  const pt = betPunte(K.bet), v = pootVlak(pt), attN = K.att.length;
+  const pt = betPunte(K.bet), pv = pootVan(K.uid, fullName(p)), attN = K.att.length;
   const attPct = K.held ? Math.round(attN / K.held * 100) : null;
   const bevOk = (p.bevestig || 0) >= yr;
   const dot = c => `<i class="kd ${c}" aria-hidden="true"></i>`;
@@ -3023,7 +3043,7 @@ function renderKontrole(){
   };
   const yrs = [yr, yr - 1, yr - 2, yr + 1];
   modalBody.innerHTML = `<h3>${escapeHtml(fullName(p) || 'Kontrole')}</h3>
-    <div class="kt-top"><span class="pt">${pootSvg(v)}</span><div><b>${POOT[v].n}</b><small>${pt} punt${pt === 1 ? '' : 'e'} · ${pootHint(pt, v)}</small></div></div>
+    <div class="kt-top"><span class="pt">${pootSvg(pv.t)}</span><div><b>${POOT[pv.t].n}${pv.r ? ' · ' + ROL[pv.r] : ''}</b><small>${sporeTxt(pt)} gelaat in die huis</small></div></div>
     <div class="kt-rows">${rows.map(r=>`<div class="kt-row">${dot(r[0])}<b>${r[1]}</b><span>${escapeHtml(r[2])}</span></div>`).join('')}</div>
     <details class="kdet"><summary>Opkoms</summary>${K.list.length ? K.list.map(x=>`<div class="hrow"><div class="t"><b>${escapeHtml(x.t)}</b><small>${escapeHtml(x.d)}</small></div><span>${x.ok ? '✓' : '✕'}</span></div>`).join('') : '<p class="hint">Nog geen opkoms aangeteken nie.</p>'}</details>
     <details class="kdet" open><summary>Betrokkenheid</summary>${betL.length ? betL.map(betRow).join('') : '<p class="hint">Nog niks nie. Voeg hieronder by waarby jy betrokke was.</p>'}
@@ -3035,14 +3055,12 @@ function renderKontrole(){
     <div class="modal-actions"><button class="btn btn-secondary" data-act="kontback">${K.back ? 'Terug' : 'Sluit'}</button></div>`;
 }
 async function betWrite(id, rec){
-  // rec === null: verwyder. Herbereken poot net wanneer HK dit doen.
+  // rec === null: verwyder.
   const hk = unlocked && !K.self, upd = {};
   upd['betrokke/'+K.uid+'/'+id] = rec;
   const nb = Object.assign({}, K.bet); if(rec) nb[id] = rec; else delete nb[id];
-  if(hk){ const pt = betPunte(nb); upd['poot/'+K.uid] = { p:pt, v:pootVlak(pt), at:Date.now() }; }
   await update(ref(db), upd);
   K.bet = nb;
-  if(hk) pootAll[K.uid] = { p:betPunte(nb), v:pootVlak(betPunte(nb)) };
   renderKontrole();
 }
 async function betAdd(){
@@ -3065,7 +3083,7 @@ async function betDel(id){
 // ---------- HK-WERKLYS EN OPKOMS-OORSIG (Rondte 9) ----------
 let allInst = {}, allBet = {};
 function werkTelling(){
-  const aans = isPrim ? flatAans().filter(a=>a.status === 'wag').length : 0;
+  const aans = isAans ? flatAans().filter(a=>a.status === 'wag').length : 0;
   const ged = Object.values(allGed || {}).filter(g=>g && g.status === 'ontvang').length;
   let inst = 0; Object.values(allInst || {}).forEach(m=>Object.values(m || {}).forEach(x=>{ if(x && x.status === 'oop') inst++; }));
   let bet = 0; Object.values(allBet || {}).forEach(m=>Object.values(m || {}).forEach(x=>{ if(x && x.st !== 'bevestig') bet++; }));
@@ -3083,7 +3101,7 @@ function openWerk(){
       ${row(w.ged, '💬', 'Gedagtes', 'Nuut van lede', 'gedhk')}
       ${row(w.inst, '🔧', 'Instandhouding', 'Oop meldings van stukkende goed', 'insthk')}
       ${row(w.bet, '🐾', 'Betrokkenheid', 'Inskrywings wat jy moet bevestig', 'betlys')}
-      ${isPrim ? row(w.aans, '📨', 'Aansoeke', 'Oorslaap en kuier', 'ansprim') : ''}
+      ${isAans ? row(w.aans, '📨', 'Aansoeke', 'Oorslaap en kuier', 'ansprim') : ''}
     </div>
     <div class="modal-actions"><button class="btn btn-secondary" data-act="mclose">Sluit</button></div>`;
   openModal();
@@ -3105,7 +3123,6 @@ async function betQueue(uid, id, ok){
   const cur = (allBet[uid] || {})[id]; if(!cur) return;
   const upd = {}; const nb = Object.assign({}, allBet[uid] || {});
   if(ok){ nb[id] = Object.assign({}, cur, { st:'bevestig', by:myName() }); upd['betrokke/'+uid+'/'+id] = nb[id]; } else { delete nb[id]; upd['betrokke/'+uid+'/'+id] = null; }
-  const pt = betPunte(nb); upd['poot/'+uid] = { p:pt, v:pootVlak(pt), at:Date.now() };
   try{ await update(ref(db), upd); showToast(ok ? 'Bevestig' : 'Verwyder'); }catch(e){ showToast('Kon nie: ' + e.message); }
 }
 
@@ -3121,9 +3138,9 @@ async function openOorsig(mode){
   const t = todayStr();
   const held = events.filter(e=>!e.isCancelled && e.date <= t && os[e.id] && Object.keys(os[e.id]).length).sort((a,b)=>a.date.localeCompare(b.date)).slice(-8);
   const mems = Object.entries(ps).filter(([u,p])=>p && p.status !== 'alumnus').map(([uid,p])=>({ uid, p, naam: fullName(p) }));
-  const tab = `<div class="seg" role="tablist"><button class="${mode==='jaar'?'on':''}" data-act="oorsig" data-m="jaar">Jaargroep</button><button class="${mode==='gang'?'on':''}" data-act="oorsig" data-m="gang">Gang</button></div>`;
+  const tab = `<div class="seg" role="tablist"><button class="${mode==='jaar'?'on':''}" data-act="oorsig" data-m="jaar">Jaargroep</button><button class="${mode==='gang'?'on':''}" data-act="oorsig" data-m="gang">Gang</button><button class="${mode==='poot'?'on':''}" data-act="oorsig" data-m="poot">Poot</button></div>`;
   if(!held.length){ modalBody.innerHTML = `<h3>Opkoms-oorsig</h3>${tab}<p class="hint">Nog geen opkoms aangeteken nie. Maak 'n event oop en kies "Begin opkoms".</p><div class="modal-actions"><button class="btn btn-secondary" data-act="mclose">Sluit</button></div>`; return; }
-  const gk = m => mode === 'jaar' ? (m.p.jaar || 'Onbekend') : (((GANGE.find(x=>x[0]===(gs[m.uid]||{}).gang)||[])[1]) || 'Nog nie gekies');
+  const gk = m => mode === 'jaar' ? (m.p.jaar || 'Onbekend') : mode === 'poot' ? (() => { const v = pootVan(m.uid, m.naam); return POOT[v.t].n; })() : (((GANGE.find(x=>x[0]===(gs[m.uid]||{}).gang)||[])[1]) || 'Nog nie gekies');
   const grp = {};
   mems.forEach(m=>{
     const k = gk(m); const n = held.filter(e=>os[e.id][m.uid]).length;
@@ -3143,9 +3160,77 @@ async function openOorsig(mode){
     <div class="modal-actions"><button class="btn btn-secondary" data-act="mclose">Sluit</button></div>`;
 }
 
+
+// ----- Naamlys-invoer (HK) -----
+function nlLynNaTekst(){
+  const arr = Object.values(nl || {}).sort((a,b)=>String(a.naam).localeCompare(String(b.naam)));
+  return arr.map(m=>m.naam + ' | ' + (m.t === 'ou' ? 'Oupoot' : m.t === 'groot' ? 'Grootpoot' : 'Kleinpoot') + (m.r ? ' | ' + ROL_TXT[m.r] : '')).join('\n');
+}
+function nlParse(txt){
+  const rows = [], errs = [], seen = {};
+  const pmap = { oupoot:'ou', ou:'ou', grootpoot:'groot', groot:'groot', kleinpoot:'klein', klein:'klein' }, rmap = { hk:'hk', prim:'prim', geelbek:'geelbek' };
+  txt.split('\n').map(l=>l.trim()).filter(Boolean).forEach((l,i)=>{
+    const pt = l.split('|').map(x=>x.trim()), L = 'Reël ' + (i+1) + ': ';
+    if(pt.length < 2 || !pt[0]){ errs.push(L + 'gebruik Naam | Poot | Rol'); return; }
+    let t = '', r = '', bad = '';
+    pt.slice(1).forEach(x=>{
+      if(!x) return; const k = nlKey(x);
+      if(pmap[k]){ if(t) bad = 'twee pote'; t = pmap[k]; }
+      else if(rmap[k]){ if(r) bad = 'twee rolle'; r = rmap[k]; }
+      else bad = 'onbekend "' + x + '" (Poot: Kleinpoot, Grootpoot of Oupoot. Rol: HK, Prim of Geelbek)';
+    });
+    if(bad){ errs.push(L + pt[0] + ': ' + bad); return; }
+    if(r === 'geelbek'){ if(!t) t = 'groot'; if(t !== 'groot'){ errs.push(L + pt[0] + ': \'n Geelbek is altyd \'n Groot Poot'); return; } }
+    else if(r === 'hk' || r === 'prim'){
+      if(!t){ errs.push(L + pt[0] + ': gee sy poot (Grootpoot of Oupoot), bv. ' + pt[0] + ' | Oupoot | ' + ROL_TXT[r]); return; }
+      if(t === 'klein'){ errs.push(L + pt[0] + ': ' + ROL_TXT[r] + ' kan nie \'n Klein Poot wees nie'); return; }
+    } else if(!t){ errs.push(L + pt[0] + ': gee \'n poot (Kleinpoot, Grootpoot of Oupoot)'); return; }
+    const key = nlKey(pt[0]); if(!key){ errs.push(L + 'geen naam nie'); return; }
+    if(seen[key]){ errs.push(L + '"' + pt[0] + '" kom twee keer voor'); return; }
+    seen[key] = 1; rows.push({ key, naam: pt[0].slice(0,80), t, r });
+  });
+  return { rows, errs };
+}
+function openNaamlys(){
+  if(!unlocked) return;
+  const n = Object.keys(nl || {}).length;
+  modalBody.innerHTML = `<button class="link-btn" data-act="mclose" style="margin:0 0 6px">✕ Sluit</button><h3>Naamlys</h3>
+    <p class="hint" style="margin:-8px 0 10px">Een reël per man: <b>Naam | Poot | Rol</b>. Poot is Kleinpoot, Grootpoot of Oupoot. Rol (opsioneel) is HK, Prim of Geelbek. Iemand wat nie op die lys is nie, is 'n <b>Klein Poot</b>. ${n ? n + ' op die lys.' : ''}</p>
+    <div class="inf-card" style="font-size:13px"><b>Reëls</b><br>Elke HK en Prim moet sy poot hê (Groot of Ou). 'n Geelbek is altyd 'n Groot Poot, so <i>Naam | Geelbek</i> is genoeg.</div>
+    <div class="field"><textarea id="nl-t" style="min-height:200px;font-family:monospace;font-size:13px" placeholder="Wihann Smit | Oupoot | HK&#10;Alex Marais | Grootpoot | Geelbek&#10;Eben Uys | Oupoot&#10;Chris Du Plooy | Grootpoot">${escapeHtml(nlLynNaTekst())}</textarea></div>
+    <div id="nlPrev" class="hint"></div><div id="nlErr" class="error-msg"></div>
+    <div class="modal-actions"><button class="btn btn-secondary" data-act="nlprev">Kyk eers</button><button class="btn btn-primary" data-act="nlsave">Stoor lys</button></div>`;
+  openModal();
+}
+function nlPreview(){
+  const r = nlParse(document.getElementById('nl-t').value);
+  const c = { ou:0, groot:0, klein:0, hk:0, prim:0, geelbek:0 };
+  r.rows.forEach(x=>{ c[x.t]++; if(x.r) c[x.r]++; });
+  document.getElementById('nlPrev').innerHTML = `<b>${r.rows.length}</b> mans: ${c.ou} Ou Pote, ${c.groot} Groot Pote, ${c.klein} Klein Pote (HK ${c.hk}, Prim ${c.prim}, Geelbekke ${c.geelbek} ingesluit).`;
+  document.getElementById('nlErr').innerHTML = r.errs.map(escapeHtml).join('<br>');
+  return r;
+}
+async function nlSave(){
+  const r = nlPreview();
+  if(!r.rows.length){ document.getElementById('nlErr').textContent = 'Plak eers die lys.'; return; }
+  if(r.errs.length){ return; }
+  const upd = {}; const keep = {};
+  r.rows.forEach(x=>{ keep[x.key] = 1; const v = { naam:x.naam, t:x.t }; if(x.r) v.r = x.r; upd['naamlys/'+x.key] = v; });
+  Object.keys(nl || {}).forEach(k=>{ if(!keep[k]) upd['naamlys/'+k] = null; });
+  try{ await update(ref(db), upd); closeModal(); showToast(r.rows.length + ' mans gestoor'); }
+  catch(e){ document.getElementById('nlErr').textContent = 'Kon nie stoor nie: ' + e.message; }
+}
+async function pootSet(uid, t){
+  try{
+    if(!t) await remove(ref(db, 'poot/' + uid)); else await set(ref(db, 'poot/' + uid), { t, at: Date.now() });
+    if(!t) delete pootAll[uid]; else pootAll[uid] = { t };
+    openPersonModal(uid);
+  }catch(e){ showToast('Kon nie: ' + e.message); }
+}
+
 // ---------- HK: MENSE EN ROLLE ----------
 let ppl = { profiles:{}, roles:{} };
-function roleBadges(r){ r = r || {}; return [r.stelsel?'Stelsel':'', r.prim?'Prim':'', r.hk?'HK':''].filter(Boolean).map(b=>`<span class="meta-pill port" style="margin-left:4px">${b}</span>`).join(''); }
+function roleBadges(r){ r = r || {}; return [r.stelsel?'Stelsel':'', r.prim?'Prim':'', r.onderprim?'Onderprim':'', r.hk?'HK':''].filter(Boolean).map(b=>`<span class="meta-pill port" style="margin-left:4px">${b}</span>`).join(''); }
 async function openPeopleModal(){
   modalBody.innerHTML = `<h3>Mense</h3><p class="hint">Laai...</p>`; openModal();
   try{
@@ -3198,16 +3283,19 @@ async function openPersonModal(uid){
   const tel = (t)=> t ? `<a href="tel:+${escapeHtml(t)}" style="color:var(--accent-dark);font-weight:700">${escapeHtml(t.replace(/^27/,'0'))}</a>` : '';
   const kont = ['k1','k2'].filter(k=>nood[k]).map(k=>`<div class="hrow"><div class="t"><b>${escapeHtml(nood[k].naam)}</b><small>${escapeHtml(nood[k].verw||'')}</small></div><a class="wa" href="tel:+${escapeHtml(nood[k].tel)}">📞 Bel ${escapeHtml(nood[k].tel.replace(/^27/,'0'))}</a></div>`).join('');
   const canSetHK = (isPrim && !r.prim && !r.stelsel && uid !== me.uid) || isStelsel;
+  const canSetOP = (isPrim && !r.prim && !r.stelsel && uid !== me.uid) || (isStelsel && uid !== me.uid);
   const tg = (key,label,on,can)=> can ? `<div class="hrow"><div class="t"><b>${label}</b></div><button class="mini-btn ${on?'':'danger'}" data-act="prole" data-uid="${uid}" data-key="${key}" data-val="${on?'0':'1'}">${on?'Haal af':'Gee'}</button></div>` : '';
   modalBody.innerHTML = `<h3>${escapeHtml(fullName(p))}</h3>
     <p class="hint" style="margin:-8px 0 8px">${kamerOf(p) ? 'Kamer ' + escapeHtml(kamerOf(p)) + ' · ' : ''}${escapeHtml(p.studie||'')}${p.jaar ? ' · ' + escapeHtml(p.jaar) : ''}${p.status==='alumnus' ? ' · alumnus' : ''}</p>
     <div class="hrow"><div class="t"><b>Selfoon</b></div>${tel(p.tel)}</div>
     <div class="sec-h">Nood-kontakte</div>${kont || '<p class="hint">Geen nie (alumnus of nog nie ingevul).</p>'}
+    <div class="sec-h">Poot</div>
+    ${(()=>{ const pv = pootVan(uid, fullName(p)); const o = pootAll[uid]; return `<div class="hrow"><div class="t"><b>${POOT[pv.t].n}${pv.r ? ' · ' + ROL[pv.r] : ''}</b><small>${pv.bron === 'hk' ? 'Deur HK gestel' : pv.bron === 'lys' ? 'Volgens die naamlys' : 'Nie op die naamlys nie (nuwe lid)'}</small></div>${pootSvg(pv.t, 36)}</div><div style="display:flex;gap:6px;margin:6px 0 4px">${['klein','groot','ou'].map(k=>`<button class="mini-btn ${pv.t===k && o && o.t===k ? 'on' : ''}" data-act="pootset" data-uid="${uid}" data-t="${k}">${POOT[k].n}</button>`).join('')}${o ? `<button class="mini-btn danger" data-act="pootset" data-uid="${uid}" data-t="">Terug na lys</button>` : ''}</div>`; })()}
     <button class="btn btn-secondary" data-act="kontuid" data-uid="${uid}" style="width:100%;margin-top:10px">📊 Kontrole en betrokkenheid</button>
     <div class="sec-h">Mediese lêer</div>
     <div id="medBox"><button class="btn btn-secondary" data-act="pmed" data-uid="${uid}" style="width:100%">${isPrim ? '🩺 Maak mediese lêer oop' : '🚨 Noodgeval: maak mediese lêer oop'}</button>
     ${isPrim ? '' : '<p class="hint">Dit word gelog en die Prim sien dit.</p>'}</div>
-    ${(canSetHK || isStelsel) ? `<div class="sec-h">Rolle</div>${tg('hk','HK-lid',!!r.hk,canSetHK)}${isStelsel ? tg('prim','Prim',!!r.prim,true) + tg('stelsel','Stelsel',!!r.stelsel,uid !== me.uid) : ''}` : ''}
+    ${(canSetHK || isStelsel) ? `<div class="sec-h">Rolle</div>${tg('hk','HK-lid',!!r.hk,canSetHK)}${tg('onderprim','Onderprim (aansoeke en oorslaap)',!!r.onderprim,canSetOP)}${isStelsel ? tg('prim','Prim',!!r.prim,true) + tg('stelsel','Stelsel',!!r.stelsel,uid !== me.uid) : ''}` : ''}
     <div class="modal-actions"><button class="btn btn-secondary" data-act="ppl">Terug</button></div>`;
 }
 async function openMedies(uid){
@@ -3224,7 +3312,10 @@ async function openMedies(uid){
   }catch(e){ box.innerHTML = `<p class="error-msg">Kon nie lees nie: ${escapeHtml(e.message)}</p>`; }
 }
 async function setRole(uid, key, val){
-  try{ await update(ref(db,'roles/'+uid), { [key]: !!val }); ppl.roles[uid] = Object.assign({}, ppl.roles[uid], { [key]: !!val }); showToast('Rol bygewerk'); openPersonModal(uid); }
+  try{
+    const upd = { [key]: !!val };
+    if(key === 'onderprim' && val) upd.hk = true;   // 'n Onderprim is altyd ook HK
+    await update(ref(db,'roles/'+uid), upd); ppl.roles[uid] = Object.assign({}, ppl.roles[uid], upd); showToast('Rol bygewerk'); openPersonModal(uid); }
   catch(e){ showToast('Kon nie: ' + e.message); }
 }
 async function openNoodLog(){
@@ -3541,7 +3632,7 @@ function confetti(host){
   const c = document.createElement('canvas'); c.className = 'confetti'; host.appendChild(c);
   const ctx = c.getContext('2d'); const dpr = Math.min(2, window.devicePixelRatio || 1);
   const W2 = c.width = innerWidth * dpr, H2 = c.height = innerHeight * dpr;
-  const cols = ['#A86E53', '#758378', '#E3B04B', '#F6F3EE', '#CBC3BA', '#8F5A43'];
+  const cols = ['#9A5D42', '#758378', '#E3B04B', '#F6F3EE', '#CBC3BA', '#8F5A43'];
   const ps = Array.from({ length: 130 }, ()=>({ x: Math.random() * W2, y: -Math.random() * H2 * .6, w: (6 + Math.random() * 8) * dpr, h: (10 + Math.random() * 10) * dpr, r: Math.random() * 6, vr: (Math.random() - .5) * .25, vy: (2 + Math.random() * 3.5) * dpr, vx: (Math.random() - .5) * 2 * dpr, c: cols[(Math.random() * cols.length) | 0] }));
   let f = 0;
   (function tick(){
@@ -3664,7 +3755,7 @@ function syncStaff(){
   if(!me) return;
   if(unlocked && !_staff.hk){ _staff.hk = true; _memberUnsubs.push(onValue(ref(db, 'gedagtes'), s=>{ allGed = s.val() || {}; liveR(); }, ()=>{ _staff.hk = false; })); }
   if(unlocked && !_staff.hk2){ _staff.hk2 = true; _memberUnsubs.push(onValue(ref(db, 'instand'), s=>{ allInst = s.val() || {}; liveR(); }, ()=>{ _staff.hk2 = false; })); _memberUnsubs.push(onValue(ref(db, 'betrokke'), s=>{ allBet = s.val() || {}; liveR(); }, ()=>{ _staff.hk2 = false; })); }
-  if(isPrim && !_staff.prim){ _staff.prim = true; _memberUnsubs.push(onValue(ref(db, 'aansoeke'), s=>{ allAans = s.val() || {}; liveR(); }, ()=>{ _staff.prim = false; })); }
+  if(isAans && !_staff.prim){ _staff.prim = true; _memberUnsubs.push(onValue(ref(db, 'aansoeke'), s=>{ allAans = s.val() || {}; liveR(); }, ()=>{ _staff.prim = false; })); }
 }
 function ping(kind){
   if(!PING_URL) return;
@@ -3696,7 +3787,7 @@ function quickHtml(){
 }
 function staffBannerHtml(){
   if(!unlocked) return '';
-  const pa = isPrim ? flatAans().filter(a=>a.status === 'wag').length : 0;
+  const pa = isAans ? flatAans().filter(a=>a.status === 'wag').length : 0;
   const ng = Object.values(allGed || {}).filter(g=>g.status === 'ontvang').length;
   if(!pa && !ng) return '';
   return `<div class="staffban">${pa ? `<button data-act="ansprim">📨 <b>${pa}</b> aansoek${pa === 1 ? '' : 'e'} wag vir jou</button>` : ''}${ng ? `<button data-act="gedhk">💬 <b>${ng}</b> nuwe gedagte${ng === 1 ? '' : 's'}</button>` : ''}</div>`;
@@ -3754,7 +3845,7 @@ async function openInfoPage(k){
       <div class="inf-card"><b>Titels volgens jaar</b><ul><li>Klein Poot: eerste jaar</li><li>Groot Poot: tweede jaar</li><li>Ou Poot: derde jaar of langer</li></ul></div>
       <div class="inf-card"><b>Geelbekke</b><p>Twee op elke gang. Hulle is die "oë en ore" van die gang en help om kultuur, deelname en trots te bewaar. Die naam kom van die geel bek van ons maskot, Albert die Hoender I.</p></div>
       <div class="inf-card"><b>Huiskomitee-titels</b><ul><li>Hoofpatriarg: die Primarius</li><li>Onderhoofpatriarg: die Onderprimarius</li><li>Quantumpatriarg: ander HK-lede</li></ul></div>
-      <div class="inf-card"><b>Ons kleure</b><div class="kleure"><i style="background:#CBC3BA"></i><i style="background:#A86E53"></i><i style="background:#758378"></i></div><small>Sand, Roes en Groen</small></div>`;
+      <div class="inf-card"><b>Ons kleure</b><div class="kleure"><i style="background:#CBC3BA"></i><i style="background:#9A5D42"></i><i style="background:#758378"></i></div><small>Sand, Roes en Groen</small></div>`;
   } else if(k === 'lied'){
     const l = await infGet('info/lied');
     h = `<h3>Koshuislied</h3>` + (l ? `<div class="inf-card lied"><p style="white-space:pre-wrap;text-align:center">${escapeHtml(l)}</p></div>` : `<p class="hint">Die HK het nog nie die koshuislied ingesit nie.</p>`) + ed;
@@ -3899,7 +3990,7 @@ async function cancelAans(id){
 }
 // ----- Aansoeke (Prim) -----
 function openAansPrim(){
-  if(!isPrim){ showToast('Net die Prim sien dit.'); return; }
+  if(!isAans){ showToast('Net die Prim of Onderprim sien dit.'); return; }
   const all = flatAans();
   const wag = all.filter(a=>a.status === 'wag').sort((a,b)=>a.date.localeCompare(b.date));
   const done = all.filter(a=>a.status !== 'wag').sort((a,b)=>(b.bat||0)-(a.bat||0)).slice(0, 15);
