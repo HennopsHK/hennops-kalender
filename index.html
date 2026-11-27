@@ -679,7 +679,7 @@ html,body{max-width:100%;overflow-x:clip;} .app{min-width:0;} .app *{overflow-wr
 
 .emi{display:inline-block;width:1.2em;height:1.2em;vertical-align:-.22em;margin-right:.35em;color:inherit}.emi svg{width:100%;height:100%;display:block}
 
-.hero.calhero{height:275px;margin-bottom:12px}
+.hero.calhero{height:330px;margin-bottom:12px}
 .calhero .calyr{font:700 14px Archivo,system-ui,sans-serif}.calhero .calname{display:block;width:100%;max-width:340px;height:auto;margin-top:2px}
 .calhero .calcnt{position:absolute;left:18px;bottom:14px;background:#FBF6EC;color:#33291F;border-radius:999px;padding:6px 12px;font:700 13px Archivo,system-ui,sans-serif;box-shadow:var(--shadow)}
 
@@ -796,7 +796,7 @@ h1,h2,h3{letter-spacing:-.01em}
 .search input{height:48px;padding:0 16px 0 46px!important;border:1px solid var(--line)!important;border-radius:var(--r-m)!important;background:#fff!important;box-shadow:none!important}
 .wk-row .wd{flex:0 0 58px!important;white-space:nowrap}.wk-row .wd b{font-size:30px!important;white-space:nowrap}
 .wk-row{min-height:64px}
-.hero.calhero{height:200px!important}
+.hero.calhero{height:290px!important}
 .mv-nav{gap:8px!important}.mv-nav button{border:0!important;background:#E4DDD0!important;border-radius:999px!important;color:var(--deep)!important;min-width:44px;font-size:20px}
 .mv-nav button[data-act=mtoday],.mv-nav button[data-act=wtoday]{background:var(--surface)!important;border:1px solid var(--line)!important;font-size:15px}
 .a2hs{margin-top:16px!important;border:1px solid var(--line);background:#EFE9DD!important;border-radius:var(--r-m)!important}
@@ -867,6 +867,22 @@ summary:has(> .ai)::-webkit-details-marker{display:none}
 .bl-body{white-space:pre-wrap;font-size:15.5px;line-height:1.65;max-width:62ch}
 .bl-body::first-letter{font:600 3.2em/.85 'Fraunces',Georgia,serif;float:left;padding:5px 9px 0 0;color:var(--accent)}
 .bl-card .bl-meta{flex-direction:column;align-items:flex-start;gap:5px}.bl-meta time{white-space:nowrap}
+
+/* filter: een rol-ry */
+.filterbar .chips{flex-wrap:nowrap!important;overflow-x:auto!important;overflow-y:hidden;gap:6px;margin:0 -14px!important;padding:2px 14px 6px!important;scrollbar-width:none}
+.filterbar .chips::-webkit-scrollbar{display:none}
+.filterbar .chip{flex:0 0 auto}
+/* geleentheidskaart */
+.event-card{border-left-width:6px!important;border-left-style:solid;overflow:hidden}
+.card-actions{gap:8px!important;padding-top:8px!important}
+.card-actions .link-btn{min-height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);font-weight:600;font-size:13px;display:inline-flex;align-items:center;gap:6px}
+.card-actions .link-btn[data-act=rsvp]{background:var(--accent);border-color:var(--accent);color:#FBF6EC}
+.card-actions .link-btn[data-act=rsvp].on{background:var(--deep,#174450);border-color:var(--deep,#174450);color:#FBF6EC}
+.card-actions .link-btn[data-act=evopen]{border-color:transparent;padding:0 6px;color:var(--accent-dark)}
+.event-title{font-family:'Fraunces',Georgia,serif;font-size:17px!important;font-weight:600}
+.search>span{display:flex!important;align-items:center;justify-content:center;width:20px;height:20px}.search>span .emi{margin:0!important;width:20px;height:20px;display:grid;place-items:center}.search>span .emi svg{width:20px;height:20px}
+.search>span .emi{position:static!important;transform:none!important;left:auto!important;top:auto!important}
+.drv{display:flex;gap:12px;align-items:flex-start;background:rgba(117,131,120,.16);border-radius:14px;padding:12px 14px}.drv svg{flex:0 0 28px;width:28px;height:28px;color:var(--deep,#174450);fill:none;stroke:currentColor}.drv b{display:block;font-size:14.5px}.drv small{display:block;color:var(--ink-soft);font-size:12.5px;line-height:1.4;margin-top:2px}
 </style>
 </head>
 <body>
@@ -935,8 +951,9 @@ const firebaseConfig = {
 let db = null;
 let auth = null;
 let firebaseError = null;
+let fbApp = null;
 try{
-  const firebaseApp = initializeApp(firebaseConfig);
+  const firebaseApp = initializeApp(firebaseConfig); fbApp = firebaseApp;
   db = getDatabase(firebaseApp);
   auth = getAuth(firebaseApp);
 }catch(e){
@@ -1342,7 +1359,7 @@ function cardHtml(e, today){
         ${e.addedBy ? `<span class="meta-pill">👤 ${escapeHtml(e.addedBy)}</span>` : ''}
       </div>
       ${(getPorts(e).length || movedRecently || audience) ? `<div class="event-meta" style="margin-top:6px;">
-        ${getPorts(e).map(k=>`<span class="meta-pill port">${PORTFOLIOS[k].emoji} ${PORTFOLIOS[k].label}</span>`).join('')}
+        ${getPorts(e).map(k=>`<span class="meta-pill port">${PORTFOLIOS[k].emoji} ${PORTFOLIOS[k].label}${e.subs && e.subs[k] ? ' · ' + escapeHtml(e.subs[k]) : ''}</span>`).join('')}
         ${audience ? `<span class="meta-pill port">${AUD_EMOJI[audience]} ${AUDIENCES[audience]}</span>` : ''}
         ${movedRecently ? `<span class="meta-pill moved">↪ Verskuif van ${formatShortDate(e.movedFrom)}</span>` : ''}
       </div>` : ''}
@@ -1659,7 +1676,27 @@ function calHeroHtml(){
 // ===== Fase 2 tot 5: verpligte events, blogs, klokkie, foto's, leiers, profiel-kalender =====
 let blogs = {}, albums = {}, kennis = {}, leiers = {}, myStats = null, albCur = null, albPh = {}, miniM = null, miniSel = '', pfotoC = {}, _statBusy = false;
 const HOOF = [['sport','Sport'],['sosiaal','Sosiaal'],['kultuur','Kuns en Kultuur'],['gemeenskap','Gemeenskap']];
-const SPORTE = ['Mixed netball','Rugby','Krieket','Hokkie','Tennis','Atletiek'];
+const SPORTE = ['Rugby','Hokkie','Netbal','Krieket','Tennis','Skaak','Padel','Atletiek','E-sport'];
+const SUBS = {
+  sport: SPORTE,
+  kultuur: ['Eerstejaarskonsert','Akademia-koor','As jy sêr (sêrprogram)','Koshuisdebatte','Fontasties','Voorskou','Artium','Fontie-spreke','Daai kleindorpiegevoel (musiekblyspel)'],
+  sosiaal: ['Primus Chorum','Fontie-bal','Fontie-mark','Fakulteitskuiers','Draaibraai','Direkteursdinee'],
+  gemeenskap: ['Spore-projek','Omgeeweek','Teetyd','Uitreike']
+};
+const SUB_LBL = { sport:'Sportsoort', kultuur:'Kuns en kultuur', sosiaal:'Sosiale aksie', gemeenskap:'Gemeenskapsaksie' };
+const subSel = (k, cur, attr) => `<div class="field"><label>${SUB_LBL[k]}</label><select ${attr}="${k}"><option value="">Almal / nie gekies nie</option>${SUBS[k].map(x=>`<option ${x===cur?'selected':''}>${escapeHtml(x)}</option>`).join('')}${cur && !SUBS[k].includes(cur) ? `<option selected>${escapeHtml(cur)}</option>` : ''}</select></div>`;
+function evSubsFill(src){
+  const w = document.getElementById('f-subs'); if(!w) return;
+  const keep = {}; w.querySelectorAll('select[data-sub]').forEach(x=>{ keep[x.dataset.sub] = x.value; });
+  const ticked = [...modalBody.querySelectorAll('input[name="f-port"]:checked')].map(i=>i.value).filter(k=>SUBS[k]);
+  w.innerHTML = ticked.map(k=>subSel(k, keep[k] !== undefined ? keep[k] : ((src && src.subs && src.subs[k]) || ''), 'data-sub')).join('');
+}
+function blSubFill(cur){
+  const w = document.getElementById('bg-sw'); if(!w) return; const k = document.getElementById('bg-p').value;
+  w.innerHTML = SUBS[k] ? subSel(k, cur || '', 'id="bg-s" data-x') .replace('<div class="field">','').replace(/<\/div>$/,'') : '';
+  w.style.display = SUBS[k] ? '' : 'none';
+}
+document.addEventListener('change', ev=>{ const t = ev.target; if(t && t.name === 'f-port') evSubsFill(window.__evSrc); if(t && t.id === 'bg-p') blSubFill(); });
 const lbl = k => (HOOF.find(x=>x[0]===k) || [k, k])[1];
 const tydFmt = ms => { const d = new Date(ms); return d.getDate() + ' ' + MAANDE_NAAM[d.getMonth()].slice(0,3).toLowerCase(); };
 function subFase(uid){
@@ -1672,6 +1709,23 @@ function subFase(uid){
 }
 async function pfotoGet(uid){ if(!uid || pfotoC[uid] !== undefined) return pfotoC[uid]; pfotoC[uid] = ''; try{ const s = await get(ref(db,'pfoto/'+uid)); pfotoC[uid] = s.val() || ''; if(pfotoC[uid]) liveR(); }catch(e){} return pfotoC[uid]; }
 function avatarHtml(uid, ini, cls){ const f = pfotoC[uid]; return f ? `<img class="${cls||'avp'}" src="${f}" alt="">` : `<span class="${cls||'avp'} avi">${escapeHtml(ini||'?')}</span>`; }
+// --- Foon-kennisgewings (push) ---
+const VAPID_KEY = '';  // Plak hier die publieke sleutel uit Firebase: Projekinstellings, Cloud Messaging, Web Push-sertifikate
+const pushOk = () => !!VAPID_KEY && 'Notification' in window && 'serviceWorker' in navigator && 'PushManager' in window;
+const pushAan = () => pushOk() && Notification.permission === 'granted' && lsGet('hennops-push') === '1';
+async function pushOn(){
+  if(!me) return;
+  try{
+    const perm = await Notification.requestPermission();
+    if(perm !== 'granted'){ showToast('Kennisgewings is nie toegelaat nie. Verander dit in jou foon se instellings.'); return; }
+    const { getMessaging, getToken } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js');
+    const reg = await navigator.serviceWorker.ready;
+    const tok = await getToken(getMessaging(fbApp), { vapidKey: VAPID_KEY, serviceWorkerRegistration: reg });
+    if(!tok) throw new Error('Geen sleutel ontvang nie');
+    await set(ref(db, 'fcm/' + me.uid + '/' + tok.replace(/[^A-Za-z0-9_-]/g,'').slice(-28)), { t: tok, at: Date.now() });
+    lsSet('hennops-push', '1'); showToast('Kennisgewings is aan'); render();
+  }catch(e){ showToast('Kon nie aanskakel nie: ' + (e.message || e)); }
+}
 async function kennisPush(t, title, refId){ try{ const id = 'k' + Date.now().toString(36); await set(ref(db,'kennis/'+id), { t, title: String(title).slice(0,90), at: Date.now(), ref: refId || '' }); }catch(e){} }
 
 // --- statistiek (verpligte events) ---
@@ -1780,19 +1834,19 @@ function openBlogForm(k){
   blogPhoto = '';
   modalBody.innerHTML = `<h3>Skryf 'n blog</h3>
     <div class="field"><label for="bg-p">Portefeulje</label><select id="bg-p">${HOOF.map(h=>`<option value="${h[0]}" ${h[0]===k?'selected':''}>${h[1]}</option>`).join('')}</select></div>
-    <div class="field" id="bg-sw"><label for="bg-s">Sportsoort (net vir Sport)</label><select id="bg-s"><option value="">Almal</option>${SPORTE.map(s=>`<option>${s}</option>`).join('')}</select></div>
+    <div class="field" id="bg-sw"></div>
     <div class="field"><label for="bg-t">Titel</label><input id="bg-t" maxlength="90" placeholder="bv. Hennops klop Wilgenhof"></div>
     <div class="field"><label for="bg-x">Storie</label><textarea id="bg-x" maxlength="3000" style="min-height:140px"></textarea></div>
     <div class="field"><button class="btn btn-secondary" data-act="blogpic" id="bg-pic">Voeg 'n foto by</button></div>
     <p class="err-msg" id="bg-err"></p>
     <div class="modal-actions"><button class="btn btn-secondary" data-act="mclose">Kanselleer</button><button class="btn btn-primary" data-act="blogsave">Plaas</button></div>`;
-  openModal();
+  openModal(); blSubFill();
 }
 async function saveBlog(){
   const g = id => document.getElementById(id), err = g('bg-err');
   const title = g('bg-t').value.trim(), text = g('bg-x').value.trim(), port = g('bg-p').value;
   if(!title || !text){ err.textContent = 'Titel en storie is nodig.'; return; }
-  const id = 'b' + Date.now().toString(36), sport = port === 'sport' ? g('bg-s').value : '';
+  const id = 'b' + Date.now().toString(36), sport = (g('bg-s') && SUBS[port]) ? g('bg-s').value : '';
   const o = { port, title, text, by: myName(), at: Date.now() }; if(sport) o.sport = sport; if(blogPhoto) o.photo = blogPhoto;
   try{ await set(ref(db,'blogs/'+id), o); kennisPush('blog', title, id); closeModal(); showToast('Blog geplaas'); }catch(e){ err.textContent = 'Kon nie plaas nie: ' + e.message; }
 }
@@ -1831,13 +1885,15 @@ async function togVsk(uid, btn){
 }
 
 // --- foto-albums ---
+const DRIVE_MAIN = 'https://drive.google.com/drive/folders/1VyxniOkp1HrZfKDAp6EbIo8r9D7WuD6O?usp=drive_link';
+const driveOf = a => (a && a.drive) || DRIVE_MAIN;
 function openAlbums(){
   const l = Object.entries(albums || {}).map(([id,a])=>({ id, ...a })).sort((a,b)=>b.at - a.at);
-  modalBody.innerHTML = `<h3>Foto's</h3><p class="hint" style="margin:-8px 0 10px">Elke event kan 'n album hê. Enige lid kan foto's byvoeg.</p>${l.length ? l.map(a=>`<button class="hrow" data-act="albopen" data-id="${a.id}"><div class="t"><b>${escapeHtml(a.title)}</b><small>${tydFmt(a.at)}</small></div></button>`).join('') : '<p class="hint">Nog geen albums nie.</p>'}<div class="modal-actions">${unlocked ? `<button class="btn btn-secondary" data-act="albnew">Nuwe album</button>` : ''}<button class="btn btn-primary" data-act="mclose">Toe</button></div>`;
+  modalBody.innerHTML = `<h3>Foto's</h3><p class="hint" style="margin:-8px 0 10px">Die foto's bly op Google Drive. Maak 'n album oop om by sy gids uit te kom, of gaan reguit na al die foto's.</p><a class="btn btn-primary" style="width:100%;margin-bottom:10px;text-decoration:none" href="${escapeHtml(DRIVE_MAIN)}" target="_blank" rel="noopener">Al die foto's op Drive</a>${l.length ? l.map(a=>`<button class="hrow" data-act="albopen" data-id="${a.id}"><div class="t"><b>${escapeHtml(a.title)}</b><small>${tydFmt(a.at)}</small></div></button>`).join('') : '<p class="hint">Nog geen albums nie.</p>'}<div class="modal-actions">${unlocked ? `<button class="btn btn-secondary" data-act="albnew">Nuwe album</button>` : ''}<button class="btn btn-primary" data-act="mclose">Toe</button></div>`;
   openModal();
 }
 function openAlbForm(){
-  modalBody.innerHTML = `<h3>Nuwe album</h3><div class="field"><label for="al-t">Naam</label><input id="al-t" maxlength="60" placeholder="bv. Rugby teen Wilgenhof"></div><div class="field"><label for="al-d">Drive-skakel (opsioneel)</label><input id="al-d" type="url" placeholder="https://drive.google.com/..."></div><p class="err-msg" id="al-err"></p><div class="modal-actions"><button class="btn btn-secondary" data-act="albums">Kanselleer</button><button class="btn btn-primary" data-act="albsave">Skep</button></div>`; openModal();
+  modalBody.innerHTML = `<h3>Nuwe album</h3><div class="field"><label for="al-t">Naam</label><input id="al-t" maxlength="60" placeholder="bv. Rugby teen Wilgenhof"></div><div class="field"><label for="al-d">Drive-gids van hierdie album</label><input id="al-d" type="url" placeholder="https://drive.google.com/..." value="${escapeHtml(DRIVE_MAIN)}"></div><p class="err-msg" id="al-err"></p><div class="modal-actions"><button class="btn btn-secondary" data-act="albums">Kanselleer</button><button class="btn btn-primary" data-act="albsave">Skep</button></div>`; openModal();
 }
 async function saveAlb(){
   const t = document.getElementById('al-t').value.trim(), d = document.getElementById('al-d').value.trim(), err = document.getElementById('al-err');
@@ -1848,14 +1904,14 @@ async function saveAlb(){
 }
 async function openAlb(id){
   albCur = id; const a = albums[id] || { title: 'Album' };
-  modalBody.innerHTML = `<h3>${escapeHtml(a.title)}</h3><div id="albg" class="albg"><p class="hint">Laai...</p></div><div class="modal-actions" style="flex-wrap:wrap"><button class="btn btn-secondary" data-act="albums">‹ Albums</button>${a.drive ? `<a class="btn btn-secondary" href="${escapeHtml(a.drive)}" target="_blank" rel="noopener">Maak Drive oop</a>` : ''}${unlocked ? `<button class="btn btn-secondary" data-act="albdel" data-id="${id}">Verwyder album</button>` : ''}<button class="btn btn-primary" data-act="albadd">Voeg foto's by</button></div>`; openModal();
+  modalBody.innerHTML = `<h3>${escapeHtml(a.title)}</h3><div class="drv"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-foto"/></svg><div><b>Die foto's is op Google Drive</b><small>Maak die gids oop om te kyk. Wil jy self foto's byvoeg? Laai dit daar op in dieselfde gids.</small></div></div><a class="btn btn-primary" style="width:100%;margin:10px 0;text-decoration:none" href="${escapeHtml(driveOf(a))}" target="_blank" rel="noopener">Maak die foto's oop</a><div id="albg" class="albg"></div><div class="modal-actions" style="flex-wrap:wrap"><button class="btn btn-secondary" data-act="albums">‹ Albums</button>${unlocked ? `<button class="btn btn-secondary" data-act="albdel" data-id="${id}">Verwyder album</button>` : ''}<button class="btn btn-secondary" data-act="mclose">Toe</button></div>`; openModal();
   try{ const s = await get(ref(db,'albumfoto/'+id)); albPh = s.val() || {}; }catch(e){ albPh = {}; }
   drawAlb();
 }
 function drawAlb(){
   const g = document.getElementById('albg'); if(!g) return;
   const l = Object.entries(albPh).map(([pid,p])=>({ pid, ...p })).sort((a,b)=>b.at - a.at);
-  g.innerHTML = l.length ? l.map(p=>`<figure><img src="${p.d}" alt="Foto deur ${escapeHtml(p.by||'')}" loading="lazy">${(unlocked || (me && p.uid === me.uid)) ? `<button class="phx" data-act="phdel" data-pid="${p.pid}" aria-label="Verwyder foto">×</button>` : ''}<figcaption>${escapeHtml(p.by||'')}</figcaption></figure>`).join('') : '<p class="hint">Nog geen foto\'s nie. Wees die eerste!</p>';
+  g.innerHTML = l.length ? '<p class="hint" style="grid-column:1/-1;margin:0">Ouer foto\'s wat in die app gelaai is:</p>' + l.map(p=>`<figure><img src="${p.d}" alt="Foto deur ${escapeHtml(p.by||'')}" loading="lazy">${(unlocked || (me && p.uid === me.uid)) ? `<button class="phx" data-act="phdel" data-pid="${p.pid}" aria-label="Verwyder foto">×</button>` : ''}<figcaption>${escapeHtml(p.by||'')}</figcaption></figure>`).join('') : '';
 }
 function addPhotos(){
   const i = document.createElement('input'); i.type = 'file'; i.accept = 'image/*'; i.multiple = true;
@@ -2155,6 +2211,7 @@ function ekHtml(){
       ${infRow('aansopen','🛏','Oorslaap of kuier','My aansoeke','')}
       ${infRow('meopen','⚙️','My profiel en rekening','Wysig, wagwoord, uitteken','')}
     </div>
+    ${pushOk() ? `<div class="sec-h">Kennisgewings</div>${pushAan() ? `<p class="hint">Jy kry kennisgewings op hierdie foon.</p>` : `<button class="btn btn-secondary" style="width:100%" data-act="pushon">Kry kennisgewings op my foon</button>`}` : ''}
     <div class="sec-h">My rekening</div><button class="btn btn-secondary" style="width:100%" data-act="meopen">Rekening, wysig profiel en teken uit</button>`;
 }
 
@@ -2336,6 +2393,7 @@ function openAddEventModal(existingEvent, asCopy){
   const rememberedName = lsGet('hennops-name') || '';
   const isP = !!(src && src.isPeriod);
   const srcPorts = src ? getPorts(src) : [];
+  window.__evSrc = src; setTimeout(()=>evSubsFill(src), 0);
   const portHtml = Object.entries(PORTFOLIOS).map(([k,v])=>`<label class="port-opt"><input type="checkbox" name="f-port" value="${k}" ${srcPorts.includes(k)?'checked':''}>${v.emoji} ${v.label}</label>`).join('');
   modalBody.innerHTML = `
     <h3>${isEdit ? 'Wysig event' : (asCopy ? 'Kopieer event' : 'Voeg event by')}</h3>
@@ -2361,7 +2419,7 @@ function openAddEventModal(existingEvent, asCopy){
     </div>` : ''}
     <div class="field"><label>Kategorie</label><select id="f-cat">${catOptions}</select></div>
     <div class="field"><label for="f-opk">Hoe teken ons opkoms aan?</label><select id="f-opk"><option value="qr" ${(!src||src.opk!=='hand')?'selected':''}>QR-kode (vir huisvergaderings)</option><option value="hand" ${src&&src.opk==='hand'?'selected':''}>Die HK teken self aan (vir sport en buite-events)</option></select></div>
-    <div class="field"><label>Portefeulje (kies een of meer, opsioneel)</label><div class="port-grid">${portHtml}</div></div>
+    <div class="field"><label>Portefeulje (kies een of meer, opsioneel)</label><div class="port-grid">${portHtml}</div></div><div id="f-subs"></div>
     <div class="field"><label>Vir wie</label><select id="f-aud"><option value="">Almal</option><option value="eerstejaars" ${src && getAudience(src)==='eerstejaars'?'selected':''}>🌱 Eerstejaars</option><option value="seniors" ${src && getAudience(src)==='seniors'?'selected':''}>🎓 Seniors</option></select></div>
     <div class="field check-row"><input type="checkbox" id="f-verpl" ${src && src.verpl ? 'checked':''}><label for="f-verpl">Verpligtend: tel in elke man se persentasie</label></div>
     <div class="field check-row"><input type="checkbox" id="f-big" ${src && src.big ? 'checked':''}><label for="f-big">Belangrik: wys 'n groot aftelling bo-aan die lys</label></div>
@@ -2427,6 +2485,7 @@ function openAddEventModal(existingEvent, asCopy){
       endTime: isPeriod ? '' : document.getElementById('f-endtime').value,
       category: document.getElementById('f-cat').value,
       portfolios,
+      subs: (()=>{ const o = {}; modalBody.querySelectorAll('select[data-sub]').forEach(x=>{ if(x.value && portfolios.includes(x.dataset.sub)) o[x.dataset.sub] = x.value; }); return o; })(),
       audience: document.getElementById('f-aud').value,
       seriesId: isEdit ? (src.seriesId || '') : '',
       location: document.getElementById('f-loc').value.trim(),
@@ -3022,6 +3081,7 @@ document.addEventListener('click', async (ev)=>{
     case 'wheel': openPortSheet(t.dataset.k); break;
     case 'portgo': closeModal(); activePortfolio = t.dataset.k; activeFilter = 'alle'; view = 'lys'; setPage('kalender'); break;
     case 'blogopen': openBlog(t.dataset.id); break;
+    case 'pushon': pushOn(); break;
     case 'bladopen': bladF = ''; openBlad(); break;
     case 'bladf': bladF = t.dataset.k || ''; openBlad(); break;
     case 'blognew': openBlogForm(t.dataset.k || 'sport'); break;
@@ -3863,7 +3923,7 @@ function renderKontrole(){
   const items = kProfItems(), done = items.filter(i=>i[1]).length;
   const betL = Object.entries(K.bet).map(([id,b])=>({id, ...b})).sort((a,b)=>(b.jaar||0)-(a.jaar||0) || (b.at||0)-(a.at||0));
   const bev = betL.filter(b=>b.st === 'bevestig'), vo = betL.filter(b=>b.st !== 'bevestig');
-  const pt = betPunte(K.bet), pv = pootVan(K.uid, fullName(p)), attN = K.att.length;
+  const pt = betPunte(K.bet) + ((K.pc && K.pc.ok) || 0), pv = pootVan(K.uid, fullName(p)), attN = K.att.length;
   const attPct = K.held ? Math.round(attN / K.held * 100) : null;
   const bevOk = (p.bevestig || 0) >= yr;
   const dot = c => `<i class="kd ${c}" aria-hidden="true"></i>`;
