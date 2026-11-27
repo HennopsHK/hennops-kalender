@@ -883,6 +883,20 @@ summary:has(> .ai)::-webkit-details-marker{display:none}
 .search>span{display:flex!important;align-items:center;justify-content:center;width:20px;height:20px}.search>span .emi{margin:0!important;width:20px;height:20px;display:grid;place-items:center}.search>span .emi svg{width:20px;height:20px}
 .search>span .emi{position:static!important;transform:none!important;left:auto!important;top:auto!important}
 .drv{display:flex;gap:12px;align-items:flex-start;background:rgba(117,131,120,.16);border-radius:14px;padding:12px 14px}.drv svg{flex:0 0 28px;width:28px;height:28px;color:var(--deep,#174450);fill:none;stroke:currentColor}.drv b{display:block;font-size:14.5px}.drv small{display:block;color:var(--ink-soft);font-size:12.5px;line-height:1.4;margin-top:2px}
+
+/* ikone netjies in die middel van hul blokkies */
+.inf-row .ic,.ico,.inf-list .ii{display:grid!important;place-items:center;line-height:0;padding:0}
+.inf-row .ic .emi,.ico .emi,.inf-list .ii .emi{margin:0!important;width:22px!important;height:22px!important;display:block!important;vertical-align:baseline!important}
+.inf-row .ic .emi svg,.ico .emi svg,.inf-list .ii .emi svg{width:22px;height:22px;display:block}
+.ai.ait,.emi.ait{display:grid!important;place-items:center;width:36px!important;height:36px!important;margin:0 2px 0 0!important;border-radius:11px;background:rgba(117,131,120,.2);color:var(--deep,#174450);vertical-align:middle;line-height:0;flex:0 0 36px}
+.ai.ait svg,.emi.ait svg{width:20px!important;height:20px!important;display:block;margin:0}
+.hkopt .ai.ait,.hkopt .emi.ait{margin-right:0!important}
+
+/* Tuis: hero + Vandag-kaart oorvleuel, wiel daarna */
+.hero:not(.calhero){border-radius:0 0 30px 30px}
+.hero:not(.calhero) + .vandag{margin:-92px 0 8px!important;position:relative;z-index:3;box-shadow:0 10px 28px rgba(23,68,80,.28)}
+.wheelwrap{margin:4px -4px 6px!important}
+.wheelwrap svg{max-width:300px!important}
 </style>
 </head>
 <body>
@@ -1588,7 +1602,7 @@ function wheelHtml(){
   const n = k => events.filter(e=>!e.isCancelled && e.date >= t && getPorts(e).includes(k)).length;
   let w = WHEEL;
   ['sport','sosiaal','kultuur','gemeenskap'].forEach(k=>{ const c = n(k); w = w.replace(new RegExp('(data-wc="'+k+'"[^>]*>)</text>'), '$1'+(c ? c+(c===1?' event':' events') : 'niks nou')+'</text>'); });
-  return `<div class="wheelwrap">${w}<p>Tik 'n deel van die wiel om die events te sien</p></div>`;
+  return `<div class="sec-h" style="margin-top:20px">Kies 'n portefeulje</div><div class="wheelwrap">${w}<p>Tik 'n deel van die wiel om die events te sien</p></div>`;
 }
 function vandagHtml(){
   const t = todayStr(), w = wx && wx[t], items = events.filter(e=>!e.isCancelled && (e.isPeriod && e.endDate ? (e.date <= t && t <= e.endDate) : e.date === t)).sort((a,b)=>sortKey(a).localeCompare(sortKey(b)));
@@ -1648,6 +1662,7 @@ function autoIcons(root){
     const k = aiKey(txt);
     const lead = el.firstElementChild;
     if(tile && k && lead && lead.classList.contains('emi')) lead.remove();
+    else if(tile && !k && lead && lead.classList.contains('emi')){ lead.classList.add('ai','ait'); return; }
     if(el.querySelector('svg,.emi,.ic,.pt,.ai')) return;
     if(!k){ AI_MISS.push(txt.trim().slice(0,40)); return; }
     const sp = document.createElement('span'); sp.className = 'ai' + (tile ? ' ait' : ''); sp.setAttribute('aria-hidden','true');
@@ -2152,7 +2167,7 @@ function whenText(e){ return evDateText(e) + (!e.isPeriod && e.time ? ' · ' + e
 function tuisHtml(){
   const t = todayStr();
   const upcoming = events.filter(e=>!e.isCancelled && (e.isPeriod && e.endDate ? e.endDate : e.date) >= t).sort((a,b)=>sortKey(a).localeCompare(sortKey(b)));
-  let h = heroHtml() + wheelHtml() + vandagHtml() + (me ? mvdwHtml() : '') + nuutHtml();
+  let h = heroHtml() + vandagHtml() + wheelHtml() + (me ? mvdwHtml() : '') + nuutHtml();
   const rest = upcoming.slice(1).filter(e=>daysBetween(t, e.date) <= 7).slice(0,3);
   if(rest.length){
     h += `<div class="sec-h">Hierdie week</div><div class="week-list">${rest.map(e=>`<button class="wk-row" data-act="evopen" data-id="${e.id}"><span class="wd"><b>${parseDate(e.date).d}</b></span><span class="wt"><b>${escapeHtml(e.title)}</b><small>${escapeHtml(whenText(e))}</small></span></button>`).join('')}</div>`;
