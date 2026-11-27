@@ -897,6 +897,23 @@ summary:has(> .ai)::-webkit-details-marker{display:none}
 .hero:not(.calhero) + .vandag{margin:-92px 0 8px!important;position:relative;z-index:3;box-shadow:0 10px 28px rgba(23,68,80,.28)}
 .wheelwrap{margin:4px -4px 6px!important}
 .wheelwrap svg{max-width:300px!important}
+
+/* Tuis: kompak portefeulje-teëls, minder leë spasie */
+.ptiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 6px}
+.ptile{display:flex;align-items:center;gap:10px;text-align:left;background:var(--c);color:#FBF6EC;border:0;border-radius:16px;padding:12px;min-height:68px;font:inherit;cursor:pointer;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.ptile::after{content:'';position:absolute;right:-18px;bottom:-22px;width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,.1)}
+.ptile .pi{flex:0 0 38px;height:38px;border-radius:11px;background:rgba(255,255,255,.18);display:grid;place-items:center}
+.ptile .pi svg{width:22px;height:22px;color:#FBF6EC}
+.ptile b{display:block;font-size:14px;line-height:1.15}.ptile small{display:block;font-size:12px;opacity:.85;margin-top:2px}
+.ptile:active{transform:scale(.98)}
+.ptile:focus-visible{outline:3px solid var(--deep,#174450);outline-offset:2px}
+.sec-h{margin:18px 2px 8px!important}
+.hero:not(.calhero) + .vandag{margin-bottom:0!important}
+.bl-lead .bl-art,.bl-lead .bl-img{aspect-ratio:16/7!important}
+.bl-card .bl-art,.bl-card .bl-img{aspect-ratio:16/8!important}
+.bl-el{width:46%!important}
+.bl-lead h4{font-size:22px}
+.bl-grid{margin-top:8px}
 </style>
 </head>
 <body>
@@ -1370,7 +1387,7 @@ function cardHtml(e, today){
         ${whenPill}
         ${wxPill(e)}
         ${e.location ? `<span class="meta-pill">📍 ${escapeHtml(e.location)}</span>` : ''}
-        ${e.addedBy ? `<span class="meta-pill">👤 ${escapeHtml(e.addedBy)}</span>` : ''}
+        ${e.addedBy && (unlocked || e.addedBy !== 'Bulk-invoer') ? `<span class="meta-pill">👤 ${escapeHtml(e.addedBy)}</span>` : ''}
       </div>
       ${(getPorts(e).length || movedRecently || audience) ? `<div class="event-meta" style="margin-top:6px;">
         ${getPorts(e).map(k=>`<span class="meta-pill port">${PORTFOLIOS[k].emoji} ${PORTFOLIOS[k].label}${e.subs && e.subs[k] ? ' · ' + escapeHtml(e.subs[k]) : ''}</span>`).join('')}
@@ -1600,9 +1617,8 @@ function heroHtml(){
 function wheelHtml(){
   const t = todayStr();
   const n = k => events.filter(e=>!e.isCancelled && e.date >= t && getPorts(e).includes(k)).length;
-  let w = WHEEL;
-  ['sport','sosiaal','kultuur','gemeenskap'].forEach(k=>{ const c = n(k); w = w.replace(new RegExp('(data-wc="'+k+'"[^>]*>)</text>'), '$1'+(c ? c+(c===1?' event':' events') : 'niks nou')+'</text>'); });
-  return `<div class="sec-h" style="margin-top:20px">Kies 'n portefeulje</div><div class="wheelwrap">${w}<p>Tik 'n deel van die wiel om die events te sien</p></div>`;
+  const defs = [['sport','Sport','sport','#A86E53'],['sosiaal','Sosiaal','sosiaal','#B4562A'],['kultuur','Kuns en Kultuur','kuns','#758378'],['gemeenskap','Gemeenskap','gem','#556F6B']];
+  return `<div class="sec-h">Kies 'n portefeulje</div><div class="ptiles" role="group" aria-label="Die vier hoof-portefeuljes">${defs.map(([k,l,ic,c])=>{ const x = n(k); return `<button class="ptile" style="--c:${c}" data-act="wheel" data-k="${k}"><span class="pi" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-${ic}"/></svg></span><span class="pt2"><b>${l}</b><small>${x ? x + (x === 1 ? ' event' : ' events') : 'niks nou'}</small></span></button>`; }).join('')}</div>`;
 }
 function vandagHtml(){
   const t = todayStr(), w = wx && wx[t], items = events.filter(e=>!e.isCancelled && (e.isPeriod && e.endDate ? (e.date <= t && t <= e.endDate) : e.date === t)).sort((a,b)=>sortKey(a).localeCompare(sortKey(b)));
@@ -4370,7 +4386,7 @@ function renderEv(){
     <div class="event-meta" style="margin:10px 0 0">
       ${e.location ? `<span class="meta-pill">📍 ${escapeHtml(e.location)}</span>` : ''}
       ${w ? `<span class="meta-pill">${wxText(w)}</span>` : ''}
-      ${e.addedBy ? `<span class="meta-pill">👤 ${escapeHtml(e.addedBy)}</span>` : ''}
+      ${e.addedBy && (unlocked || e.addedBy !== 'Bulk-invoer') ? `<span class="meta-pill">👤 ${escapeHtml(e.addedBy)}</span>` : ''}
       ${getPorts(e).map(k=>`<span class="meta-pill port">${PORTFOLIOS[k].emoji} ${PORTFOLIOS[k].label}</span>`).join('')}
       ${aud ? `<span class="meta-pill port">${AUD_EMOJI[aud]} ${AUDIENCES[aud]}</span>` : ''}
     </div>
