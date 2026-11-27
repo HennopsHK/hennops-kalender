@@ -819,6 +819,12 @@ header.topbar,.topbar{background:#D9D2C6!important}
 .mv-cell.has,.mv-cell.ev{background:var(--accent)!important;color:#FFF4E0!important}
 .mcell.past .n{opacity:.8!important}.mcell.has .n{opacity:1!important;background:var(--accent)!important;color:#fff!important}
 .mcell.today .n{background:var(--deep)!important;color:#fff!important;box-shadow:none!important}
+.kt-pc{align-items:flex-start!important;gap:12px}.kt-pc .kd{margin-top:5px;flex:none}.ktm{flex:1;min-width:0}.kth{display:flex;justify-content:space-between;align-items:baseline}.kth b{font-size:15px}.kth em{font-style:normal;font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:20px;color:var(--deep)}
+.ktbar{height:8px;border-radius:99px;background:#E2D8C6;margin:6px 0 4px;overflow:hidden}.ktbar i{display:block;height:100%;border-radius:99px;background:#B9B0A5}.ktbar i.g{background:#3F7F55}.ktbar i.y{background:#D9A21B}.ktbar i.r{background:#B5333B}.ktm span{font-size:13px;color:var(--ink-soft)}
+.inf-row,.inf-list>*{align-items:center!important}.inf-row .ic{align-self:center;display:grid;place-items:center}.inf-row .ic svg{display:block;margin:0}
+.hdr-actions{display:flex}body.signed .hdr-actions{display:none!important}
+.xlsel{width:100%;margin:6px 0 4px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);font:inherit;color:var(--ink)}
+.kt-row.kt-pc{display:flex!important;grid-template-columns:none!important}.kt-pc .ktm{flex:1 1 auto!important;width:100%}.kt-pc .kth b{width:auto!important;min-width:0!important;flex:none}.kt-pc .ktm span{display:block;width:auto!important;margin:0}.kth em{white-space:nowrap}
 </style>
 </head>
 <body>
@@ -1215,6 +1221,7 @@ function isPermissionError(msg){ return /permission[_ ]denied/i.test(msg || '');
 
 function render(){
   hkBtn.style.display = unlocked ? '' : 'none';
+  document.body.classList.toggle('signed', !!me && !navigator.webdriver);
   hkBtn.textContent = 'HK ⚙';
   meBtn.textContent = me ? ('👤 ' + ((myProfile && myProfile.naam) || (me.email||'Ek').split('@')[0]).slice(0,12)) : 'Teken in';
 
@@ -1537,7 +1544,7 @@ function vandagHtml(){
 
 
 // ===== Simbole in plaas van emojis =====
-const EMO = {'🏠':'kamer','🛏':'kamer','🔧':'herstel','🛠':'herstel','📶':'wifi','📍':'plek','📌':'plek','⛺':'plek','🚨':'nood','🌱':'eerste','🐘':'poot','🐾':'poot','🌿':'tradisie','🎶':'lied','🎵':'lied','👥':'leiers','👤':'ek','🧭':'pyl','↗':'pyl','⚽':'sport','🏆':'sport','🏉':'sport','📣':'bell','🔔':'bell','🤝':'gem','🎭':'kuns','🎨':'kuns','🎉':'sosiaal','📖':'vers','🗓':'kal','📅':'kal','🕐':'tel','⏰':'tel','🔍':'filter','📚':'akademia','🎓':'akademia','☀':'weer','🌤':'weer','⛈':'weer','🌦':'weer','🌧':'weer','☁':'weer','❄':'weer','🌫':'weer','ℹ':'tradisie','⚙':'herstel','🖼':'kaart','💭':'bell','💬':'bell','✏':'herstel','✓':'tel','🎒':'akademia','🐥':'eerste','🫂':'mense','🔎':'zoek','📷':'foto','⭐':'ster','🏛':'tuis'};
+const EMO = {'🏠':'kamer','🛏':'kamer','🔧':'herstel','🛠':'herstel','📶':'wifi','📍':'plek','📌':'plek','⛺':'plek','🚨':'nood','🌱':'eerste','🐘':'poot','🐾':'poot','🌿':'tradisie','🎶':'lied','🎵':'lied','👥':'leiers','👤':'ek','🧭':'pyl','↗':'pyl','⚽':'sport','🏆':'sport','🏉':'sport','📣':'bell','🔔':'bell','🤝':'gem','🎭':'kuns','🎨':'kuns','🎉':'sosiaal','📖':'vers','🗓':'kal','📅':'kal','🕐':'tel','⏰':'tel','🔍':'filter','📚':'akademia','🎓':'akademia','☀':'weer','🌤':'weer','⛈':'weer','🌦':'weer','🌧':'weer','☁':'weer','❄':'weer','🌫':'weer','ℹ':'tradisie','⚙':'herstel','🖼':'kaart','💭':'bell','💬':'bell','✏':'herstel','✓':'tel','🎒':'akademia','🐥':'eerste','🫂':'mense','🧾':'kaart','📊':'tel','🔎':'zoek','📷':'foto','⭐':'ster','🏛':'tuis'};
 const EMO_RE = /(?:\p{Extended_Pictographic}\uFE0F?(?:\u200D\p{Extended_Pictographic}\uFE0F?)*|[\u2600-\u27BF]\uFE0F?)\s?/gu;
 function emoSwap(root){
   if(!root) return;
@@ -1894,6 +1901,102 @@ function spoorViewHtml(){
     <div class="sec-h">My spoor</div>${list.length ? `<ol class="spoorpad">${list.map(r=>`<li><span class="sp">${icn('poot',18)}</span><div><b>${escapeHtml(r.e.title)}</b><small>${formatShortDate(r.e.date)}</small></div></li>`).join('')}</ol>` : `<div class="notice"><p>Nog geen spore nie. Skandeer die QR by 'n event om jou eerste spoor te los.</p></div>`}</section>`;
 }
 
+
+// ===== Kontrole na Excel (eie xlsx-skrywer) =====
+const XL = (function(){
+  const T = (()=>{ const t = []; for(let n = 0; n < 256; n++){ let c = n; for(let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+  const crc = b => { let c = 0xFFFFFFFF; for(let i = 0; i < b.length; i++) c = T[(c ^ b[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; };
+  const enc = new TextEncoder();
+  const esc = v => String(v).replace(/[<>&"]/g, c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c])).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '');
+  const col = i => { let s = ''; i++; while(i > 0){ const m = (i - 1) % 26; s = String.fromCharCode(65 + m) + s; i = Math.floor((i - 1) / 26); } return s; };
+  function zip(files){
+    const parts = [], cen = []; let off = 0;
+    const u16 = n => [n & 255, (n >> 8) & 255], u32 = n => [n & 255, (n >> 8) & 255, (n >> 16) & 255, (n >>> 24) & 255];
+    files.forEach(([name, text])=>{
+      const nb = enc.encode(name), db = enc.encode(text), c = crc(db);
+      const lh = new Uint8Array([0x50,0x4b,3,4, 20,0, 0,8, 0,0, 0,0, 0x21,0, ...u32(c), ...u32(db.length), ...u32(db.length), ...u16(nb.length), 0,0]);
+      parts.push(lh, nb, db);
+      cen.push(new Uint8Array([0x50,0x4b,1,2, 20,0, 20,0, 0,8, 0,0, 0,0, 0x21,0, ...u32(c), ...u32(db.length), ...u32(db.length), ...u16(nb.length), 0,0, 0,0, 0,0, 0,0, 0,0,0,0, ...u32(off)]), nb);
+      off += lh.length + nb.length + db.length;
+    });
+    const cs = cen.reduce((a,b)=>a + b.length, 0);
+    const end = new Uint8Array([0x50,0x4b,5,6, 0,0, 0,0, ...u16(files.length), ...u16(files.length), ...u32(cs), ...u32(off), 0,0]);
+    return new Blob([...parts, ...cen, end], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  }
+  // cel: string | number | {v, s:stylId, f:formule}
+  function sheet(rows, widths, opt){
+    opt = opt || {};
+    let x = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetPr><pageSetUpPr fitToPage="1"/></sheetPr><sheetViews><sheetView workbookViewId="0" showGridLines="0">' + (opt.freeze ? '<pane ySplit="' + opt.freeze + '" topLeftCell="A' + (opt.freeze + 1) + '" activePane="bottomLeft" state="frozen"/>' : '') + '</sheetView></sheetViews><sheetFormatPr defaultRowHeight="18"/><cols>' + widths.map((w,i)=>'<col min="' + (i+1) + '" max="' + (i+1) + '" width="' + w + '" customWidth="1"/>').join('') + '</cols><sheetData>';
+    rows.forEach((r,ri)=>{
+      x += '<row r="' + (ri+1) + '"' + (r.h ? ' ht="' + r.h + '" customHeight="1"' : '') + '>';
+      (r.c || r).forEach((cell, ci)=>{
+        if(cell === null || cell === undefined || cell === '') return;
+        const o = typeof cell === 'object' ? cell : { v: cell }, ref = col(ci) + (ri+1), st = o.s ? ' s="' + o.s + '"' : '';
+        if(o.f) x += '<c r="' + ref + '"' + st + '><f>' + esc(o.f) + '</f>' + (o.v === '' || o.v === null || o.v === undefined ? '' : '<v>' + o.v + '</v>') + '</c>';
+        else if(typeof o.v === 'number') x += '<c r="' + ref + '"' + st + '><v>' + o.v + '</v></c>';
+        else x += '<c r="' + ref + '"' + st + ' t="inlineStr"><is><t xml:space="preserve">' + esc(o.v) + '</t></is></c>';
+      });
+      x += '</row>';
+    });
+    x += '</sheetData>' + (opt.filter ? '<autoFilter ref="' + opt.filter + '"/>' : '') + (opt.cf || '') + '<pageMargins left="0.5" right="0.5" top="0.6" bottom="0.6" header="0.3" footer="0.3"/><pageSetup orientation="landscape" fitToWidth="1" fitToHeight="0"/></worksheet>';
+    return x;
+  }
+  const styles = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="5"><font><sz val="11"/><name val="Arial"/></font><font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Arial"/></font><font><b/><sz val="18"/><color rgb="FF174450"/><name val="Arial"/></font><font><sz val="10"/><color rgb="FF544A41"/><name val="Arial"/></font><font><b/><sz val="11"/><name val="Arial"/></font></fonts><fills count="5"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF174450"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFF5F1E9"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFE4DDD0"/></patternFill></fill></fills><borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left/><right/><top/><bottom style="thin"><color rgb="FFC2B8A8"/></bottom><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="8"><xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1"><alignment vertical="center"/></xf><xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf><xf numFmtId="9" fontId="4" fillId="0" borderId="1" xfId="0" applyNumberFormat="1" applyFont="1" applyBorder="1"><alignment horizontal="center" vertical="center"/></xf><xf numFmtId="0" fontId="2" fillId="0" borderId="0" xfId="0" applyFont="1"/><xf numFmtId="0" fontId="3" fillId="0" borderId="0" xfId="0" applyFont="1"/><xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1"><alignment horizontal="center" vertical="center"/></xf><xf numFmtId="0" fontId="4" fillId="0" borderId="1" xfId="0" applyFont="1" applyBorder="1"><alignment vertical="center"/></xf><xf numFmtId="14" fontId="0" fillId="0" borderId="1" xfId="0" applyNumberFormat="1" applyBorder="1"><alignment horizontal="center" vertical="center"/></xf></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles><dxfs count="3"><dxf><font><color rgb="FF7A2A20"/></font><fill><patternFill><bgColor rgb="FFE8C9C2"/></patternFill></fill></dxf><dxf><font><color rgb="FF5E4A12"/></font><fill><patternFill><bgColor rgb="FFEFE0B8"/></patternFill></fill></dxf><dxf><font><color rgb="FF1F4A2B"/></font><fill><patternFill><bgColor rgb="FFCFE0CF"/></patternFill></fill></dxf></dxfs></styleSheet>';
+  const cfPct = ref => '<conditionalFormatting sqref="' + ref + '"><cfRule type="cellIs" dxfId="0" priority="1" operator="lessThan"><formula>0.6</formula></cfRule><cfRule type="cellIs" dxfId="1" priority="2" operator="lessThan"><formula>0.85</formula></cfRule><cfRule type="cellIs" dxfId="2" priority="3" operator="greaterThanOrEqual"><formula>0.85</formula></cfRule></conditionalFormatting>';
+  function build(sheets){
+    const f = [['[Content_Types].xml', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>' + sheets.map((_,i)=>'<Override PartName="/xl/worksheets/sheet' + (i+1) + '.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>').join('') + '</Types>'],
+      ['_rels/.rels', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'],
+      ['xl/workbook.xml', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>' + sheets.map((s,i)=>'<sheet name="' + esc(s.name) + '" sheetId="' + (i+1) + '" r:id="rId' + (i+1) + '"/>').join('') + '</sheets></workbook>'],
+      ['xl/_rels/workbook.xml.rels', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' + sheets.map((_,i)=>'<Relationship Id="rId' + (i+1) + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet' + (i+1) + '.xml"/>').join('') + '<Relationship Id="rId' + (sheets.length+1) + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>'],
+      ['xl/styles.xml', styles]];
+    sheets.forEach((s,i)=>f.push(['xl/worksheets/sheet' + (i+1) + '.xml', sheet(s.rows, s.widths, s.opt)]));
+    return zip(f);
+  }
+  return { build, cfPct, col };
+})();
+async function openKontrolXl(){
+  modalBody.innerHTML = `<h3>Kontrole na Excel</h3><p class="hint">Laai...</p>`; openModal();
+  let pr = {}; try{ pr = (await get(ref(db,'profiles'))).val() || {}; }catch(e){}
+  const ppl2 = Object.entries(pr).map(([u,p])=>({ u, n: fullName(p) })).filter(x=>x.n).sort((a,b)=>a.n.localeCompare(b.n));
+  modalBody.innerHTML = `<h3>Kontrole na Excel</h3><p class="hint" style="margin:-8px 0 12px">Opkoms en betrokkenheid in 'n netjiese Excel-lêer, met persentasies.</p>
+    <label class="modrow"><input type="radio" name="xlw" value="all" checked><span><b>Hele groep</b><small>Almal in een lys, plus detail per event</small></span></label>
+    <label class="modrow"><input type="radio" name="xlw" value="one"><span><b>Een man</b><small>Kies hieronder</small></span></label>
+    <select id="xlp" class="xlsel" aria-label="Kies 'n man">${ppl2.map(x=>`<option value="${x.u}">${escapeHtml(x.n)}</option>`).join('')}</select>
+    <p class="err-msg" id="xl-err"></p><div class="modal-actions"><button class="btn btn-secondary" data-act="mclose">Kanselleer</button><button class="btn btn-primary" data-act="xlgo">Laai Excel af</button></div>`;
+}
+async function makeKontrolXl(){
+  const er = document.getElementById('xl-err'), btn = document.querySelector('[data-act=xlgo]');
+  const one = (document.querySelector('input[name=xlw]:checked') || {}).value === 'one', only = one ? document.getElementById('xlp').value : null;
+  if(btn){ btn.disabled = true; btn.textContent = 'Maak lêer...'; }
+  try{
+    const g = async k => { try{ return (await get(ref(db,k))).val() || {}; }catch(e){ return {}; } };
+    const [op, vk, pr, bt] = await Promise.all([g('opkoms'), g('verskoon'), g('profiles'), g('betrokke')]);
+    const t = todayStr(), vp = events.filter(e=>e.verpl && !e.isCancelled && !e.isPeriod && e.date <= t).sort((a,b)=>a.date.localeCompare(b.date));
+    const people = Object.entries(pr).filter(([u,p])=>(!only || u === only) && fullName(p)).sort((a,b)=>fullName(a[1]).localeCompare(fullName(b[1])));
+    const H = (...c)=>({ c: c.map(v=>({ v, s: 1 })), h: 34 });
+    const status = (e,u)=> op[e.id] && op[e.id][u] ? 'Bygewoon' : (vk[e.id] && vk[e.id][u] ? 'Verskoon' : 'Gemis');
+    const sum = [{ c: [{ v: 'Huis Hennops: Kontrole', s: 3 }], h: 30 }, { c: [{ v: (only ? fullName(pr[only]) : 'Hele groep') + ' · tot ' + t + ' · ' + vp.length + ' verpligte events', s: 4 }] }, [], H('Naam','Kamer','Studierigting','Verpligte events','Bygewoon','Verskoon','Gemis','Opkoms %','Bydraes bevestig','Bydraes aangeteken','Betrokkenheid %')];
+    const det = [H('Naam','Event','Datum','Status')];
+    people.forEach(([u,p],i)=>{
+      let ok = 0, ex = 0; vp.forEach(e=>{ const st = status(e,u); if(st === 'Bygewoon') ok++; else if(st === 'Verskoon') ex++; det.push([{ v: fullName(p) }, { v: e.title }, { v: e.date, s: 5 }, { v: st, s: 5 }]); });
+      const miss = vp.length - ok - ex, base = vp.length - ex, r = 5 + i;
+      const bl = Object.values(bt[u] || {}), bc = bl.filter(b=>b && b.st === 'bevestig').length;
+      sum.push([{ v: fullName(p), s: 6 }, { v: (typeof kamerOf === 'function' ? kamerOf(p) : p.kamer) || '' }, { v: p.studie || '' }, { v: vp.length, s: 5 }, { v: ok, s: 5 }, { v: ex, s: 5 }, { v: miss, f: 'D' + r + '-E' + r + '-F' + r, s: 5 }, { v: base > 0 ? ok / base : '', f: 'IF(D' + r + '-F' + r + '>0,E' + r + '/(D' + r + '-F' + r + '),"")', s: 2 }, { v: bc, s: 5 }, { v: bl.length, s: 5 }, { v: bl.length ? bc / bl.length : '', f: 'IF(J' + r + '>0,I' + r + '/J' + r + ',"")', s: 2 }]);
+    });
+    const n = people.length, last = 4 + n;
+    const sheets = [{ name: 'Opsomming', rows: sum, widths: [26,10,30,12,11,11,10,12,14,14,15], opt: { freeze: 4, filter: 'A4:K' + Math.max(last, 5), cf: XL.cfPct('H5:H' + Math.max(last, 5)) + XL.cfPct('K5:K' + Math.max(last, 5)).replace('priority="1"','priority="4"').replace('priority="2"','priority="5"').replace('priority="3"','priority="6"') } }, { name: 'Detail', rows: det, widths: [26,34,13,13], opt: { freeze: 1, filter: 'A1:D' + Math.max(det.length, 2) } }];
+    if(!only){
+      const ev = [H('Event','Datum','Bygewoon','Verskoon','Gemis','Opkoms %')];
+      vp.forEach((e,i)=>{ let a = 0, x = 0; people.forEach(([u])=>{ const st = status(e,u); if(st === 'Bygewoon') a++; else if(st === 'Verskoon') x++; }); const m = people.length - a - x, b = people.length - x, r = 2 + i; ev.push([{ v: e.title, s: 6 }, { v: e.date, s: 5 }, { v: a, s: 5 }, { v: x, s: 5 }, { v: m, s: 5 }, { v: b > 0 ? a / b : '', f: 'IF(' + (people.length) + '-D' + r + '>0,C' + r + '/(' + people.length + '-D' + r + '),"")', s: 2 }]); });
+      sheets.push({ name: 'Per event', rows: ev, widths: [36,13,12,12,12,12], opt: { freeze: 1, cf: XL.cfPct('F2:F' + Math.max(ev.length, 2)) } });
+    }
+    const blob = XL.build(sheets), a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = 'Hennops_kontrole_' + (only ? fullName(pr[only]).replace(/\s+/g,'_') : 'groep') + '_' + t + '.xlsx';
+    document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 4000);
+    closeModal(); showToast('Excel-lêer afgelaai');
+  }catch(e){ if(er) er.textContent = 'Kon nie maak nie: ' + e.message; if(btn){ btn.disabled = false; btn.textContent = 'Laai Excel af'; } }
+}
+
 function whenText(e){ return evDateText(e) + (!e.isPeriod && e.time ? ' · ' + e.time : ''); }
 function tuisHtml(){
   const t = todayStr();
@@ -1957,7 +2060,8 @@ function ekHtml(){
       ${infRow('rstopen','📚','My rooster','Toetse en eksamens','')}
       ${infRow('aansopen','🛏','Oorslaap of kuier','My aansoeke','')}
       ${infRow('meopen','⚙️','My profiel en rekening','Wysig, wagwoord, uitteken','')}
-    </div>`;
+    </div>
+    <div class="sec-h">My rekening</div><button class="btn btn-secondary" style="width:100%" data-act="meopen">Rekening, wysig profiel en teken uit</button>`;
 }
 
 function renderKalender(){
@@ -2071,6 +2175,7 @@ function openHKMenu(){
       <button class="btn btn-secondary hkopt" id="hkBulkAdd">📋 Voeg lys van datums by</button>
       <button class="btn btn-secondary hkopt" id="hkMvdw">🐘 Man van die week</button>
       <button class="btn btn-secondary hkopt" id="hkPct">📊 Opkoms per man</button>
+      <button class="btn btn-secondary hkopt" id="hkXl">🧾 Kontrole na Excel</button>
       <button class="btn btn-secondary hkopt" id="hkVers">📖 Bybelvers</button>
       <button class="btn btn-secondary hkopt" id="hkHist">🕘 Geskiedenis en ontdoen</button>
       <button class="btn btn-secondary hkopt" id="hkBackup">💾 Rugsteun (JSON)</button>
@@ -2092,6 +2197,7 @@ function openHKMenu(){
   document.getElementById('hkPeople').addEventListener('click', openPeopleModal);
   document.getElementById('hkMvdw').addEventListener('click', ()=>openMvdwModal());
   document.getElementById('hkPct').addEventListener('click', openPct);
+  document.getElementById('hkXl').addEventListener('click', openKontrolXl);
   document.getElementById('hkKamer').addEventListener('click', ()=>{ location.href = 'kamers.html'; });
   const ha = document.getElementById('hkAans'); if(ha) ha.addEventListener('click', openAansPrim);
   document.getElementById('hkGed').addEventListener('click', openGedHK);
@@ -2808,6 +2914,8 @@ document.addEventListener('click', async (ev)=>{
     case 'wtoday': weekOffset = 0; render(); break;
     case 'weekimg': shareWeekImage(); break;
     case 'openfilter': openFilterSheet(); break;
+    case 'xlgo': makeKontrolXl(); break;
+    case 'meopen': openMeModal(); break;
     case 'nomopen': openNominate(); break;
     case 'nomsave': saveNominate(); break;
     case 'nompick': openMvdwModal({ name: t.dataset.n, lines: t.dataset.w, photo: '' }); break;
@@ -3630,17 +3738,25 @@ async function openKontrole(uid, back){
       const os = await get(ref(db,'opkoms')); const all = os.val() || {};
       const held = past.filter(e=>all[e.id] && Object.keys(all[e.id]).length);
       K.held = held.length; K.att = held.filter(e=>all[e.id][uid]);
+      try{ const vs = (await get(ref(db,'verskoon'))).val() || {}; K.pc = pctCalc(past, uid, e=>!!(all[e.id] && all[e.id][uid]), e=>!!(vs[e.id] && vs[e.id][uid])); }catch(_){ K.pc = pctCalc(past, uid, e=>!!(all[e.id] && all[e.id][uid]), ()=>false); }
       K.list = held.slice(-8).reverse().map(e=>({ t:e.title, d:e.date, ok:!!all[e.id][uid] }));
     } else {
       const cand = past.slice(-60);
       const rs = await Promise.all(cand.map(e=>get(ref(db,'opkoms/'+e.id+'/'+uid)).then(s=>s.exists()).catch(()=>false)));
       K.held = null; K.att = cand.filter((e,i)=>rs[i]);
+      try{ const vp2 = past.filter(e=>e.verpl); const r1 = await Promise.all(vp2.map(e=>get(ref(db,'opkoms/'+e.id+'/'+uid)).then(x=>x.exists()).catch(()=>false))); const r2 = await Promise.all(vp2.map((e,i)=>r1[i] ? false : get(ref(db,'verskoon/'+e.id+'/'+uid)).then(x=>x.exists()).catch(()=>false))); const ix = id=>vp2.findIndex(e=>e.id === id); K.pc = pctCalc(past, uid, e=>r1[ix(e.id)] === true, e=>r2[ix(e.id)] === true); }catch(_){ K.pc = null; }
       K.list = K.att.slice(-8).reverse().map(e=>({ t:e.title, d:e.date, ok:true }));
     }
   }catch(e){
     modalBody.innerHTML = `<h3>Kontrole</h3><p class="error-msg">Kon nie laai nie: ${escapeHtml(e.message)}</p><div class="modal-actions"><button class="btn btn-secondary" data-act="kontback">Terug</button></div>`; return;
   }
   renderKontrole();
+}
+function pctCalc(past, uid, okF, exF){
+  const vp = past.filter(e=>e.verpl && !e.isPeriod); let ok = 0, ex = 0;
+  vp.forEach(e=>{ if(okF(e)) ok++; else if(exF(e)) ex++; });
+  const base = vp.length - ex;
+  return { ok, ex, base, tot: vp.length, pct: base > 0 ? Math.round(100 * ok / base) : null };
 }
 function kProfItems(){
   const p = K.p || {}, g = K.g || {};
@@ -3655,11 +3771,14 @@ function renderKontrole(){
   const attPct = K.held ? Math.round(attN / K.held * 100) : null;
   const bevOk = (p.bevestig || 0) >= yr;
   const dot = c => `<i class="kd ${c}" aria-hidden="true"></i>`;
+  const pc = K.pc && K.pc.base ? K.pc : null, opPct = pc ? pc.pct : attPct;
+  const betPct = betL.length ? Math.round(100 * bev.length / betL.length) : null;
+  const profPct = Math.round(100 * done / items.length);
   const rows = [
-    [attPct === null ? (attN ? 'g' : 'n') : attPct >= 70 ? 'g' : attPct >= 40 ? 'y' : 'r', 'Opkoms', attPct === null ? attN + ' aangeteken' : attN + ' van ' + K.held + ' (' + attPct + '%)'],
-    [bev.length ? 'g' : vo.length ? 'y' : 'n', 'Betrokkenheid', bev.length + ' bevestig' + (vo.length ? ', ' + vo.length + ' wag vir HK' : '')],
-    [done >= 6 ? 'g' : done >= 4 ? 'y' : 'r', 'Profiel', done + ' van ' + items.length + ' ingevul'],
-    [bevOk ? 'g' : 'y', 'Inligting', bevOk ? 'Bevestig vir ' + yr : 'Nog nie bevestig vir ' + yr]
+    [opPct === null ? 'n' : opPct >= 70 ? 'g' : opPct >= 40 ? 'y' : 'r', 'Opkoms', pc ? (pc.ok + ' van ' + pc.base + ' verpligte events' + (pc.ex ? ' · ' + pc.ex + ' verskoon' : '')) : (attPct === null ? attN + ' aangeteken' : attN + ' van ' + K.held + ' events'), opPct],
+    [bev.length ? 'g' : vo.length ? 'y' : 'n', 'Betrokkenheid', bev.length + ' bevestig' + (vo.length ? ', ' + vo.length + ' wag vir HK' : ''), betPct],
+    [done >= 6 ? 'g' : done >= 4 ? 'y' : 'r', 'Profiel', done + ' van ' + items.length + ' ingevul', profPct],
+    [bevOk ? 'g' : 'y', 'Inligting', bevOk ? 'Bevestig vir ' + yr : 'Nog nie bevestig vir ' + yr, bevOk ? 100 : 0]
   ];
   const tipeLbl = b => (BTIPE[b.tipe] || ['Ander'])[0];
   const betRow = b => {
@@ -3671,7 +3790,7 @@ function renderKontrole(){
   const yrs = [yr, yr - 1, yr - 2, yr + 1];
   modalBody.innerHTML = `<h3>${escapeHtml(fullName(p) || 'Kontrole')}</h3>
     <div class="kt-top"><span class="pt">${pootSvg(pv.t)}</span><div><b>${POOT[pv.t].n}${pv.r ? ' · ' + ROL[pv.r] : ''}</b><small>${sporeTxt(pt)} gelaat in die huis</small></div></div>
-    <div class="kt-rows">${rows.map(r=>`<div class="kt-row">${dot(r[0])}<b>${r[1]}</b><span>${escapeHtml(r[2])}</span></div>`).join('')}</div>
+    <div class="kt-rows">${rows.map(r=>`<div class="kt-row kt-pc">${dot(r[0])}<div class="ktm"><div class="kth"><b>${r[1]}</b><em>${r[3] === null ? '–%' : r[3] + '%'}</em></div><div class="ktbar"><i style="width:${r[3] === null ? 0 : r[3]}%" class="${r[0]}"></i></div><span>${escapeHtml(r[2])}</span></div></div>`).join('')}</div>
     <details class="kdet"><summary>Opkoms</summary>${K.list.length ? K.list.map(x=>`<div class="hrow"><div class="t"><b>${escapeHtml(x.t)}</b><small>${escapeHtml(x.d)}</small></div><span>${x.ok ? '✓' : '✕'}</span></div>`).join('') : '<p class="hint">Nog geen opkoms aangeteken nie.</p>'}</details>
     <details class="kdet" open><summary>Betrokkenheid</summary>${betL.length ? betL.map(betRow).join('') : '<p class="hint">Nog niks nie. Voeg hieronder by waarby jy betrokke was.</p>'}
       <div class="bet-add"><div class="fl2"><select id="bt-tipe" aria-label="Soort">${Object.entries(BTIPE).map(([k,x])=>`<option value="${k}">${x[0]}</option>`).join('')}</select><select id="bt-jaar" aria-label="Jaar">${yrs.map(y=>`<option value="${y}" ${y===yr?'selected':''}>${y}</option>`).join('')}</select></div>
